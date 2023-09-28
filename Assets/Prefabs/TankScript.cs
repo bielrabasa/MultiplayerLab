@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TankScript : MonoBehaviour
 {
-    [SerializeField] float rotationSpeed = 10.0f;
+    [SerializeField] float topRotationSpeed = 10.0f;
+    [SerializeField] float bottomRotationSpeed = 0.1f;
     Transform top;
     Transform bot;
 
@@ -18,25 +19,51 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Movement
+        //Tank Movement
         Vector3 movement = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W)) movement += Vector3.up;
         if (Input.GetKey(KeyCode.S)) movement += Vector3.down;
         if (Input.GetKey(KeyCode.A)) movement += Vector3.left;
         if (Input.GetKey(KeyCode.D)) movement += Vector3.right;
+        movement.Normalize();
 
-        transform.Translate(movement.normalized * Time.deltaTime);
-        //
+        transform.Translate(movement * Time.deltaTime);
 
-        //Rotation
-        if (Input.GetKey(KeyCode.LeftArrow))
+        //Visual Tank Rotation
+        if(movement != Vector3.zero)
         {
-            top.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+            Quaternion newRot = Quaternion.AngleAxis(Mathf.Atan2(movement.y, movement.x) * 180 / Mathf.PI + 90, Vector3.forward);
+            bot.rotation = Quaternion.Slerp(bot.rotation, newRot, bottomRotationSpeed);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+
+        //Cannon Rotation
+        Vector3 rot = Vector3.zero;
+        if (Input.GetKey(KeyCode.UpArrow)) rot += Vector3.up;
+        if (Input.GetKey(KeyCode.DownArrow)) rot += Vector3.down;
+        if (Input.GetKey(KeyCode.LeftArrow)) rot += Vector3.left;
+        if (Input.GetKey(KeyCode.RightArrow)) rot += Vector3.right;
+        rot.Normalize();
+
+        if(rot != Vector3.zero)
         {
-            top.transform.Rotate(Vector3.back * rotationSpeed * Time.deltaTime);
+            float newAngle = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90;
+            float pastAngle = top.rotation.eulerAngles.z;
+
+            Debug.Log("New Angle: " + newAngle + "\nReal Angle: " + pastAngle);
+
+            //Errors
+            if(pastAngle < newAngle)
+            {
+                Debug.Log("right");
+
+                top.Rotate(new Vector3(0, 0, topRotationSpeed * Time.deltaTime));
+            }
+            if (pastAngle > newAngle)
+            {
+                Debug.Log("left");
+                top.Rotate(new Vector3(0, 0, -topRotationSpeed * Time.deltaTime));
+            }
         }
     }
 }
