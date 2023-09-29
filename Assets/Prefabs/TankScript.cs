@@ -59,8 +59,9 @@ public class TankScript : MonoBehaviour
 
     void Shoot()
     {
-        GameObject b = Instantiate(bullet, transform.position, 
-            Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward));
+        Quaternion dir = Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward);
+        Vector3 spawnDist = dir * Vector3.up * 0.7f;
+        GameObject b = Instantiate(bullet, transform.position + spawnDist, dir);
         b.GetComponent<BulletScript>().Shoot();
     }
 }

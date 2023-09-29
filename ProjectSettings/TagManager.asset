@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - TANK
+  - WALL
   layers:
   - Default
   - TransparentFX
