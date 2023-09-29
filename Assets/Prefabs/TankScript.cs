@@ -9,6 +9,8 @@ public class TankScript : MonoBehaviour
     Transform top;
     Transform bot;
 
+    [SerializeField] GameObject bullet;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,9 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Shoot
+        if (Input.GetKeyDown(KeyCode.Space)) Shoot();
+
         //Tank Movement
         Vector3 movement = Vector3.zero;
 
@@ -33,7 +38,7 @@ public class TankScript : MonoBehaviour
         //Visual Tank Rotation
         if(movement != Vector3.zero)
         {
-            Quaternion newRot = Quaternion.AngleAxis(Mathf.Atan2(movement.y, movement.x) * 180 / Mathf.PI + 90, Vector3.forward);
+            Quaternion newRot = Quaternion.AngleAxis(Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg + 90, Vector3.forward);
             bot.rotation = Quaternion.Slerp(bot.rotation, newRot, bottomRotationSpeed);
         }
 
@@ -50,5 +55,12 @@ public class TankScript : MonoBehaviour
             Quaternion newAngle = Quaternion.AngleAxis(Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90, Vector3.forward);
             top.rotation = Quaternion.Slerp(top.rotation, newAngle, topRotationSpeed);
         }
+    }
+
+    void Shoot()
+    {
+        GameObject b = Instantiate(bullet, transform.position, 
+            Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward));
+        b.GetComponent<BulletScript>().Shoot();
     }
 }
