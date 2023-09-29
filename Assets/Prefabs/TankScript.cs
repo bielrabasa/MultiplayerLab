@@ -47,23 +47,8 @@ public class TankScript : MonoBehaviour
 
         if(rot != Vector3.zero)
         {
-            float newAngle = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90;
-            float pastAngle = top.rotation.eulerAngles.z;
-
-            Debug.Log("New Angle: " + newAngle + "\nReal Angle: " + pastAngle);
-
-            //Errors
-            if(pastAngle < newAngle)
-            {
-                Debug.Log("right");
-
-                top.Rotate(new Vector3(0, 0, topRotationSpeed * Time.deltaTime));
-            }
-            if (pastAngle > newAngle)
-            {
-                Debug.Log("left");
-                top.Rotate(new Vector3(0, 0, -topRotationSpeed * Time.deltaTime));
-            }
+            Quaternion newAngle = Quaternion.AngleAxis(Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90, Vector3.forward);
+            top.rotation = Quaternion.Slerp(top.rotation, newAngle, topRotationSpeed);
         }
     }
 }
