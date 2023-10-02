@@ -64,4 +64,10 @@ public class TankScript : MonoBehaviour
         GameObject b = Instantiate(bullet, transform.position + spawnDist, dir);
         b.GetComponent<BulletScript>().Shoot();
     }
+    
+    /*void Trail()
+    {
+        GameObject t = Instantiate(bullet, transform.position + spawnDist, dir);
+        t.GetComponent<BulletScript>().Shoot();
+    }*/
 }

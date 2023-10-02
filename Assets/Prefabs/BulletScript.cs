@@ -6,6 +6,9 @@ public class BulletScript : MonoBehaviour
 {
     [SerializeField] float speed = 10.0f;
     float timer = 0.0f;
+
+    bool bounce = false;
+
     private void Start()
     {
         timer = 0.0f;
@@ -26,7 +29,16 @@ public class BulletScript : MonoBehaviour
 
         if (collision.gameObject.CompareTag("WALL"))
         {
-            Destroy(gameObject);
+            if(!bounce)
+            {
+                GetComponent<Rigidbody2D>().velocity = transform.up * (speed / 2);
+                GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(GetComponent<Rigidbody2D>().velocity, Vector3.right);
+                bounce = true;
+            }
+            else 
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
