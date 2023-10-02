@@ -14,6 +14,8 @@ public class TankScript : MonoBehaviour
     [SerializeField] float SpawnTrailDelay = 1.0f;
     float STDAux;
 
+    int inputNum = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,12 @@ public class TankScript : MonoBehaviour
         if (Input.GetKey(KeyCode.S)){ movement += Vector3.down;     Trail(); }
         if (Input.GetKey(KeyCode.A)){ movement += Vector3.left;     Trail(); }
         if (Input.GetKey(KeyCode.D)){ movement += Vector3.right;    Trail(); }
+
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) inputNum++;
+        else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D)) inputNum--;
+
+
+
         movement.Normalize();
 
         transform.Translate(movement * Time.deltaTime);
@@ -76,7 +84,11 @@ public class TankScript : MonoBehaviour
 
         Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
         Vector3 spawnDist = dir * Vector3.up * -0.2f;
-        STDAux -= 0.1f;
+
+        
+        if (inputNum >= 2)  STDAux -= 0.05f;
+        else                STDAux -= 0.1f;
+
         if (STDAux <= 0f)
         {
             Instantiate(trail, transform.position + spawnDist, dir);
