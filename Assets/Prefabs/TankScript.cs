@@ -10,12 +10,17 @@ public class TankScript : MonoBehaviour
     Transform bot;
 
     [SerializeField] GameObject bullet;
+    [SerializeField] GameObject trail;
+    [SerializeField] float SpawnTrailDelay = 1.0f;
+    float STDAux;
 
     // Start is called before the first frame update
     void Start()
     {
         top = transform.GetChild(0);
         bot = transform.GetChild(1);
+
+        STDAux = SpawnTrailDelay;
     }
 
     // Update is called once per frame
@@ -27,10 +32,10 @@ public class TankScript : MonoBehaviour
         //Tank Movement
         Vector3 movement = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W)) movement += Vector3.up;
-        if (Input.GetKey(KeyCode.S)) movement += Vector3.down;
-        if (Input.GetKey(KeyCode.A)) movement += Vector3.left;
-        if (Input.GetKey(KeyCode.D)) movement += Vector3.right;
+        if (Input.GetKey(KeyCode.W)){ movement += Vector3.up;       Trail(); }
+        if (Input.GetKey(KeyCode.S)){ movement += Vector3.down;     Trail(); }
+        if (Input.GetKey(KeyCode.A)){ movement += Vector3.left;     Trail(); }
+        if (Input.GetKey(KeyCode.D)){ movement += Vector3.right;    Trail(); }
         movement.Normalize();
 
         transform.Translate(movement * Time.deltaTime);
@@ -64,10 +69,16 @@ public class TankScript : MonoBehaviour
         GameObject b = Instantiate(bullet, transform.position + spawnDist, dir);
         b.GetComponent<BulletScript>().Shoot();
     }
-    
-    /*void Trail()
+
+    void Trail()
     {
-        GameObject t = Instantiate(bullet, transform.position + spawnDist, dir);
-        t.GetComponent<BulletScript>().Shoot();
-    }*/
+        Quaternion dir = Quaternion.AngleAxis(0, Vector3.up);
+        Vector3 spawnDist = dir * Vector3.up * 0.1f;
+        STDAux -= 0.1f;
+        if (STDAux <= 0f)
+        {
+            Instantiate(trail, transform.position + spawnDist, dir);
+            STDAux = SpawnTrailDelay;
+        }
+    }
 }

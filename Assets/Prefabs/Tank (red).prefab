@@ -219,6 +219,7 @@ MonoBehaviour:
   topRotationSpeed: 0.005
   bottomRotationSpeed: 0.005
   bullet: {fileID: 8239439814468822852, guid: 3f03c61e4a7f997409b49648c22c2a1f, type: 3}
+  trail: {fileID: 630741718949834218, guid: 385fd6bc527c7744cb51627e8d34e85a, type: 3}
 --- !u!58 &6628815800944967494
 CircleCollider2D:
   m_ObjectHideFlags: 0
