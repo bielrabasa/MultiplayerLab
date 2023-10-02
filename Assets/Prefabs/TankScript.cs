@@ -20,7 +20,7 @@ public class TankScript : MonoBehaviour
         top = transform.GetChild(0);
         bot = transform.GetChild(1);
 
-        STDAux = SpawnTrailDelay;
+        STDAux = 0;
     }
 
     // Update is called once per frame
@@ -72,8 +72,10 @@ public class TankScript : MonoBehaviour
 
     void Trail()
     {
-        Quaternion dir = Quaternion.AngleAxis(0, Vector3.up);
-        Vector3 spawnDist = dir * Vector3.up * 0.1f;
+        bot.rotation.Normalize();
+
+        Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
+        Vector3 spawnDist = dir * Vector3.up * -0.2f;
         STDAux -= 0.1f;
         if (STDAux <= 0f)
         {
