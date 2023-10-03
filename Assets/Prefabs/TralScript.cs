@@ -9,13 +9,15 @@ public class TralScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timer = 0.0f;
+        timer = 2.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > 1.0f) Destroy(gameObject);
+        timer -= Time.deltaTime;
+
+        if (timer < 1.0f) GetComponent<SpriteRenderer>().color = new Color (1,1,1,timer);
+        if (timer < 0.0f) Destroy(gameObject);
     }
 }
