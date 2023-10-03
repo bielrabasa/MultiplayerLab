@@ -1,15 +1,17 @@
-using System.Collections; 
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Threading;
 
 public class P2_Server : MonoBehaviour
 {
     Socket socket;
     Socket client;
+    Thread serverThread;
 
     [SerializeField] string message = "IM CONNECTED! Bieeeen ._.";
 
@@ -24,14 +26,35 @@ public class P2_Server : MonoBehaviour
         //Bind Socket to network
         socket.Bind(ipep);
 
+
+        //Thread Listen
+        serverThread = new Thread(serverThreadStart);
+        serverThread.Start();
+        StartCoroutine(StopListening());
+    }
+
+    IEnumerator StopListening()
+    {
+        yield return new WaitForSeconds(5);
+
+        if (serverThread.IsAlive) { 
+            serverThread.Interrupt();
+            KillSocket();
+
+            Debug.Log("Connection time EXPIRED!");
+        }
+    }
+
+    void serverThreadStart()
+    {
         //Wait for client
-        socket.Listen(10); //TODO: Should be a thread
         Debug.Log("Waiting for client...");
-        
+        socket.Listen(10); //TODO: Should be a thread
+
         //Bind with client
         client = socket.Accept();
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
-        Debug.Log("Connected with " + clientep.Address.ToString() + 
+        Debug.Log("Connected with " + clientep.Address.ToString() +
             " at port " + clientep.Port);
 
         //SEND info

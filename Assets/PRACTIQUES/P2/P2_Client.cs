@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class P2_Client : MonoBehaviour
 {
