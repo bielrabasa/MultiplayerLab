@@ -9,6 +9,7 @@ using System.Threading;
 
 public class P2_Server : MonoBehaviour
 {
+    //bool connectionSuccess;
     Socket socket;
     Socket client;
     Thread serverThread;
@@ -38,7 +39,7 @@ public class P2_Server : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         if (serverThread.IsAlive) { 
-            serverThread.Interrupt();
+            serverThread.Interrupt(); //TODO: This causes errors
             KillSocket();
 
             Debug.Log("Connection time EXPIRED!");
@@ -49,10 +50,11 @@ public class P2_Server : MonoBehaviour
     {
         //Wait for client
         Debug.Log("Waiting for client...");
-        socket.Listen(10); //TODO: Should be a thread
+        socket.Listen(10);
 
         //Bind with client
-        client = socket.Accept();
+        client = socket.Accept(); //Peta aquí al interrumpir el thread
+        //connectionSuccess = true; //TODO: Preguntar com canviar variables bé (amb la Key i tot)
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
         Debug.Log("Connected with " + clientep.Address.ToString() +
             " at port " + clientep.Port);
@@ -65,6 +67,7 @@ public class P2_Server : MonoBehaviour
 
         //Close connection
         client.Close();
+        ShutdownSocket();
         KillSocket();
     }
 
@@ -90,7 +93,6 @@ public class P2_Server : MonoBehaviour
 
     void KillSocket()
     {
-        ShutdownSocket();
         socket.Close();
 
         Debug.Log("Socket KILLED");
