@@ -27,13 +27,13 @@ public class P2_Server : MonoBehaviour
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050); //TODO: Preguntar port
 
         //Open Socket
-        CreateSocket(isUDP: false);
+        CreateSocket(isUDP: true);
 
         //Bind Socket to network
         socket.Bind(ipep);
 
         //Send info in UDP or TCP mode
-        SendData(isUDP: false);
+        SendData(isUDP: true);
 
     }
 

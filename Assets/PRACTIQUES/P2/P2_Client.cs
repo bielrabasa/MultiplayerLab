@@ -22,10 +22,10 @@ public class P2_Client : MonoBehaviour
         ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
 
         //Open Socket
-        CreateSocket(isUDP: false);
+        CreateSocket(isUDP: true);
 
         //Recive info in UDP or TCP mode
-        RecieveData(isUDP: false);
+        RecieveData(isUDP: true);
        
     }
 
