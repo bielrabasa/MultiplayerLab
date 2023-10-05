@@ -9,7 +9,6 @@ using System.Threading;
 
 public class P2_Server : MonoBehaviour
 {
-    //bool connectionSuccess;
     Socket socket;
     Socket client;
     Thread serverThread;
@@ -36,7 +35,7 @@ public class P2_Server : MonoBehaviour
 
     IEnumerator StopListening()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(15);
 
         if (serverThread.IsAlive) { 
             serverThread.Interrupt(); //TODO: This causes errors
@@ -53,8 +52,7 @@ public class P2_Server : MonoBehaviour
         socket.Listen(10);
 
         //Bind with client
-        client = socket.Accept(); //Peta aquí al interrumpir el thread
-        //connectionSuccess = true; //TODO: Preguntar com canviar variables bé (amb la Key i tot)
+        client = socket.Accept(); //TODO: Peta aquí al interrumpir el thread
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
         Debug.Log("Connected with " + clientep.Address.ToString() +
             " at port " + clientep.Port);
@@ -67,7 +65,6 @@ public class P2_Server : MonoBehaviour
 
         //Close connection
         client.Close();
-        ShutdownSocket();
         KillSocket();
     }
 
@@ -82,19 +79,14 @@ public class P2_Server : MonoBehaviour
         Debug.Log("Socket CREATED");
     }
 
-    void ShutdownSocket()
-    {
-        //socket.Shutdown(SocketShutdown.Receive);
-        //socket.Shutdown(SocketShutdown.Send);
-        socket.Shutdown(SocketShutdown.Both);
-
-        //TODO: Preguntar
-    }
-
     void KillSocket()
     {
-        socket.Close();
+        if (socket.Connected)
+        {
+            socket.Shutdown(SocketShutdown.Both);
+        }
 
+        socket.Close();
         Debug.Log("Socket KILLED");
     }
 }
