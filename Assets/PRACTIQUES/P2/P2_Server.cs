@@ -10,6 +10,7 @@ using System;
 
 public class P2_Server : MonoBehaviour
 {
+    bool isUDP = false;
     Socket socket;
     Socket client;
     Thread serverThread;
@@ -27,13 +28,13 @@ public class P2_Server : MonoBehaviour
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050); //TODO: Preguntar port
 
         //Open Socket
-        CreateSocket(isUDP: true);
+        CreateSocket();
 
         //Bind Socket to network
         socket.Bind(ipep);
 
         //Send info in UDP or TCP mode
-        SendData(isUDP: true);
+        SendData();
 
     }
 
@@ -45,33 +46,32 @@ public class P2_Server : MonoBehaviour
             serverThread.Interrupt(); //TODO: This causes errors
             KillSocket();
 
-            Debug.Log("Connection time EXPIRED!");
+            Debug.Log("___SERVER___\nConnection time EXPIRED!\n");
         }
     }
 
     void serverThreadStart()
     {
         //Wait for client
-        Debug.Log("Waiting for client...");
+        Debug.Log("___SERVER___\nWaiting for client...\n");
         socket.Listen(10);
 
         //Bind with client
         client = socket.Accept(); //TODO: Peta aquí al interrumpir el thread
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
-        Debug.Log("Connected with " + clientep.Address.ToString() +
-            " at port " + clientep.Port);
-
+        Debug.Log("___SERVER___\nConnected with " + clientep.Address.ToString() +
+            " at port " + clientep.Port + "\n");
         
         data = Encoding.ASCII.GetBytes(message);
         client.Send(data, data.Length, SocketFlags.None);
-        Debug.Log("Data sent!");
+        Debug.Log("___SERVER___\nData sent!\n");
 
         //Close connection
         client.Close();
         KillSocket();
     }
 
-    void CreateSocket(bool isUDP)
+    void CreateSocket()
     {
         if (isUDP)
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -79,10 +79,10 @@ public class P2_Server : MonoBehaviour
         else
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        Debug.Log("Socket CREATED");
+        Debug.Log("___SERVER___\nSocket CREATED\n");
     }
 
-    void SendData(bool isUDP)
+    void SendData()
     {
         if (isUDP)
         {
@@ -90,8 +90,8 @@ public class P2_Server : MonoBehaviour
             EndPoint Remote = (EndPoint)(sender);
 
             recv = socket.ReceiveFrom(data, ref Remote);
-
-            Debug.Log("Message received from:" + Remote.ToString());
+            
+            Debug.Log("___SERVER___\nMessage received from:" + Remote.ToString());
             Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
 
             data = Encoding.ASCII.GetBytes(message);
@@ -114,6 +114,6 @@ public class P2_Server : MonoBehaviour
         }
 
         socket.Close();
-        Debug.Log("Socket KILLED");
+        Debug.Log("___SERVER___\nSocket KILLED\n");
     }
 }

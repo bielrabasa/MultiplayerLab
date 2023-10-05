@@ -7,6 +7,7 @@ using UnityEngine.Windows;
 
 public class P2_Client : MonoBehaviour
 {
+    bool isUDP = false;
     [SerializeField] string ip = "127.0.0.1";
     Socket socket;
 
@@ -22,14 +23,14 @@ public class P2_Client : MonoBehaviour
         ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
 
         //Open Socket
-        CreateSocket(isUDP: true);
+        CreateSocket();
 
         //Recive info in UDP or TCP mode
-        RecieveData(isUDP: true);
+        RecieveData();
        
     }
 
-    void CreateSocket(bool isUDP)
+    void CreateSocket()
     {
         if (isUDP)
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -37,14 +38,14 @@ public class P2_Client : MonoBehaviour
         else
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        Debug.Log("Socket CREATED");
+        Debug.Log("___CLIENT___\nSocket CREATED\n");
     }
 
-    void RecieveData(bool isUDP)
+    void RecieveData()
     {
         if (isUDP)
         {
-            stringData = "Hello, thats UDP";
+            stringData = "___CLIENT___\nHello, thats UDP\n";
             data = Encoding.ASCII.GetBytes(stringData);
             socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
@@ -54,10 +55,10 @@ public class P2_Client : MonoBehaviour
             data = new byte[1024];
             recv = socket.ReceiveFrom(data, ref Remote);
 
-            Debug.Log("Message received from:" + Remote.ToString());
+            Debug.Log("___CLIENT___\nMessage received from:" + Remote.ToString());
             Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
 
-            Debug.Log("Socket CLOSE");
+            Debug.Log("___CLIENT___\nSocket CLOSE\n");
             socket.Close();
         }
         else
@@ -68,14 +69,14 @@ public class P2_Client : MonoBehaviour
             }
             catch (SocketException e)
             {
-                Debug.Log("Connection FAILED: Unable to connect to server.\nError: " + e.ToString());
+                Debug.Log("___CLIENT___\nConnection FAILED: Unable to connect to server.\nError: " + e.ToString());
                 return;
             }
 
             //Recieve data and read as string
             recv = socket.Receive(data);
             stringData = Encoding.ASCII.GetString(data, 0, recv);
-            Debug.Log("Data RECIEVED:\n" + stringData);
+            Debug.Log("___CLIENT___\nData RECIEVED:\n" + stringData);
 
             KillSocket();
         }
@@ -95,6 +96,6 @@ public class P2_Client : MonoBehaviour
         ShutdownSocket();
         socket.Close();
 
-        Debug.Log("Socket KILLED");
+        Debug.Log("___CLIENT___\nSocket KILLED\n");
     }
 }
