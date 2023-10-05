@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Threading;
+using System;
 
 public class P2_Server : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class P2_Server : MonoBehaviour
     Thread serverThread;
 
     [SerializeField] string message = "IM CONNECTED! Bieeeen ._.";
+
+    //SEND info
+    byte[] data = new byte[1024];
+
+    int recv;
 
     void Start()
     {
@@ -26,11 +32,9 @@ public class P2_Server : MonoBehaviour
         //Bind Socket to network
         socket.Bind(ipep);
 
+        //Send info in UDP or TCP mode
+        SendData(isUDP: false);
 
-        //Thread Listen
-        serverThread = new Thread(serverThreadStart);
-        serverThread.Start();
-        StartCoroutine(StopListening());
     }
 
     IEnumerator StopListening()
@@ -57,8 +61,7 @@ public class P2_Server : MonoBehaviour
         Debug.Log("Connected with " + clientep.Address.ToString() +
             " at port " + clientep.Port);
 
-        //SEND info
-        byte[] data = new byte[1024];
+        
         data = Encoding.ASCII.GetBytes(message);
         client.Send(data, data.Length, SocketFlags.None);
         Debug.Log("Data sent!");
@@ -77,6 +80,30 @@ public class P2_Server : MonoBehaviour
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         Debug.Log("Socket CREATED");
+    }
+
+    void SendData(bool isUDP)
+    {
+        if (isUDP)
+        {
+            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+            EndPoint Remote = (EndPoint)(sender);
+
+            recv = socket.ReceiveFrom(data, ref Remote);
+
+            Debug.Log("Message received from:" + Remote.ToString());
+            Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
+
+            data = Encoding.ASCII.GetBytes(message);
+            socket.SendTo(data, data.Length, SocketFlags.None, Remote);
+        }
+        else
+        {
+            //Thread Listen
+            serverThread = new Thread(serverThreadStart);
+            serverThread.Start();
+            StartCoroutine(StopListening());
+        }
     }
 
     void KillSocket()

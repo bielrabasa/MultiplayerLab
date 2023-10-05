@@ -24,6 +24,7 @@ public class P2_Client : MonoBehaviour
         //Open Socket
         CreateSocket(isUDP: false);
 
+        //Recive info in UDP or TCP mode
         RecieveData(isUDP: false);
        
     }
@@ -53,7 +54,7 @@ public class P2_Client : MonoBehaviour
             data = new byte[1024];
             recv = socket.ReceiveFrom(data, ref Remote);
 
-            Debug.Log("Message received from {0}:" + Remote.ToString());
+            Debug.Log("Message received from:" + Remote.ToString());
             Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
 
             Debug.Log("Socket CLOSE");
