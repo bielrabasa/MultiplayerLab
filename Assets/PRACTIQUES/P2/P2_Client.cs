@@ -1,7 +1,9 @@
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class P2_Client : MonoBehaviour
 {
@@ -12,30 +14,18 @@ public class P2_Client : MonoBehaviour
     string stringData;
     int recv;
 
+    IPEndPoint ipep;
+
     void Start()
     {
         //Create IP info struct
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
+        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
 
         //Open Socket
         CreateSocket(isUDP: false);
 
-        try
-        {
-            socket.Connect(ipep); //Connect to ip with socket
-        }
-        catch (SocketException e)
-        {
-            Debug.Log("Connection FAILED: Unable to connect to server.\nError: " + e.ToString());
-            return;
-        }
-
-        //Recieve data and read as string
-        recv = socket.Receive(data);
-        stringData = Encoding.ASCII.GetString(data, 0, recv);
-        Debug.Log("Data RECIEVED:\n" + stringData);
-
-        KillSocket();
+        RecieveData(isUDP: false);
+       
     }
 
     void CreateSocket(bool isUDP)
@@ -47,6 +37,47 @@ public class P2_Client : MonoBehaviour
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         Debug.Log("Socket CREATED");
+    }
+
+    void RecieveData(bool isUDP)
+    {
+        if (isUDP)
+        {
+            stringData = "Hello, thats UDP";
+            data = Encoding.ASCII.GetBytes(stringData);
+            socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+
+            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+            EndPoint Remote = (EndPoint)sender;
+
+            data = new byte[1024];
+            recv = socket.ReceiveFrom(data, ref Remote);
+
+            Debug.Log("Message received from {0}:" + Remote.ToString());
+            Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
+
+            Debug.Log("Socket CLOSE");
+            socket.Close();
+        }
+        else
+        {
+            try
+            {
+                socket.Connect(ipep); //Connect to ip with socket
+            }
+            catch (SocketException e)
+            {
+                Debug.Log("Connection FAILED: Unable to connect to server.\nError: " + e.ToString());
+                return;
+            }
+
+            //Recieve data and read as string
+            recv = socket.Receive(data);
+            stringData = Encoding.ASCII.GetString(data, 0, recv);
+            Debug.Log("Data RECIEVED:\n" + stringData);
+
+            KillSocket();
+        }
     }
 
     void ShutdownSocket()
