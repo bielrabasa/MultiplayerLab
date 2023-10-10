@@ -10,7 +10,7 @@ using System;
 
 public class P2_Server : MonoBehaviour
 {
-    bool isUDP = false;
+    [SerializeField] bool isUDP = false;
     Socket socket;
     Socket client;
     Thread serverThread;
@@ -50,12 +50,12 @@ public class P2_Server : MonoBehaviour
         }
     }
 
-    void serverThreadStart()
+    void TCPserverThreadStart()
     {
         //Wait for client
         Debug.Log("___SERVER___\nWaiting for client...\n");
         socket.Listen(10);
-
+        
         //Bind with client
         client = socket.Accept(); //TODO: Peta aquí al interrumpir el thread
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
@@ -68,6 +68,22 @@ public class P2_Server : MonoBehaviour
 
         //Close connection
         client.Close();
+        KillSocket();
+    }
+
+    void UDPserverThreadStart()
+    {
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        EndPoint Remote = (EndPoint)(sender);
+
+        recv = socket.ReceiveFrom(data, ref Remote);
+
+        Debug.Log("___SERVER___\nMessage received from:" + Remote.ToString()
+            + Encoding.ASCII.GetString(data, 0, recv));
+
+        data = Encoding.ASCII.GetBytes(message);
+        socket.SendTo(data, data.Length, SocketFlags.None, Remote);
+
         KillSocket();
     }
 
@@ -86,24 +102,15 @@ public class P2_Server : MonoBehaviour
     {
         if (isUDP)
         {
-            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            EndPoint Remote = (EndPoint)(sender);
-
-            recv = socket.ReceiveFrom(data, ref Remote);
-            
-            Debug.Log("___SERVER___\nMessage received from:" + Remote.ToString());
-            Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
-
-            data = Encoding.ASCII.GetBytes(message);
-            socket.SendTo(data, data.Length, SocketFlags.None, Remote);
+            serverThread = new Thread(UDPserverThreadStart);
         }
         else
         {
-            //Thread Listen
-            serverThread = new Thread(serverThreadStart);
-            serverThread.Start();
-            StartCoroutine(StopListening());
+            serverThread = new Thread(TCPserverThreadStart);
         }
+        
+        serverThread.Start();
+        StartCoroutine(StopListening());
     }
 
     void KillSocket()

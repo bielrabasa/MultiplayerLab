@@ -7,7 +7,7 @@ using UnityEngine.Windows;
 
 public class P2_Client : MonoBehaviour
 {
-    bool isUDP = false;
+    [SerializeField] bool isUDP = false;
     [SerializeField] string ip = "127.0.0.1";
     Socket socket;
 
@@ -45,7 +45,7 @@ public class P2_Client : MonoBehaviour
     {
         if (isUDP)
         {
-            stringData = "___CLIENT___\nHello, thats UDP\n";
+            stringData = "Hello, IM A CLIENT UDP!";
             data = Encoding.ASCII.GetBytes(stringData);
             socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
@@ -55,11 +55,10 @@ public class P2_Client : MonoBehaviour
             data = new byte[1024];
             recv = socket.ReceiveFrom(data, ref Remote);
 
-            Debug.Log("___CLIENT___\nMessage received from:" + Remote.ToString());
-            Debug.Log(Encoding.ASCII.GetString(data, 0, recv));
+            Debug.Log("___CLIENT___\nMessage received from:" + Remote.ToString() 
+                + Encoding.ASCII.GetString(data, 0, recv));
 
-            Debug.Log("___CLIENT___\nSocket CLOSE\n");
-            socket.Close();
+            KillSocket();
         }
         else
         {

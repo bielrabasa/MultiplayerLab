@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d68614d3080af34090e3c6d8a2bcfcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUDP: 1
   ip: 127.0.0.1
 --- !u!1 &1111985099
 GameObject:
@@ -304,4 +305,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2671ce14d33444287c37384f5b658d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUDP: 1
   message: IM CONNECTED! Bieeeen ._.
