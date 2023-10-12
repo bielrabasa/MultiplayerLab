@@ -46,7 +46,7 @@ public class P2_ServerMSG : MonoBehaviour
             " at port " + clientep.Port + "\n");
 
         //Message Sender
-        byte[] data = new byte[1024];
+        /*byte[] data = new byte[1024];
         for (int i = 0; i < 1000; i++)
         {
             string message = "\tRoger Puto (" + i + ")!";
@@ -54,9 +54,27 @@ public class P2_ServerMSG : MonoBehaviour
             client.Send(data, data.Length, SocketFlags.None);
         }
 
-        //Close connection
+        Close connection
         client.Close();
-        KillSocket();
+        KillSocket();*/
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            byte[] data = new byte[1024];
+            string message = "MESSAGE sent at: " + Time.realtimeSinceStartup + " !!!!!!";
+            data = Encoding.ASCII.GetBytes(message);
+            client.Send(data, data.Length, SocketFlags.None);
+        }
+        
+        //TODO: Need to kill socket on disconnect
+        /*if (!socket.Connected)
+        {
+            client.Close();
+            KillSocket();
+        }*/
     }
 
     void CreateSocket()

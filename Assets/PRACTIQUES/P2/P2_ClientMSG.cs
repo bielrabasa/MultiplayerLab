@@ -32,11 +32,16 @@ public class P2_ClientMSG : MonoBehaviour
             return;
         }
 
-        //Message Reciever
-        byte[] data = new byte[1024];
+        Thread messageReciever = new Thread(MessageReciever);
+        messageReciever.Start();
+    }
 
-        for (int i = 0; i < 1000; i++)
+    void MessageReciever()
+    {
+        //Message Reciever
+        for (int i = 0; i < 3; i++)
         {
+            byte[] data = new byte[1024];
             int size = socket.Receive(data);
             Debug.Log("___CLIENT___\nMessage RECIEVED:\n" + Encoding.ASCII.GetString(data, 0, size));
         }
