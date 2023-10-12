@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/PRACTIQUES/EmptyScene.unity
+    guid: a8a18ae366a458d45a4f7f128a65cf6a
+  - enabled: 1
+    path: Assets/PRACTIQUES/EmptyClient.unity
+    guid: 170ae1c1152c85544836da604d900804
   m_configObjects: {}

@@ -40,7 +40,7 @@ public class P2_Server : MonoBehaviour
 
     IEnumerator StopListening()
     {
-        yield return new WaitForSeconds(15);
+        yield return new WaitForSeconds(60);
 
         if (serverThread.IsAlive) { 
             serverThread.Interrupt(); //TODO: This causes errors

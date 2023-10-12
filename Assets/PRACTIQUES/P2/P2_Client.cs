@@ -85,7 +85,7 @@ public class P2_Client : MonoBehaviour
     {
         //socket.Shutdown(SocketShutdown.Receive);
         //socket.Shutdown(SocketShutdown.Send);
-        socket.Shutdown(SocketShutdown.Both);
+        //socket.Shutdown(SocketShutdown.Both);
 
         //TODO: Preguntar
     }
