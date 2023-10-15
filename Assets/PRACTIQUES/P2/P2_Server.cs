@@ -14,7 +14,7 @@ public class P2_Server : MonoBehaviour
     Socket socket;
     Socket client;
     Thread serverThread;
-
+    EndPoint Remote;
     [SerializeField] string message = "IM CONNECTED! Bieeeen ._.";
 
     //SEND info
@@ -71,11 +71,8 @@ public class P2_Server : MonoBehaviour
         KillSocket();
     }
 
-    void UDPserverThreadStart()
+    public void Connecting()
     {
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        EndPoint Remote = (EndPoint)(sender);
-
         recv = socket.ReceiveFrom(data, ref Remote);
 
         Debug.Log("___SERVER___\nMessage received from:" + Remote.ToString()
@@ -83,8 +80,14 @@ public class P2_Server : MonoBehaviour
 
         data = Encoding.ASCII.GetBytes(message);
         socket.SendTo(data, data.Length, SocketFlags.None, Remote);
+    }
 
-        KillSocket();
+    void UDPserverThreadStart()
+    {
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        Remote = (EndPoint)(sender);
+
+        //KillSocket();
     }
 
     void CreateSocket()

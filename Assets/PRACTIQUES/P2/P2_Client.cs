@@ -4,18 +4,25 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Windows;
+using System.Threading;
+using UnityEngine.UI;
 
 public class P2_Client : MonoBehaviour
 {
     [SerializeField] bool isUDP = false;
     [SerializeField] string ip = "127.0.0.1";
     Socket socket;
+    EndPoint Remote;
 
     byte[] data = new byte[1024];
     string stringData;
     int recv;
 
     IPEndPoint ipep;
+
+    P2_Server server;
+
+    [SerializeField] GameObject indicator;
 
     void Start()
     {
@@ -27,7 +34,18 @@ public class P2_Client : MonoBehaviour
 
         //Recive info in UDP or TCP mode
         RecieveData();
-       
+
+        server = GameObject.FindAnyObjectByType<P2_Server>();
+        server.Connecting();
+
+        Thread messageReciever = new Thread(MessageReciever);
+        messageReciever.Start();
+
+        if(socket.Connected)
+        {
+            ChangeColor();
+        }
+
     }
 
     void CreateSocket()
@@ -41,6 +59,17 @@ public class P2_Client : MonoBehaviour
         Debug.Log("___CLIENT___\nSocket CREATED\n");
     }
 
+    void MessageReciever()
+    {
+        data = new byte[1024];
+        recv = socket.ReceiveFrom(data, ref Remote);
+
+        Debug.Log("___CLIENT___\nMessage received from player " +": " + Remote.ToString()
+            + Encoding.ASCII.GetString(data, 0, recv));
+
+        KillSocket();
+    }
+
     void RecieveData()
     {
         if (isUDP)
@@ -50,15 +79,7 @@ public class P2_Client : MonoBehaviour
             socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
             IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            EndPoint Remote = (EndPoint)sender;
-
-            data = new byte[1024];
-            recv = socket.ReceiveFrom(data, ref Remote);
-
-            Debug.Log("___CLIENT___\nMessage received from:" + Remote.ToString() 
-                + Encoding.ASCII.GetString(data, 0, recv));
-
-            KillSocket();
+            Remote = (EndPoint)sender;
         }
         else
         {
@@ -96,5 +117,11 @@ public class P2_Client : MonoBehaviour
         socket.Close();
 
         Debug.Log("___CLIENT___\nSocket KILLED\n");
+    }
+
+    void ChangeColor()
+    {
+        indicator.GetComponent<Image>().color = new Color(0, 255, 0);
+        Debug.Log("Mostrar que conecto");
     }
 }
