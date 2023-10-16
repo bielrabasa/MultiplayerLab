@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class P2_Client : MonoBehaviour
 {
-    [SerializeField] bool isUDP = false;
     [SerializeField] string ip = "127.0.0.1";
     Socket socket;
     EndPoint Remote;
@@ -45,16 +44,11 @@ public class P2_Client : MonoBehaviour
         {
             ChangeColor();
         }
-
     }
 
     void CreateSocket()
     {
-        if (isUDP)
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        else
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         Debug.Log("___CLIENT___\nSocket CREATED\n");
     }
@@ -72,48 +66,16 @@ public class P2_Client : MonoBehaviour
 
     void RecieveData()
     {
-        if (isUDP)
-        {
-            stringData = "Hello, IM A CLIENT UDP!";
-            data = Encoding.ASCII.GetBytes(stringData);
-            socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+        stringData = "Hello, IM A CLIENT UDP!";
+        data = Encoding.ASCII.GetBytes(stringData);
+        socket.SendTo(data, data.Length, SocketFlags.None, ipep);
 
-            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-            Remote = (EndPoint)sender;
-        }
-        else
-        {
-            try
-            {
-                socket.Connect(ipep); //Connect to ip with socket
-            }
-            catch (SocketException e)
-            {
-                Debug.Log("___CLIENT___\nConnection FAILED: Unable to connect to server.\nError: " + e.ToString());
-                return;
-            }
-
-            //Recieve data and read as string
-            recv = socket.Receive(data);
-            stringData = Encoding.ASCII.GetString(data, 0, recv);
-            Debug.Log("___CLIENT___\nData RECIEVED:\n" + stringData);
-
-            KillSocket();
-        }
-    }
-
-    void ShutdownSocket()
-    {
-        //socket.Shutdown(SocketShutdown.Receive);
-        //socket.Shutdown(SocketShutdown.Send);
-        //socket.Shutdown(SocketShutdown.Both);
-
-        //TODO: Preguntar
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        Remote = (EndPoint)sender;
     }
 
     void KillSocket()
     {
-        ShutdownSocket();
         socket.Close();
 
         Debug.Log("___CLIENT___\nSocket KILLED\n");
@@ -122,6 +84,5 @@ public class P2_Client : MonoBehaviour
     void ChangeColor()
     {
         indicator.GetComponent<Image>().color = new Color(0, 255, 0);
-        Debug.Log("Mostrar que conecto");
     }
 }

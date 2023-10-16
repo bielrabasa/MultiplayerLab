@@ -10,9 +10,7 @@ using System;
 
 public class P2_Server : MonoBehaviour
 {
-    [SerializeField] bool isUDP = false;
     Socket socket;
-    Socket client;
     Thread serverThread;
     EndPoint Remote;
     [SerializeField] string message = "IM CONNECTED! Bieeeen ._.";
@@ -50,33 +48,15 @@ public class P2_Server : MonoBehaviour
         }
     }
 
-    void TCPserverThreadStart()
-    {
-        //Wait for client
-        Debug.Log("___SERVER___\nWaiting for client...\n");
-        socket.Listen(10);
-        
-        //Bind with client
-        client = socket.Accept(); //TODO: Peta aquí al interrumpir el thread
-        IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
-        Debug.Log("___SERVER___\nConnected with " + clientep.Address.ToString() +
-            " at port " + clientep.Port + "\n");
-        
-        data = Encoding.ASCII.GetBytes(message);
-        client.Send(data, data.Length, SocketFlags.None);
-        Debug.Log("___SERVER___\nData sent!\n");
-
-        //Close connection
-        client.Close();
-        KillSocket();
-    }
-
     public void Connecting()
     {
         recv = socket.ReceiveFrom(data, ref Remote);
 
         Debug.Log("___SERVER___\nMessage received from:" + Remote.ToString()
             + Encoding.ASCII.GetString(data, 0, recv));
+
+        //entenc que aqui em guardo els inputs del player??
+
 
         data = Encoding.ASCII.GetBytes(message);
         socket.SendTo(data, data.Length, SocketFlags.None, Remote);
@@ -86,31 +66,18 @@ public class P2_Server : MonoBehaviour
     {
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         Remote = (EndPoint)(sender);
-
-        //KillSocket();
     }
 
     void CreateSocket()
     {
-        if (isUDP)
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        else
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         Debug.Log("___SERVER___\nSocket CREATED\n");
     }
 
     void SendData()
     {
-        if (isUDP)
-        {
-            serverThread = new Thread(UDPserverThreadStart);
-        }
-        else
-        {
-            serverThread = new Thread(TCPserverThreadStart);
-        }
+        serverThread = new Thread(UDPserverThreadStart);
         
         serverThread.Start();
         StartCoroutine(StopListening());
