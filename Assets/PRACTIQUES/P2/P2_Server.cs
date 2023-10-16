@@ -48,6 +48,27 @@ public class P2_Server : MonoBehaviour
         }
     }
 
+    void CreateSocket()
+    {
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+        Debug.Log("___SERVER___\nSocket CREATED\n");
+    }
+
+    void SendData()
+    {
+        serverThread = new Thread(UDPserverThreadStart);
+
+        serverThread.Start();
+        StartCoroutine(StopListening());
+    }
+
+    void UDPserverThreadStart()
+    {
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+        Remote = (EndPoint)(sender);
+    }
+
     public void Connecting()
     {
         recv = socket.ReceiveFrom(data, ref Remote);
@@ -60,27 +81,6 @@ public class P2_Server : MonoBehaviour
 
         data = Encoding.ASCII.GetBytes(message);
         socket.SendTo(data, data.Length, SocketFlags.None, Remote);
-    }
-
-    void UDPserverThreadStart()
-    {
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        Remote = (EndPoint)(sender);
-    }
-
-    void CreateSocket()
-    {
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-        Debug.Log("___SERVER___\nSocket CREATED\n");
-    }
-
-    void SendData()
-    {
-        serverThread = new Thread(UDPserverThreadStart);
-        
-        serverThread.Start();
-        StartCoroutine(StopListening());
     }
 
     void KillSocket()

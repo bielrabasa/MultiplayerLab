@@ -53,17 +53,6 @@ public class P2_Client : MonoBehaviour
         Debug.Log("___CLIENT___\nSocket CREATED\n");
     }
 
-    void MessageReciever()
-    {
-        data = new byte[1024];
-        recv = socket.ReceiveFrom(data, ref Remote);
-
-        Debug.Log("___CLIENT___\nMessage received from player " +": " + Remote.ToString()
-            + Encoding.ASCII.GetString(data, 0, recv));
-
-        KillSocket();
-    }
-
     void RecieveData()
     {
         stringData = "Hello, IM A CLIENT UDP!";
@@ -72,6 +61,17 @@ public class P2_Client : MonoBehaviour
 
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         Remote = (EndPoint)sender;
+    }
+
+    void MessageReciever()
+    {
+        data = new byte[1024];
+        recv = socket.ReceiveFrom(data, ref Remote);
+
+        Debug.Log("___CLIENT___\nMessage received from player " + ": " + Remote.ToString()
+            + Encoding.ASCII.GetString(data, 0, recv));
+
+        KillSocket();
     }
 
     void KillSocket()
