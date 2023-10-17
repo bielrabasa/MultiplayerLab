@@ -88,14 +88,9 @@ public class P2_ServerMSG : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             client.Send(Encoding.ASCII.GetBytes("stop"), 4, SocketFlags.None);
-        }
-
-        //TODO: Need to kill socket on disconnect
-        /*if (!socket.Connected)
-        {
             client.Close();
             KillSocket();
-        }*/
+        }
     }
 
     void CreateSocket()
