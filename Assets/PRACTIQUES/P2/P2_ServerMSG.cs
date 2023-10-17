@@ -48,10 +48,12 @@ public class P2_ServerMSG : MonoBehaviour
         socket.Listen(10);
 
         //Bind with client
-        try {
+        try 
+        {
             client = socket.Accept();
         }
-        catch { 
+        catch 
+        { 
             Debug.Log("Server stopped listening! "); 
             return;
         }
@@ -82,6 +84,10 @@ public class P2_ServerMSG : MonoBehaviour
             string message = "MESSAGE sent at: " + Time.realtimeSinceStartup + " !!!!!!";
             data = Encoding.ASCII.GetBytes(message);
             client.Send(data, data.Length, SocketFlags.None);
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            client.Send(Encoding.ASCII.GetBytes("stop"), 4, SocketFlags.None);
         }
 
         //TODO: Need to kill socket on disconnect

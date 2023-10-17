@@ -39,12 +39,15 @@ public class P2_ClientMSG : MonoBehaviour
     void MessageReciever()
     {
         //Message Reciever
-        for (int i = 0; i < 3; i++)
+        string message;
+        do
         {
             byte[] data = new byte[1024];
             int size = socket.Receive(data);
-            Debug.Log("___CLIENT___\nMessage RECIEVED:\n" + Encoding.ASCII.GetString(data, 0, size));
-        }
+            message = Encoding.ASCII.GetString(data, 0, size);
+            Debug.Log("___CLIENT___\nMessage RECIEVED:\n" + message);
+        } 
+        while (message != "stop");
 
         KillSocket();
     }
