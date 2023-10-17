@@ -31,6 +31,14 @@ public class P2_ServerMSG : MonoBehaviour
 
         serverThread = new Thread(ServerSearchClient);
         serverThread.Start();
+        StartCoroutine(StopSearching());
+    }
+
+    IEnumerator StopSearching()
+    {
+        yield return new WaitForSeconds(5);
+
+        serverThread.Abort();
     }
 
     void ServerSearchClient()
@@ -40,7 +48,14 @@ public class P2_ServerMSG : MonoBehaviour
         socket.Listen(10);
 
         //Bind with client
-        client = socket.Accept();
+        try {
+            client = socket.Accept();
+        }
+        catch { 
+            Debug.Log("Server stopped listening! "); 
+            return;
+        }
+
         IPEndPoint clientep = (IPEndPoint)client.RemoteEndPoint;
         Debug.Log("___SERVER___\nConnected with " + clientep.Address.ToString() +
             " at port " + clientep.Port + "\n");
@@ -68,7 +83,7 @@ public class P2_ServerMSG : MonoBehaviour
             data = Encoding.ASCII.GetBytes(message);
             client.Send(data, data.Length, SocketFlags.None);
         }
-        
+
         //TODO: Need to kill socket on disconnect
         /*if (!socket.Connected)
         {
