@@ -22,6 +22,8 @@ public class P2_Server : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
+
         //Create IP info struct
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050); //TODO: Preguntar port
 

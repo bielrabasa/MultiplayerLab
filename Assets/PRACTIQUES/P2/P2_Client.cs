@@ -21,10 +21,18 @@ public class P2_Client : MonoBehaviour
 
     P2_Server server;
 
+    bool actuConsole = false;
+    string axuConsole;
+    string myName;
+    fool consoleUI;
+
     [SerializeField] GameObject indicator;
 
     void Start()
     {
+        myName = this.name;
+        consoleUI = GameObject.FindAnyObjectByType<fool>();
+
         //Create IP info struct
         ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
 
@@ -44,6 +52,11 @@ public class P2_Client : MonoBehaviour
         {
             ChangeColor();
         }
+    }
+
+    private void Update()
+    {
+        if(actuConsole) { consoleUI.ConsoleLogs(axuConsole); actuConsole = false; }
     }
 
     void CreateSocket()
@@ -67,6 +80,11 @@ public class P2_Client : MonoBehaviour
     {
         data = new byte[1024];
         recv = socket.ReceiveFrom(data, ref Remote);
+
+        axuConsole = ("___CLIENT___\nMessage received from " + myName + ": " + Remote.ToString()
+            + Encoding.ASCII.GetString(data, 0, recv));
+
+        actuConsole = true;
 
         Debug.Log("___CLIENT___\nMessage received from player " + ": " + Remote.ToString()
             + Encoding.ASCII.GetString(data, 0, recv));
