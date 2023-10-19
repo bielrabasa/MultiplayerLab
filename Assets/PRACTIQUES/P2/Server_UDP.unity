@@ -362,7 +362,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b968ca4d7a9d80648a80d1576948c8a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneName: EmptyClient
+  SceneName: Clients_UDP
+  Console1: {fileID: 0}
+  Console2: {fileID: 0}
 --- !u!1 &900813757
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,5 +672,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2671ce14d33444287c37384f5b658d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUDP: 1
   message: IM CONNECTED! Bieeeen ._.

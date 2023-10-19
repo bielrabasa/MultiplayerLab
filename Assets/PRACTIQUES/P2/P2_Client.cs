@@ -26,9 +26,11 @@ public class P2_Client : MonoBehaviour
     string myName;
     fool consoleUI;
 
+    bool colorConnected;
+
     [SerializeField] GameObject indicator;
 
-    void Start()
+    public void ConnectMe()
     {
         myName = this.name;
         consoleUI = GameObject.FindAnyObjectByType<fool>();
@@ -39,7 +41,7 @@ public class P2_Client : MonoBehaviour
         //Open Socket
         CreateSocket();
 
-        //Recive info in UDP or TCP mode
+        //Recive info in UDP
         RecieveData();
 
         server = GameObject.FindAnyObjectByType<P2_Server>();
@@ -50,6 +52,7 @@ public class P2_Client : MonoBehaviour
 
         if(socket.Connected)
         {
+            colorConnected = true;
             ChangeColor();
         }
     }
@@ -78,16 +81,20 @@ public class P2_Client : MonoBehaviour
 
     void MessageReciever()
     {
-        data = new byte[1024];
-        recv = socket.ReceiveFrom(data, ref Remote);
+        string info;
+        do
+        {
+            data = new byte[1024];
+            recv = socket.ReceiveFrom(data, ref Remote);
 
-        axuConsole = ("___CLIENT___\nMessage received from " + myName + ": " + Remote.ToString()
-            + Encoding.ASCII.GetString(data, 0, recv));
+            info = Encoding.ASCII.GetString(data, 0, recv);
 
-        actuConsole = true;
+            axuConsole = ("___CLIENT___\nMessage received from " + myName + ": " + Remote.ToString()
+                + Encoding.ASCII.GetString(data, 0, recv));
 
-        Debug.Log("___CLIENT___\nMessage received from player " + ": " + Remote.ToString()
-            + Encoding.ASCII.GetString(data, 0, recv));
+            actuConsole = true;
+        }
+        while (info != "stop");
 
         KillSocket();
     }
@@ -101,6 +108,22 @@ public class P2_Client : MonoBehaviour
 
     void ChangeColor()
     {
-        indicator.GetComponent<Image>().color = new Color(0, 255, 0);
+        if(colorConnected)
+        {
+            indicator.GetComponent<Image>().color = new Color(0, 255, 0);
+        }
+        else 
+        { 
+            indicator.GetComponent<Image>().color = new Color(255, 0, 0);
+        }
+    }
+
+    public void DisconnetMe()
+    {
+        stringData = "stop";
+        data = Encoding.ASCII.GetBytes(stringData);
+        socket.SendTo(data, data.Length, SocketFlags.None, ipep);
+        colorConnected = false;
+        ChangeColor();
     }
 }

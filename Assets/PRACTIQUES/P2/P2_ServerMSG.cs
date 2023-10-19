@@ -36,7 +36,7 @@ public class P2_ServerMSG : MonoBehaviour
 
     IEnumerator StopSearching()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(15);
 
         serverThread.Abort();
     }

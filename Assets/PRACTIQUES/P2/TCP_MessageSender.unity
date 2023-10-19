@@ -459,12 +459,12 @@ MonoBehaviour:
     - Enable Server object
 
     - Enable Client object
+    faster than 15s
+
+    - Press "Space" to send message from server to client
 
     -
-    Press "Space" to send message from server to client
-
-    - Press "Return" to
-    stop connection
+    Press "Return" to stop connection
 
 
     Check Logs to undestand what''s happening!'

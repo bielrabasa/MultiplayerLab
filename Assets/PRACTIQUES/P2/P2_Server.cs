@@ -95,4 +95,9 @@ public class P2_Server : MonoBehaviour
         socket.Close();
         Debug.Log("___SERVER___\nSocket KILLED\n");
     }
+
+    public void DisconnectPlayer()
+    {
+        socket.Send(Encoding.ASCII.GetBytes("stop"), 4, SocketFlags.None);
+    }
 }
