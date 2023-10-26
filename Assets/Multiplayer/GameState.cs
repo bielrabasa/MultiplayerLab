@@ -5,6 +5,10 @@ using System.Net.Sockets;
 using System.Net;
 using UnityEngine.UIElements;
 using UnityEditor;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Networking;
+using System;
 
 public struct PlayerState
 {
@@ -20,6 +24,7 @@ public class GameState : MonoBehaviour
     const int MESSAGE_PACK_SIZE = 1024;
     const string BLUE_TANK_NAME = "Tank (blue)";
     const string RED_TANK_NAME = "Tank (red)";
+    [SerializeField] float MESSAGE_SEND_DELAY = 1.0f;
 
     //Real ingame objects
     Transform otherPlayer;
@@ -28,9 +33,7 @@ public class GameState : MonoBehaviour
     //Client -> Red
 
     //Multiplayer
-    Socket mpSocket;
-    EndPoint mpRemote;
-    bool isServer; //TODO: Needs to be set from outside
+    MultiplayerState multiplayerState;
 
     //State Update
     bool hasUpdated;
@@ -38,7 +41,7 @@ public class GameState : MonoBehaviour
 
     //Recieve messages
     bool stopConnection;
-    Thread recievingMessages; //TODO: Activate Thread on connection
+    Thread recievingMessages;
 
     void Start()
     {
@@ -46,11 +49,9 @@ public class GameState : MonoBehaviour
         hasUpdated = false;
         recievingMessages = new Thread(RecieveOtherState);
 
-        //TODO: ERASE, this is a test
-        isServer = false;
+        multiplayerState = FindObjectOfType<MultiplayerState>();
+
         GetPlayers();
-        Debug.Log("JSON: \n" + JsonUtility.ToJson(GetMyState()));
-        //
     }
 
     void Update()
@@ -71,6 +72,12 @@ public class GameState : MonoBehaviour
             UpdateOtherState();
             hasUpdated = false;
         }
+    }
+
+    void StartDataTransfer()
+    {
+        recievingMessages.Start();
+        StartCoroutine(SendMyState());
     }
 
     void UpdateOtherState()
@@ -105,10 +112,9 @@ public class GameState : MonoBehaviour
         {
             if (t.gameObject.name == BLUE_TANK_NAME)
             {
-                if (isServer)
+                if (multiplayerState.isServer)
                 {
                     myPlayer = t.gameObject.transform;
-                    Debug.Log("Server Set");
                 }
                 else
                 {
@@ -118,10 +124,9 @@ public class GameState : MonoBehaviour
             }
             else if(t.gameObject.name == RED_TANK_NAME)
             {
-                if (!isServer)
+                if (!multiplayerState.isServer)
                 {
                     myPlayer = t.gameObject.transform;
-                    Debug.Log("Client Set");
                 }
                 else
                 {
@@ -132,12 +137,17 @@ public class GameState : MonoBehaviour
         }
     }
 
-    void SendMyState()
+    IEnumerator SendMyState()
     {
-        byte[] messageData = ToBytes(GetMyState());
+        while (!stopConnection)
+        {
+            yield return new WaitForSecondsRealtime(MESSAGE_SEND_DELAY);
 
-        //TODO: Send message correctly
-        mpSocket.SendTo(messageData, messageData.Length, SocketFlags.None, mpRemote);
+            byte[] messageData = ToBytes(GetMyState());
+
+            //TODO: Send message correctly
+            multiplayerState.socket.SendTo(messageData, messageData.Length, SocketFlags.None, multiplayerState.remote);
+        }
     }
 
     //
@@ -149,7 +159,7 @@ public class GameState : MonoBehaviour
         {
             byte[] data = new byte[MESSAGE_PACK_SIZE];
             //TODO: Recieve message correctly
-            int size = mpSocket.ReceiveFrom(data, ref mpRemote);
+            int size = multiplayerState.socket.ReceiveFrom(data, ref multiplayerState.remote);
 
             PlayerState message = FromBytes(data, size);
 
