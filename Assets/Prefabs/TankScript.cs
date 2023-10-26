@@ -16,6 +16,9 @@ public class TankScript : MonoBehaviour
 
     int inputNum = 0;
 
+    //Multiplayer
+    bool movementBlocked = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +31,8 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (movementBlocked) return;
+
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space)) Shoot();
 
@@ -94,5 +99,11 @@ public class TankScript : MonoBehaviour
             Instantiate(trail, transform.position + spawnDist, dir);
             STDAux = SpawnTrailDelay;
         }
+    }
+
+    //Multiplayer
+    public void BlockMovement()
+    {
+        movementBlocked = true;
     }
 }

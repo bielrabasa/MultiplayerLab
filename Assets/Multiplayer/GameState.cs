@@ -3,21 +3,29 @@ using System.Threading;
 using UnityEngine;
 using System.Net.Sockets;
 using System.Net;
+using UnityEngine.UIElements;
+using UnityEditor;
 
 public struct PlayerState
 {
     public float time;
-    public Transform transform;
+    public Vector3 pos;
+    public float topRot;
+    public float botRot;
     public bool shotBullet;    
 }
 
 public class GameState : MonoBehaviour
 {
     const int MESSAGE_PACK_SIZE = 1024;
+    const string BLUE_TANK_NAME = "Tank (blue)";
+    const string RED_TANK_NAME = "Tank (red)";
 
     //Real ingame objects
-    [SerializeField] Transform otherPlayer;
-    [SerializeField] Transform myPlayer;
+    Transform otherPlayer;
+    Transform myPlayer;
+    //Server -> Blue
+    //Client -> Red
 
     //Multiplayer
     Socket mpSocket;
@@ -37,10 +45,27 @@ public class GameState : MonoBehaviour
         stopConnection = false;
         hasUpdated = false;
         recievingMessages = new Thread(RecieveOtherState);
+
+        //TODO: ERASE, this is a test
+        isServer = false;
+        GetPlayers();
+        Debug.Log("JSON: \n" + JsonUtility.ToJson(GetMyState()));
+        //
     }
 
     void Update()
     {
+        //TODO: TEST, erase this
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            otherState = GetMyState();
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            UpdateOtherState();
+        }
+        //
+        
         if (hasUpdated)
         {
             UpdateOtherState();
@@ -50,17 +75,62 @@ public class GameState : MonoBehaviour
 
     void UpdateOtherState()
     {
-        //TODO: Update all scene from the otherState struct
+        otherPlayer.position = otherState.pos;
+        otherPlayer.GetChild(0).rotation = Quaternion.Euler(0, 0, otherState.topRot);
+        otherPlayer.GetChild(1).rotation = Quaternion.Euler(0, 0, otherState.botRot);
+
+        if(otherState.shotBullet)
+        {
+            //TODO: Instanciate bullet from data
+        }
+    }
+
+    PlayerState GetMyState()
+    {
+        PlayerState myState = new PlayerState();
+
+        myState.time = Time.time;
+        myState.pos = myPlayer.position;
+        myState.topRot = myPlayer.GetChild(0).rotation.eulerAngles.z;
+        myState.botRot = myPlayer.GetChild(1).rotation.eulerAngles.z;
+        myState.shotBullet = false; //TODO: Check if bullet has been shot
+
+        return myState;
+    }
+
+    void GetPlayers()
+    {
+        if (isServer) 
+        {
+            TankScript[] ts = FindObjectsOfType<TankScript>();
+            foreach (TankScript t in ts)
+            {
+                if (t.gameObject.name == BLUE_TANK_NAME)
+                {
+                    if (isServer) myPlayer = t.gameObject.transform;
+                    else
+                    {
+                        otherPlayer = t.gameObject.transform;
+                        t.BlockMovement();
+                    }
+                }
+                else if(t.gameObject.name == RED_TANK_NAME)
+                {
+                    if (!isServer) myPlayer = t.gameObject.transform;
+                    else
+                    {
+                        otherPlayer = t.gameObject.transform;
+                        t.BlockMovement();
+                    }
+                }
+            }
+        }
+
     }
 
     void SendMyState()
     {
-        PlayerState myState = new PlayerState();
-        myState.time = Time.time;
-        myState.transform = myPlayer;
-        myState.shotBullet = false; //TODO: Check if bullet has been shot
-
-        byte[] messageData = ToBytes(myState);
+        byte[] messageData = ToBytes(GetMyState());
 
         //TODO: Send message correctly
         mpSocket.SendTo(messageData, messageData.Length, SocketFlags.None, mpRemote);
@@ -87,7 +157,11 @@ public class GameState : MonoBehaviour
             }
         }
     }
+    
 
+    //
+    //  TOOLS
+    //
     byte[] ToBytes(PlayerState ps) //ps -> json -> bytes
     {
         string json = JsonUtility.ToJson(ps); 
