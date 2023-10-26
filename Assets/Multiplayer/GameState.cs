@@ -100,32 +100,36 @@ public class GameState : MonoBehaviour
 
     void GetPlayers()
     {
-        if (isServer) 
+        TankScript[] ts = FindObjectsOfType<TankScript>();
+        foreach (TankScript t in ts)
         {
-            TankScript[] ts = FindObjectsOfType<TankScript>();
-            foreach (TankScript t in ts)
+            if (t.gameObject.name == BLUE_TANK_NAME)
             {
-                if (t.gameObject.name == BLUE_TANK_NAME)
+                if (isServer)
                 {
-                    if (isServer) myPlayer = t.gameObject.transform;
-                    else
-                    {
-                        otherPlayer = t.gameObject.transform;
-                        t.BlockMovement();
-                    }
+                    myPlayer = t.gameObject.transform;
+                    Debug.Log("Server Set");
                 }
-                else if(t.gameObject.name == RED_TANK_NAME)
+                else
                 {
-                    if (!isServer) myPlayer = t.gameObject.transform;
-                    else
-                    {
-                        otherPlayer = t.gameObject.transform;
-                        t.BlockMovement();
-                    }
+                    otherPlayer = t.gameObject.transform;
+                    t.BlockMovement();
+                }
+            }
+            else if(t.gameObject.name == RED_TANK_NAME)
+            {
+                if (!isServer)
+                {
+                    myPlayer = t.gameObject.transform;
+                    Debug.Log("Client Set");
+                }
+                else
+                {
+                    otherPlayer = t.gameObject.transform;
+                    t.BlockMovement();
                 }
             }
         }
-
     }
 
     void SendMyState()
