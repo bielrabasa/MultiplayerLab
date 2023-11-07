@@ -23,13 +23,24 @@ public class Client : MonoBehaviour
     IPEndPoint ipep;
 
     bool connected;
-
+    bool startConnection;
 
     private void Start()
     {
         connected = false;
+        startConnection = false;
         messageReciever = new Thread(ConnectToServer);
         waitForStart = new Thread(ConnectToServer);
+    }
+
+    private void Update()
+    {
+        if (startConnection)
+        {
+            FullyConnected();
+            startConnection = false;
+        }
+
     }
 
     public void SetIP()
@@ -91,7 +102,7 @@ public class Client : MonoBehaviour
         if(message == "ServerConnected")
         {
             connected = true;
-            FullyConnected();
+            startConnection = true;
         }
         else
         {
