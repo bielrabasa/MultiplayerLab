@@ -86,12 +86,24 @@ public class Server : MonoBehaviour
     {
         if (!connected) return;
 
-        Debug.Log("PLAYING!!");
-        //TODO: Transfer info
-        //TODO: Send message
+        TransferInformation();
+
+        //SendStart message
+        string stringData = "StartGame";
+        byte[] sendData = new byte[1024];
+        sendData = Encoding.ASCII.GetBytes(stringData);
+        socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
 
         //ChangeScene
         ChangeScene();
+    }
+
+    void TransferInformation()
+    {
+        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
+        ms.socket = socket;
+        ms.remote = remote;
+        ms.isServer = true;
     }
 
     void ChangeScene()
