@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Server : MonoBehaviour
 {
@@ -109,5 +110,15 @@ public class Server : MonoBehaviour
     void ChangeScene()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void GetIP(Text text)
+    {
+        string host = Dns.GetHostName();
+
+        // Getting ip address using host name 
+        IPHostEntry ip = Dns.GetHostEntry(host);
+
+        text.text = ip.AddressList[0].ToString();
     }
 }
