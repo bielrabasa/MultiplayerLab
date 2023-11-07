@@ -96,6 +96,6 @@ public class Server : MonoBehaviour
 
     void ChangeScene()
     {
-        SceneManager.LoadScene("MainScene", LoadSceneMode.Additive);
+        SceneManager.LoadScene("MainScene");
     }
 }
