@@ -25,12 +25,16 @@ public class Client : MonoBehaviour
     bool connected;
     bool startConnection;
 
+    Dropdown dD;
+
     private void Start()
     {
         connected = false;
         startConnection = false;
         messageReciever = new Thread(ConnectToServer);
         waitForStart = new Thread(ConnectToServer);
+
+        SetDropDown();
     }
 
     private void Update()
@@ -40,12 +44,11 @@ public class Client : MonoBehaviour
             FullyConnected();
             startConnection = false;
         }
-
     }
 
     public void SetIP()
     {
-        InputField ipInput = FindObjectOfType<InputField>(); 
+        InputField ipInput = FindObjectOfType<InputField>();
         string ip = ipInput.text.ToString();
         serverIP = ip;
 
@@ -150,5 +153,34 @@ public class Client : MonoBehaviour
         {
             Debug.Log("Message recieved to start game is INCORRECT!");
         }
+    }
+
+    void SetDropDown()
+    {
+        dD = FindAnyObjectByType<Dropdown>();
+        dD.options.Clear();
+        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
+
+        dD.options.Add(new Dropdown.OptionData() { text = "Select Server" });
+
+        foreach (string ip in ms.ipList)
+        {
+            dD.options.Add(new Dropdown.OptionData() { text = ip });
+        }
+        dD.options.Add(new Dropdown.OptionData() { text = "127.0.0.1" });
+
+        dD.GetComponentInChildren<Text>().text = dD.options[0].text;
+    }
+
+    public void SelectDropDown()
+    {
+        dD = FindAnyObjectByType<Dropdown>();
+        InputField ipInput = FindObjectOfType<InputField>();
+
+        int aux = dD.value;
+
+        if(dD.options[aux].text != "Select Server")
+        ipInput.text = dD.options[aux].text;
+
     }
 }

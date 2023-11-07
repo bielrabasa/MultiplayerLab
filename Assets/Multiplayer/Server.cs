@@ -114,11 +114,23 @@ public class Server : MonoBehaviour
 
     public void GetIP(Text text)
     {
-        string host = Dns.GetHostName();
+        // Getting Ip address of local machine...
+        string strHostName = string.Empty;
 
-        // Getting ip address using host name 
-        IPHostEntry ip = Dns.GetHostEntry(host);
+        // First get the host name of local machine.
+        strHostName = Dns.GetHostName();
 
-        text.text = ip.AddressList[0].ToString();
+        // Then using host name, get the IP address list..
+        IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+        IPAddress[] addr = ipEntry.AddressList;
+
+        for (int i = 0; i < addr.Length; i++)
+        {
+            text.text = addr[i].ToString();
+        }
+
+        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
+        ms.ipList.Add(text.text);
+
     }
 }
