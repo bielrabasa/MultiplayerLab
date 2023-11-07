@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Client : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    string serverIP = "127.0.0.1";
+
+    public void SetIP(string ip)
     {
-        
+        serverIP = ip;
+        StartConnection();
     }
 
-    // Update is called once per frame
-    void Update()
+    void StartConnection()
     {
-        
+
     }
 }
