@@ -4,10 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.tvOS;
+using UnityEngine.SceneManagement;
 
 public class Server : MonoBehaviour
 {
@@ -90,5 +88,14 @@ public class Server : MonoBehaviour
 
         Debug.Log("PLAYING!!");
         //TODO: Transfer info
+        //TODO: Send message
+
+        //ChangeScene
+        ChangeScene();
+    }
+
+    void ChangeScene()
+    {
+        SceneManager.LoadScene("MainScene", LoadSceneMode.Additive);
     }
 }
