@@ -5,84 +5,111 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.tvOS;
 using UnityEngine.UI;
 
 public class Client : MonoBehaviour
 {
+    Thread messageReciever;
+
     string serverIP = "127.0.0.1";
 
     Socket socket;
-    EndPoint Remote;
-
+    EndPoint remote;
     IPEndPoint ipep;
 
-    byte[] data = new byte[1024];
-    string stringData;
-    int recv;
+    bool connected;
+
+
+    private void Start()
+    {
+        connected = false;
+        messageReciever = new Thread(ConnectToServer);
+    }
+
+    private void Update()
+    {
+        if (connected)
+        {
+            TransferInformation();
+            //change scene
+            Debug.Log("Change Scene");
+        }
+    }
 
     public void SetIP()
     {
         InputField ipInput = FindObjectOfType<InputField>(); 
-
         string ip = ipInput.text.ToString();
-
         serverIP = ip;
-        StartConnection(ip);
+
+        StartConnection();
     }
 
-    void StartConnection(string ip)
+    void StartConnection()
+    {
+        ClientSetup();
+        messageReciever.Start();
+    }
+
+    void ClientSetup()
     {
         //Create IP info struct
-        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
+        ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
 
         //Open Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        //Recive info in UDP
-        RecieveData();
-
-        Thread messageReciever = new Thread(MessageReciever);
-        messageReciever.Start();
-    }
-
-    void RecieveData()
-    {
-        stringData = "Hello, IM A CLIENT UDP!";
-        data = Encoding.ASCII.GetBytes(stringData);
-        socket.SendTo(data, data.Length, SocketFlags.None, ipep);
-
+        //Set port 0 to send messages
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        Remote = (EndPoint)sender;
+        remote = (EndPoint)sender;
     }
 
-    void MessageReciever()
+    void SendConfirmation()
     {
-        string info;
-        do
-        {
-            data = new byte[1024];
-            recv = socket.ReceiveFrom(data, ref Remote);
-
-            info = Encoding.ASCII.GetString(data, 0, recv);
-        }
-        while (info != "stop");
-
-        KillSocket();
-    }
-
-    void KillSocket()
-    {
-        socket.Close();
-
-        Debug.Log("___CLIENT___\nSocket KILLED\n");
-    }
-
-    /*public void DisconnetMe()
-    {
-        stringData = "stop";
+        string stringData = "ClientConnected";
+        byte[] data = new byte[1024];
         data = Encoding.ASCII.GetBytes(stringData);
         socket.SendTo(data, data.Length, SocketFlags.None, ipep);
-    }*/
+    }
+
+    //THREAD
+    void ConnectToServer()
+    {
+        SendConfirmation();
+
+        byte[] data = new byte[1024];
+        int recv;
+
+        try
+        {
+            recv = socket.ReceiveFrom(data, ref remote);
+        }
+        catch
+        {
+            Debug.Log("Client stopped listening! ");
+            return;
+        }
+
+        string message = Encoding.ASCII.GetString(data, 0, recv);
+
+        if(message == "ServerConnected")
+        {
+            connected = true;
+        }
+        else
+        {
+            Debug.Log("Incorrect confirmation message!");
+        }
+    }
+
+    void TransferInformation()
+    {
+        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
+        ms.socket = socket;
+        ms.remote = remote;
+        ms.isServer = false;
+    }
 }
