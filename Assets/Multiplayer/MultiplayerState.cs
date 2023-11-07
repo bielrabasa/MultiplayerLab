@@ -8,7 +8,7 @@ public class MultiplayerState : MonoBehaviour
 {
     [HideInInspector] public Socket socket;
     [HideInInspector] public EndPoint remote;
-    //[HideInInspector] 
+
     public bool isServer = true;
 
     void Start()
