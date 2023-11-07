@@ -99,7 +99,7 @@ public class Client : MonoBehaviour
 
         string message = Encoding.ASCII.GetString(data, 0, recv);
 
-        if(message == "ServerConnected")
+        if(message == "ServerConnected") //TODO: Es fuma un missatge i rep directament el start playing
         {
             connected = true;
             startConnection = true;
