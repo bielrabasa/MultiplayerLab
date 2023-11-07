@@ -7,12 +7,14 @@ using System.Threading;
 using System.Xml.Linq;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.tvOS;
 using UnityEngine.UI;
 
 public class Client : MonoBehaviour
 {
     Thread messageReciever;
+    Thread waitForStart;
 
     string serverIP = "127.0.0.1";
 
@@ -27,16 +29,7 @@ public class Client : MonoBehaviour
     {
         connected = false;
         messageReciever = new Thread(ConnectToServer);
-    }
-
-    private void Update()
-    {
-        if (connected)
-        {
-            TransferInformation();
-            //change scene
-            Debug.Log("Change Scene");
-        }
+        waitForStart = new Thread(ConnectToServer);
     }
 
     public void SetIP()
@@ -98,11 +91,18 @@ public class Client : MonoBehaviour
         if(message == "ServerConnected")
         {
             connected = true;
+            FullyConnected();
         }
         else
         {
             Debug.Log("Incorrect confirmation message!");
         }
+    }
+
+    void FullyConnected()
+    {
+        TransferInformation();
+        waitForStart.Start();
     }
 
     void TransferInformation()
@@ -111,5 +111,33 @@ public class Client : MonoBehaviour
         ms.socket = socket;
         ms.remote = remote;
         ms.isServer = false;
+    }
+
+    void WaitForStart() //TODO: function to abort
+    {
+        byte[] data = new byte[1024];
+        int recv;
+
+        try
+        {
+            recv = socket.ReceiveFrom(data, ref remote);
+        }
+        catch
+        {
+            Debug.Log("Client did not want to wait for Start!");
+            return;
+        }
+
+        string message = Encoding.ASCII.GetString(data, 0, recv);
+
+        //ChangeScene
+        if (message == "StartGame")
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+        else
+        {
+            Debug.Log("Message recieved to start game is INCORRECT!");
+        }
     }
 }
