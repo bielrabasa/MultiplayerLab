@@ -22,14 +22,14 @@ public class Client : MonoBehaviour
     EndPoint remote;
     IPEndPoint ipep;
 
-    bool connected;
+    bool startGame;
     bool startConnection;
 
     Dropdown dD;
 
     private void Start()
     {
-        connected = false;
+        startGame = false;
         startConnection = false;
         messageReciever = new Thread(ConnectToServer);
         waitForStart = new Thread(WaitForStart);
@@ -43,6 +43,12 @@ public class Client : MonoBehaviour
         {
             FullyConnected();
             startConnection = false;
+        }
+
+        if(startGame)
+        {
+            ChangeScene();
+            startGame = false;
         }
     }
 
@@ -102,7 +108,6 @@ public class Client : MonoBehaviour
 
         if(message == "ServerConnected")
         {
-            connected = true;
             startConnection = true;
         }
         else
@@ -147,7 +152,7 @@ public class Client : MonoBehaviour
         //ChangeScene
         if (message == "StartGame")
         {
-            SceneManager.LoadScene("MainScene");
+            startGame = true;
         }
         else
         {
@@ -183,5 +188,10 @@ public class Client : MonoBehaviour
         if(dD.options[aux].text != "Select Server")
         ipInput.text = dD.options[aux].text;
 
+    }
+
+    void ChangeScene()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 }
