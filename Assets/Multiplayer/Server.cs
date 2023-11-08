@@ -122,9 +122,5 @@ public class Server : MonoBehaviour
         {
             text.text = addr[i].ToString();
         }
-
-        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
-        ms.ipList.Add(text.text);
-
     }
 }

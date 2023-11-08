@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.tvOS;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Client : MonoBehaviour
 {
@@ -70,7 +71,19 @@ public class Client : MonoBehaviour
     void ClientSetup()
     {
         //Create IP info struct
-        ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
+        //ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
+        ipep = new IPEndPoint(IPAddress.Parse("10.0.203.255"), 9050);
+   
+
+        /*string strHostName = Dns.GetHostName();
+        IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+        IPAddress[] addr = ipEntry.AddressList;
+
+        string ip = addr[0].ToString();
+
+        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050);*/
+
+
 
         //Open Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -163,7 +176,7 @@ public class Client : MonoBehaviour
     //Ip dropdown
     void SetDropDown()
     {
-        dD = FindAnyObjectByType<Dropdown>();
+        /*dD = FindAnyObjectByType<Dropdown>();
         dD.options.Clear();
         MultiplayerState ms = FindObjectOfType<MultiplayerState>();
 
@@ -175,7 +188,7 @@ public class Client : MonoBehaviour
         }
         dD.options.Add(new Dropdown.OptionData() { text = "127.0.0.1" });
 
-        dD.GetComponentInChildren<Text>().text = dD.options[0].text;
+        dD.GetComponentInChildren<Text>().text = dD.options[0].text;*/
     }
 
     public void SelectDropDown()
