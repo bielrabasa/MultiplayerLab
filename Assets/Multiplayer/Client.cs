@@ -32,7 +32,7 @@ public class Client : MonoBehaviour
         connected = false;
         startConnection = false;
         messageReciever = new Thread(ConnectToServer);
-        waitForStart = new Thread(ConnectToServer);
+        waitForStart = new Thread(WaitForStart);
 
         SetDropDown();
     }
@@ -76,9 +76,7 @@ public class Client : MonoBehaviour
 
     void SendConfirmation()
     {
-        string stringData = "ClientConnected";
-        byte[] data = new byte[1024];
-        data = Encoding.ASCII.GetBytes(stringData);
+        byte[] data =  Encoding.ASCII.GetBytes("ClientConnected");
         socket.SendTo(data, data.Length, SocketFlags.None, ipep);
     }
 
@@ -96,20 +94,20 @@ public class Client : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Client stopped listening! ");
+            Debug.Log("Client stopped listening!");
             return;
         }
 
         string message = Encoding.ASCII.GetString(data, 0, recv);
 
-        if(message == "ServerConnected") //TODO: Es fuma un missatge i rep directament el start playing
+        if(message == "ServerConnected")
         {
             connected = true;
             startConnection = true;
         }
         else
         {
-            Debug.Log("Incorrect confirmation message!");
+            Debug.Log("Incorrect confirmation message: " + message);
         }
     }
 
@@ -129,6 +127,8 @@ public class Client : MonoBehaviour
 
     void WaitForStart() //TODO: function to abort
     {
+        Debug.Log("Waiting for the Server to Start...");
+
         byte[] data = new byte[1024];
         int recv;
 
@@ -151,10 +151,11 @@ public class Client : MonoBehaviour
         }
         else
         {
-            Debug.Log("Message recieved to start game is INCORRECT!");
+            Debug.Log("Message recieved to start game is INCORRECT: " + message);
         }
     }
 
+    //Ip dropdown
     void SetDropDown()
     {
         dD = FindAnyObjectByType<Dropdown>();

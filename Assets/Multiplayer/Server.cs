@@ -65,13 +65,12 @@ public class Server : MonoBehaviour
         //Incorrect message
         if(message != "ClientConnected")
         {
-            Debug.Log("Incorrect confirmation message!");
+            Debug.Log("Incorrect confirmation message: " + message);
             return;
         }
 
-        string stringData = "ServerConnected";
-        byte[] sendData = new byte[1024];
-        sendData = Encoding.ASCII.GetBytes(stringData);
+        //Send Confirmation Message
+        byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
         socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
 
         connected = true;
@@ -90,9 +89,7 @@ public class Server : MonoBehaviour
         TransferInformation();
 
         //SendStart message
-        string stringData = "StartGame";
-        byte[] sendData = new byte[1024];
-        sendData = Encoding.ASCII.GetBytes(stringData);
+        byte[] sendData = Encoding.ASCII.GetBytes("StartGame");
         socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
 
         //ChangeScene
@@ -115,10 +112,7 @@ public class Server : MonoBehaviour
     public void GetIP(Text text)
     {
         // Getting Ip address of local machine...
-        string strHostName = string.Empty;
-
-        // First get the host name of local machine.
-        strHostName = Dns.GetHostName();
+        string strHostName = Dns.GetHostName();
 
         // Then using host name, get the IP address list..
         IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
