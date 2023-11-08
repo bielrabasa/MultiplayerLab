@@ -26,7 +26,6 @@ public class Client : MonoBehaviour
     bool startGame;
     bool startConnection;
 
-    Dropdown dD;
 
     private void Start()
     {
@@ -35,7 +34,7 @@ public class Client : MonoBehaviour
         messageReciever = new Thread(ConnectToServer);
         waitForStart = new Thread(WaitForStart);
 
-        SetDropDown();
+        FillInputField();
     }
 
     private void Update()
@@ -51,6 +50,12 @@ public class Client : MonoBehaviour
             ChangeScene();
             startGame = false;
         }
+    }
+
+    void FillInputField()
+    {
+        InputField ipInput = FindObjectOfType<InputField>();
+        ipInput.text = GetMyIp();
     }
 
     public void SetIP()
@@ -70,20 +75,7 @@ public class Client : MonoBehaviour
 
     void ClientSetup()
     {
-        //Create IP info struct
-        //ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9050);
-        ipep = new IPEndPoint(IPAddress.Parse("10.0.203.255"), 9050);
-   
-
-        /*string strHostName = Dns.GetHostName();
-        IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
-        IPAddress[] addr = ipEntry.AddressList;
-
-        string ip = addr[0].ToString();
-
-        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050);*/
-
-
+        ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9889);
 
         //Open Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -172,39 +164,22 @@ public class Client : MonoBehaviour
             Debug.Log("Message recieved to start game is INCORRECT: " + message);
         }
     }
-
-    //Ip dropdown
-    void SetDropDown()
-    {
-        /*dD = FindAnyObjectByType<Dropdown>();
-        dD.options.Clear();
-        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
-
-        dD.options.Add(new Dropdown.OptionData() { text = "Select Server" });
-
-        foreach (string ip in ms.ipList)
-        {
-            dD.options.Add(new Dropdown.OptionData() { text = ip });
-        }
-        dD.options.Add(new Dropdown.OptionData() { text = "127.0.0.1" });
-
-        dD.GetComponentInChildren<Text>().text = dD.options[0].text;*/
-    }
-
-    public void SelectDropDown()
-    {
-        dD = FindAnyObjectByType<Dropdown>();
-        InputField ipInput = FindObjectOfType<InputField>();
-
-        int aux = dD.value;
-
-        if(dD.options[aux].text != "Select Server")
-        ipInput.text = dD.options[aux].text;
-
-    }
-
     void ChangeScene()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    string GetMyIp()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+
+        return "";
     }
 }

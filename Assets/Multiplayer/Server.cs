@@ -29,7 +29,7 @@ public class Server : MonoBehaviour
     void ServerSetup()
     {
         //Create IP info struct
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9889);
 
         //Create Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -111,16 +111,20 @@ public class Server : MonoBehaviour
 
     public void GetIP(Text text)
     {
-        // Getting Ip address of local machine...
-        string strHostName = Dns.GetHostName();
+        text.text = GetMyIp();
+    }
 
-        // Then using host name, get the IP address list..
-        IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
-        IPAddress[] addr = ipEntry.AddressList;
-
-        for (int i = 0; i < addr.Length; i++)
+    string GetMyIp()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
         {
-            text.text = addr[i].ToString();
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
         }
+
+        return "";
     }
 }
