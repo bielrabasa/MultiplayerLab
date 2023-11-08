@@ -51,6 +51,8 @@ public class GameState : MonoBehaviour
 
         multiplayerState = FindObjectOfType<MultiplayerState>();
 
+        Debug.Log("Is Server? " + multiplayerState.isServer);
+
         GetPlayers();
     }
 
