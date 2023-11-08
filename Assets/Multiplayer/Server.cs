@@ -34,7 +34,7 @@ public class Server : MonoBehaviour
         //Create Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        //Bind Socket to ONLY recieve info from the 9050 port
+        //Bind Socket to ONLY recieve info from the 9889 port
         socket.Bind(ipep);
 
         //Set port 0 to send the messages

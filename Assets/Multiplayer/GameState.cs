@@ -2,13 +2,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using System.Net.Sockets;
-using System.Net;
-using UnityEngine.UIElements;
-using UnityEditor;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
-using System;
 
 public struct PlayerState
 {
@@ -138,7 +132,6 @@ public class GameState : MonoBehaviour
 
             byte[] messageData = ToBytes(GetMyState());
 
-            //TODO: Send message correctly
             multiplayerState.socket.SendTo(messageData, messageData.Length, SocketFlags.None, multiplayerState.remote);
         }
     }
@@ -151,14 +144,13 @@ public class GameState : MonoBehaviour
         while (!stopConnection)
         {
             byte[] data = new byte[MESSAGE_PACK_SIZE];
-            //TODO: Recieve message correctly
+
             int size = multiplayerState.socket.ReceiveFrom(data, ref multiplayerState.remote);
 
             PlayerState message = FromBytes(data, size);
 
             if (message.time > otherState.time)
             {
-                //PROBLEMS? Maybe needs (lock)
                 otherState = message;
                 hasUpdated = true;
             }

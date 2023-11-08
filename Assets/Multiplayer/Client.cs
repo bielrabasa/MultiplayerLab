@@ -1,16 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Xml.Linq;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.tvOS;
 using UnityEngine.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 public class Client : MonoBehaviour
 {
