@@ -54,6 +54,8 @@ public class GameState : MonoBehaviour
         Debug.Log("Is Server? " + multiplayerState.isServer);
 
         GetPlayers();
+
+        StartDataTransfer();
     }
 
     void Update()
