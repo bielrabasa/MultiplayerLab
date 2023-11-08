@@ -34,7 +34,7 @@ public class Client : MonoBehaviour
         messageReciever = new Thread(ConnectToServer);
         waitForStart = new Thread(WaitForStart);
 
-        FillInputField();
+        StartCoroutine(FillInputField());
     }
 
     private void Update()
@@ -52,10 +52,22 @@ public class Client : MonoBehaviour
         }
     }
 
-    void FillInputField()
+    IEnumerator FillInputField()
     {
+        //Get IP without last digits
+        string myIp = GetMyIp();
+        int i = myIp.LastIndexOf('.');
+        myIp = myIp.Substring(0, i + 1);
+
+        //Fill input
         InputField ipInput = FindObjectOfType<InputField>();
-        ipInput.text = GetMyIp();
+        ipInput.text = myIp;
+
+        ipInput.Select();
+        yield return new WaitForEndOfFrame();
+        //Needs to wait to set cursor
+        ipInput.caretPosition = ipInput.text.Length;
+        ipInput.ForceLabelUpdate();
     }
 
     public void SetIP()

@@ -60,17 +60,6 @@ public class GameState : MonoBehaviour
 
     void Update()
     {
-        //TODO: TEST, erase this
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            otherState = GetMyState();
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            UpdateOtherState();
-        }
-        //
-        
         if (hasUpdated)
         {
             UpdateOtherState();
