@@ -3,14 +3,22 @@ using System.Threading;
 using UnityEngine;
 using System.Net.Sockets;
 using System.Collections;
+using System.Collections.Generic;
 
+public enum MultiplayerEvents
+{
+    SHOOT,
+    DIE,
+    DISCONNECT,
+    NUMEVENTS
+}
 public struct PlayerState
 {
     public float time;
     public Vector3 pos;
     public float topRot;
     public float botRot;
-    public bool shotBullet;    
+    public List<MultiplayerEvents> events;
 }
 
 public class GameState : MonoBehaviour
@@ -36,6 +44,9 @@ public class GameState : MonoBehaviour
     //Recieve messages
     bool stopConnection;
     Thread recievingMessages;
+
+    //EVENTS
+    public List<MultiplayerEvents> events;
 
     void Start()
     {
@@ -73,9 +84,22 @@ public class GameState : MonoBehaviour
         otherPlayer.GetChild(0).rotation = Quaternion.Euler(0, 0, otherState.topRot);
         otherPlayer.GetChild(1).rotation = Quaternion.Euler(0, 0, otherState.botRot);
 
-        if(otherState.shotBullet)
+        foreach (MultiplayerEvents e in otherState.events)
         {
-            //TODO: Instanciate bullet from data
+            switch (e)
+            {
+                case MultiplayerEvents.SHOOT:
+                    //Instanciate Bullet
+                    otherPlayer.GetComponent<TankScript>().Shoot();
+                    break;
+                case MultiplayerEvents.DIE:
+
+                    break;
+
+                case MultiplayerEvents.DISCONNECT:
+
+                    break;
+            }
         }
     }
 
@@ -87,7 +111,7 @@ public class GameState : MonoBehaviour
         myState.pos = myPlayer.position;
         myState.topRot = myPlayer.GetChild(0).rotation.eulerAngles.z;
         myState.botRot = myPlayer.GetChild(1).rotation.eulerAngles.z;
-        myState.shotBullet = false; //TODO: Check if bullet has been shot
+        myState.events = events;
 
         return myState;
     }
@@ -133,6 +157,9 @@ public class GameState : MonoBehaviour
             byte[] messageData = ToBytes(GetMyState());
 
             multiplayerState.socket.SendTo(messageData, messageData.Length, SocketFlags.None, multiplayerState.remote);
+
+            //After sending, clear event list
+            events.Clear();
         }
     }
 
@@ -151,6 +178,7 @@ public class GameState : MonoBehaviour
 
             if (message.time > otherState.time)
             {
+                //TODO: Check events even if the message is old
                 otherState = message;
                 hasUpdated = true;
             }

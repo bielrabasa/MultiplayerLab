@@ -31,18 +31,23 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Trail();
         if (movementBlocked) return;
 
         //Shoot
-        if (Input.GetKeyDown(KeyCode.Space)) Shoot();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FindObjectOfType<GameState>().events.Add(MultiplayerEvents.SHOOT);
+            Shoot();
+        }
 
         //Tank Movement
         Vector3 movement = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W)){ movement += Vector3.up;       Trail(); }
-        if (Input.GetKey(KeyCode.S)){ movement += Vector3.down;     Trail(); }
-        if (Input.GetKey(KeyCode.A)){ movement += Vector3.left;     Trail(); }
-        if (Input.GetKey(KeyCode.D)){ movement += Vector3.right;    Trail(); }
+        if (Input.GetKey(KeyCode.W)){ movement += Vector3.up;       }
+        if (Input.GetKey(KeyCode.S)){ movement += Vector3.down;     }
+        if (Input.GetKey(KeyCode.A)){ movement += Vector3.left;     }
+        if (Input.GetKey(KeyCode.D)){ movement += Vector3.right;    }
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) inputNum++;
         else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D)) inputNum--;
@@ -75,7 +80,7 @@ public class TankScript : MonoBehaviour
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
         Quaternion dir = Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward);
         Vector3 spawnDist = dir * Vector3.up * 0.7f;
