@@ -51,6 +51,7 @@ public class GameState : MonoBehaviour
 
     //State Game
     public bool isGamePaused = false;
+    PostProcessVolume postpo;
 
     void Start()
     {
@@ -63,6 +64,7 @@ public class GameState : MonoBehaviour
         Debug.Log("Is Server? " + multiplayerState.isServer);
 
         GameObject.Find("Server_UI").SetActive(multiplayerState.isServer);
+        postpo = GameObject.FindAnyObjectByType<PostProcessVolume>();
 
         GetPlayers();
 
@@ -233,7 +235,7 @@ public class GameState : MonoBehaviour
     public void PauseGame()
     {
         isGamePaused = !isGamePaused;
-        GameObject.FindAnyObjectByType<PostProcessVolume>().gameObject.SetActive(!isGamePaused);
+        postpo.gameObject.SetActive(isGamePaused);
     }
 
     public void ResetGame()

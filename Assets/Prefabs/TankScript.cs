@@ -19,6 +19,8 @@ public class TankScript : MonoBehaviour
     //Multiplayer
     bool movementBlocked = false;
 
+    GameState gameState;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,18 +28,20 @@ public class TankScript : MonoBehaviour
         bot = transform.GetChild(1);
 
         STDAux = 0;
+
+        gameState = FindObjectOfType<GameState>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Trail();
-        if (movementBlocked) return;
+        if (movementBlocked || gameState.isGamePaused) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.SHOOT);
+            gameState.SendEvent(MultiplayerEvents.SHOOT);
             Debug.Log("Shoot");
             Shoot();
         }
