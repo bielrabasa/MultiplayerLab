@@ -38,6 +38,7 @@ public class TankScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.SHOOT);
+            Debug.Log("Shoot");
             Shoot();
         }
 

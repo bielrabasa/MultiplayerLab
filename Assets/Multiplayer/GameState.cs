@@ -46,7 +46,7 @@ public class GameState : MonoBehaviour
     Thread recievingMessages;
 
     //EVENTS
-    List<MultiplayerEvents> events;
+    [HideInInspector] public List<MultiplayerEvents> events;
 
     void Start()
     {
