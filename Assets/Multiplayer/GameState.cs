@@ -46,7 +46,7 @@ public class GameState : MonoBehaviour
     Thread recievingMessages;
 
     //EVENTS
-    public List<MultiplayerEvents> events;
+    List<MultiplayerEvents> events;
 
     void Start()
     {
