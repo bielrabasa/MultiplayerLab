@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public enum MultiplayerEvents
 {
     SHOOT,
-    DIE,
+    KILL,
     DISCONNECT,
     NUMEVENTS
 }
@@ -92,8 +92,9 @@ public class GameState : MonoBehaviour
                     //Instanciate Bullet
                     otherPlayer.GetComponent<TankScript>().Shoot();
                     break;
-                case MultiplayerEvents.DIE:
-
+                case MultiplayerEvents.KILL:
+                    //Die
+                    myPlayer.gameObject.SetActive(false);
                     break;
 
                 case MultiplayerEvents.DISCONNECT:
@@ -199,5 +200,22 @@ public class GameState : MonoBehaviour
     {
         string json = Encoding.ASCII.GetString(data, 0, size);
         return JsonUtility.FromJson<PlayerState>(json);
+    }
+
+
+    //
+    //  INGAME FUNCTIONALITIES
+    //
+    public void SendEvent(MultiplayerEvents e, Transform t = null)
+    {
+        //Only check death on other tank
+        if(e == MultiplayerEvents.KILL)
+        {
+            if (t == null || t == myPlayer) return;
+
+            t.gameObject.SetActive(false);
+        }
+
+        events.Add(e);
     }
 }

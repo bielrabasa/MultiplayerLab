@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
@@ -23,7 +24,8 @@ public class BulletScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("TANK"))
         {
-            Destroy(collision.gameObject);
+            //Destroy(collision.gameObject);
+            FindObjectOfType<GameState>().events.Add(MultiplayerEvents.KILL);
             Destroy(gameObject);
         }
 
