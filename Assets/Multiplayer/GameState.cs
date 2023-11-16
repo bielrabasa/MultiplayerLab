@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum MultiplayerEvents
 {
@@ -48,6 +49,9 @@ public class GameState : MonoBehaviour
     //EVENTS
     [HideInInspector] public List<MultiplayerEvents> events;
 
+    //State Game
+    public bool isGamePaused = false;
+
     void Start()
     {
         stopConnection = false;
@@ -57,6 +61,8 @@ public class GameState : MonoBehaviour
         multiplayerState = FindObjectOfType<MultiplayerState>();
 
         Debug.Log("Is Server? " + multiplayerState.isServer);
+
+        GameObject.Find("Server_UI").SetActive(multiplayerState.isServer);
 
         GetPlayers();
 
@@ -69,6 +75,11 @@ public class GameState : MonoBehaviour
         {
             UpdateOtherState();
             hasUpdated = false;
+        }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            PauseGame();
         }
     }
 
@@ -217,5 +228,16 @@ public class GameState : MonoBehaviour
         }
 
         events.Add(e);
+    }
+
+    public void PauseGame()
+    {
+        isGamePaused = !isGamePaused;
+        GameObject.FindAnyObjectByType<PostProcessVolume>().gameObject.SetActive(!isGamePaused);
+    }
+
+    public void ResetGame()
+    {
+        
     }
 }
