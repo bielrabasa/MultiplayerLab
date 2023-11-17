@@ -12,6 +12,7 @@ public enum MultiplayerEvents
     KILL,
     DISCONNECT,
     PAUSE,
+    UNPAUSE,
     NUMEVENTS
 }
 public struct PlayerState
@@ -51,7 +52,7 @@ public class GameState : MonoBehaviour
     [HideInInspector] public List<MultiplayerEvents> events;
 
     //State Game
-    public bool isGamePaused = true;
+    public bool isGamePaused = false;
     PostProcessVolume postpo;
 
     void Start()
@@ -65,13 +66,12 @@ public class GameState : MonoBehaviour
         Debug.Log("Is Server? " + multiplayerState.isServer);
 
         GameObject.Find("Server_UI").SetActive(multiplayerState.isServer);
-        postpo = GameObject.FindAnyObjectByType<PostProcessVolume>();
+        postpo = FindAnyObjectByType<PostProcessVolume>();
+        postpo.gameObject.SetActive(false);
 
         GetPlayers();
 
         StartDataTransfer();
-
-        PauseGame();
     }
 
     void Update()
@@ -84,7 +84,7 @@ public class GameState : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.P))
         {
-            PauseGame();
+            SendPauseGame(!isGamePaused);
         }
     }
 
@@ -118,7 +118,11 @@ public class GameState : MonoBehaviour
                     break;
 
                 case MultiplayerEvents.PAUSE:
-                    PauseGame();
+                    SetPause(true);
+                    break;
+
+                case MultiplayerEvents.UNPAUSE:
+                    SetPause(false);
                     break;
             }
         }
@@ -197,10 +201,14 @@ public class GameState : MonoBehaviour
 
             PlayerState message = FromBytes(data, size);
 
-            if (message.time > otherState.time)
+            if (message.time > otherState.time) 
             {
-                //TODO: Check events even if the message is old
                 otherState = message;
+                hasUpdated = true;
+            }
+            else if (message.events.Count > 0)
+            {
+                otherState.events = message.events;
                 hasUpdated = true;
             }
         }
@@ -239,10 +247,17 @@ public class GameState : MonoBehaviour
         events.Add(e);
     }
 
-    public void PauseGame()
+    public void SendPauseGame(bool pause)
     {
-        postpo.gameObject.SetActive(isGamePaused);
-        isGamePaused = !isGamePaused;
+        SetPause(pause);
+
+        SendEvent(pause ? MultiplayerEvents.PAUSE : MultiplayerEvents.UNPAUSE);
+    }
+
+    void SetPause(bool pause)
+    {
+        postpo.gameObject.SetActive(pause);
+        isGamePaused = pause;
     }
 
     public void ResetGame()

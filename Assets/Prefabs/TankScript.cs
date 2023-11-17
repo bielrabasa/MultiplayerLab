@@ -11,6 +11,7 @@ public class TankScript : MonoBehaviour
 
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject trail;
+    Transform trailStorage;
     [SerializeField] float SpawnTrailDelay = 1.0f;
     float STDAux;
 
@@ -30,13 +31,14 @@ public class TankScript : MonoBehaviour
         STDAux = 0;
 
         gameState = FindObjectOfType<GameState>();
+        trailStorage = GameObject.Find("Trails").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
         Trail();
-        if (movementBlocked || !gameState.isGamePaused) return;
+        if (movementBlocked || gameState.isGamePaused) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
@@ -106,7 +108,7 @@ public class TankScript : MonoBehaviour
 
         if (STDAux <= 0f)
         {
-            Instantiate(trail, transform.position + spawnDist, dir);
+            Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
             STDAux = SpawnTrailDelay;
         }
     }
