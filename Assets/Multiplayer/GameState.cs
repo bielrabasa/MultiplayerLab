@@ -11,6 +11,7 @@ public enum MultiplayerEvents
     SHOOT,
     KILL,
     DISCONNECT,
+    PAUSE,
     NUMEVENTS
 }
 public struct PlayerState
@@ -50,7 +51,7 @@ public class GameState : MonoBehaviour
     [HideInInspector] public List<MultiplayerEvents> events;
 
     //State Game
-    public bool isGamePaused = false;
+    public bool isGamePaused = true;
     PostProcessVolume postpo;
 
     void Start()
@@ -69,6 +70,8 @@ public class GameState : MonoBehaviour
         GetPlayers();
 
         StartDataTransfer();
+
+        PauseGame();
     }
 
     void Update()
@@ -112,6 +115,10 @@ public class GameState : MonoBehaviour
 
                 case MultiplayerEvents.DISCONNECT:
 
+                    break;
+
+                case MultiplayerEvents.PAUSE:
+                    PauseGame();
                     break;
             }
         }
@@ -234,8 +241,8 @@ public class GameState : MonoBehaviour
 
     public void PauseGame()
     {
-        isGamePaused = !isGamePaused;
         postpo.gameObject.SetActive(isGamePaused);
+        isGamePaused = !isGamePaused;
     }
 
     public void ResetGame()

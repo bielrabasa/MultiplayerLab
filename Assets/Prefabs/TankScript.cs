@@ -36,7 +36,7 @@ public class TankScript : MonoBehaviour
     void Update()
     {
         Trail();
-        if (movementBlocked || gameState.isGamePaused) return;
+        if (movementBlocked || !gameState.isGamePaused) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
