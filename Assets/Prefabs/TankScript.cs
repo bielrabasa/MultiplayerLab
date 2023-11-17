@@ -12,10 +12,7 @@ public class TankScript : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject trail;
     Transform trailStorage;
-    [SerializeField] float SpawnTrailDelay = 1.0f;
-    float STDAux;
-
-    int inputNum = 0;
+    [SerializeField] float trailSpawnDelay = 1.0f;
 
     //Multiplayer
     bool movementBlocked = false;
@@ -28,16 +25,15 @@ public class TankScript : MonoBehaviour
         top = transform.GetChild(0);
         bot = transform.GetChild(1);
 
-        STDAux = 0;
-
         gameState = FindObjectOfType<GameState>();
         trailStorage = GameObject.Find("Trails").transform;
+
+        StartCoroutine(Trail());
     }
 
     // Update is called once per frame
     void Update()
     {
-        Trail();
         if (movementBlocked || gameState.isGamePaused) return;
 
         //Shoot
@@ -55,11 +51,6 @@ public class TankScript : MonoBehaviour
         if (Input.GetKey(KeyCode.S)){ movement += Vector3.down;     }
         if (Input.GetKey(KeyCode.A)){ movement += Vector3.left;     }
         if (Input.GetKey(KeyCode.D)){ movement += Vector3.right;    }
-
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) inputNum++;
-        else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D)) inputNum--;
-
-
 
         movement.Normalize();
 
@@ -95,21 +86,18 @@ public class TankScript : MonoBehaviour
         b.GetComponent<BulletScript>().Shoot();
     }
 
-    void Trail()
+    IEnumerator Trail()
     {
-        bot.rotation.Normalize();
-
-        Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
-        Vector3 spawnDist = dir * Vector3.up * -0.2f;
-
-        
-        if (inputNum >= 2)  STDAux -= 0.05f;
-        else                STDAux -= 0.1f;
-
-        if (STDAux <= 0f)
+        while (!gameState.isGamePaused)
         {
+            yield return new WaitForSecondsRealtime(trailSpawnDelay);
+
+            bot.rotation.Normalize();
+
+            Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
+            Vector3 spawnDist = dir * Vector3.up * -0.2f;
+
             Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
-            STDAux = SpawnTrailDelay;
         }
     }
 
