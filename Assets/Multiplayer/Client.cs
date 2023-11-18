@@ -13,6 +13,7 @@ public class Client : MonoBehaviour
     Thread waitForStart;
 
     string serverIP = "127.0.0.1";
+    int serverPort;
 
     Socket socket;
     EndPoint remote;
@@ -55,21 +56,41 @@ public class Client : MonoBehaviour
         myIp = myIp.Substring(0, i + 1);
 
         //Fill input
-        InputField ipInput = FindObjectOfType<InputField>();
+        InputField ipInput = GameObject.Find("InputIP").GetComponent<InputField>();
         ipInput.text = myIp;
-
         ipInput.Select();
+
+        InputField portInput = GameObject.Find("InputPort").GetComponent<InputField>();
+        portInput.text = "9000";
+
         yield return new WaitForEndOfFrame();
+
         //Needs to wait to set cursor
         ipInput.caretPosition = ipInput.text.Length;
         ipInput.ForceLabelUpdate();
     }
 
+    public void SelectPort()
+    {
+        StartCoroutine(SelectPortCo());
+    }
+    IEnumerator SelectPortCo()
+    {
+        InputField portInput = GameObject.Find("InputPort").GetComponent<InputField>();
+        portInput.Select();
+
+        yield return new WaitForEndOfFrame();
+
+        portInput.caretPosition = portInput.text.Length;
+        portInput.ForceLabelUpdate();
+    }
+
     public void SetIP()
     {
-        InputField ipInput = FindObjectOfType<InputField>();
-        string ip = ipInput.text.ToString();
-        serverIP = ip;
+        InputField ipInput = GameObject.Find("InputIP").GetComponent<InputField>();
+        InputField portInput = GameObject.Find("InputPort").GetComponent<InputField>();
+        serverIP = ipInput.text.ToString();
+        serverPort = int.Parse(portInput.text.ToString());
 
         StartConnection();
     }
@@ -82,7 +103,7 @@ public class Client : MonoBehaviour
 
     void ClientSetup()
     {
-        ipep = new IPEndPoint(IPAddress.Parse(serverIP), 9889);
+        ipep = new IPEndPoint(IPAddress.Parse(serverIP), serverPort);
 
         //Open Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);

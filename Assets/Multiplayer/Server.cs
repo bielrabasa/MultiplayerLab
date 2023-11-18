@@ -15,27 +15,47 @@ public class Server : MonoBehaviour
 
     Socket socket;
     EndPoint remote;
-
+    int port;
 
     void Start()
     {
         waitingClientThread = new Thread(WaitClient);
         connected = false;
+        
 
         ServerSetup();
         waitingClientThread.Start();
+
+        //Set port in screen
+        GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
     }
 
     void ServerSetup()
     {
-        //Create IP info struct
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9889);
-
         //Create Socket
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        //Bind Socket to ONLY recieve info from the 9889 port
-        socket.Bind(ipep);
+        //Try different ports until one is free
+        port = 9000;
+        bool correctPort = false;
+
+        while (!correctPort)
+        {
+            try
+            {
+                //Create IP info struct
+                IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
+
+                //Bind Socket to ONLY recieve info from the said port
+                socket.Bind(ipep);
+
+                correctPort = true;
+            }
+            catch
+            {
+                port++;
+            }
+        }
 
         //Set port 0 to send the messages
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
@@ -112,6 +132,11 @@ public class Server : MonoBehaviour
     public void GetIP(Text text)
     {
         text.text = GetMyIp();
+    }
+
+    public void GetPort(Text text)
+    {
+        text.text = port.ToString();
     }
 
     string GetMyIp()
