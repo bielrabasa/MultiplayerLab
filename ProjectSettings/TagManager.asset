@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TANK
   - WALL
+  - OBSTACLE
   layers:
   - Default
   - TransparentFX

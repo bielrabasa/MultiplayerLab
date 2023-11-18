@@ -13,6 +13,7 @@ public enum MultiplayerEvents
     DISCONNECT,
     PAUSE,
     UNPAUSE,
+    OBSTACLE,
     NUMEVENTS
 }
 public struct PlayerState
@@ -54,6 +55,8 @@ public class GameState : MonoBehaviour
     //State Game
     public bool isGamePaused = false;
     PostProcessVolume postpo;
+
+    GameObject obstacleToDestroy;
 
     void Start()
     {
@@ -125,6 +128,10 @@ public class GameState : MonoBehaviour
 
                 case MultiplayerEvents.UNPAUSE:
                     SetPause(false);
+                    break;
+
+                case MultiplayerEvents.OBSTACLE:
+                    DestroyObstacle(obstacleToDestroy);
                     break;
             }
         }
@@ -265,5 +272,19 @@ public class GameState : MonoBehaviour
     public void ResetGame()
     {
         
+    }
+
+    public void SendDestroyObstacle(GameObject GO)
+    {
+        obstacleToDestroy = GO;
+
+        DestroyObstacle(obstacleToDestroy);
+
+        SendEvent(MultiplayerEvents.OBSTACLE);
+    }
+
+    public void DestroyObstacle(GameObject GO)
+    {
+        GO.SetActive(false);
     }
 }

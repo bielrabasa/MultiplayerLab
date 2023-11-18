@@ -41,6 +41,22 @@ public class BulletScript : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        if (collision.gameObject.CompareTag("OBSTACLE"))
+        {
+            FindObjectOfType<GameState>().SendDestroyObstacle(collision.gameObject);
+
+            if (!bounce)
+            {
+                GetComponent<Rigidbody2D>().velocity = transform.up * (speed / 2);
+                GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(GetComponent<Rigidbody2D>().velocity, Vector3.right);
+                bounce = true;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void Shoot()
