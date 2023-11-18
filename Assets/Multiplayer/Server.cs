@@ -62,6 +62,12 @@ public class Server : MonoBehaviour
         remote = (EndPoint)(sender);
     }
 
+    public void StopConnection()
+    {
+        socket.Close();
+        Debug.Log("SERVER DISCONNECTED");
+    }
+
     //THREAD
     private void WaitClient()
     {
@@ -76,6 +82,7 @@ public class Server : MonoBehaviour
         catch
         {
             Debug.Log("Server stopped listening! ");
+            StopConnection();
             return;
         }
 
@@ -86,6 +93,7 @@ public class Server : MonoBehaviour
         if(message != "ClientConnected")
         {
             Debug.Log("Incorrect confirmation message: " + message);
+            StopConnection();
             return;
         }
 

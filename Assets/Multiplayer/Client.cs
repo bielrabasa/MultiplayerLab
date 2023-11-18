@@ -113,6 +113,12 @@ public class Client : MonoBehaviour
         remote = (EndPoint)sender;
     }
 
+    public void StopConnection()
+    {
+        socket.Close();
+        Debug.Log("CLIENT DISCONNECTED");
+    }
+
     void SendConfirmation()
     {
         byte[] data =  Encoding.ASCII.GetBytes("ClientConnected");
@@ -134,6 +140,7 @@ public class Client : MonoBehaviour
         catch
         {
             Debug.Log("Client stopped listening!");
+            StopConnection();
             return;
         }
 
@@ -146,6 +153,7 @@ public class Client : MonoBehaviour
         else
         {
             Debug.Log("Incorrect confirmation message: " + message);
+            StopConnection();
         }
     }
 
@@ -177,6 +185,7 @@ public class Client : MonoBehaviour
         catch
         {
             Debug.Log("Client did not want to wait for Start!");
+            StopConnection();
             return;
         }
 
@@ -190,6 +199,7 @@ public class Client : MonoBehaviour
         else
         {
             Debug.Log("Message recieved to start game is INCORRECT: " + message);
+            StopConnection();
         }
     }
     void ChangeScene()
