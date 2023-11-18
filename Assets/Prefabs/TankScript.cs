@@ -60,7 +60,7 @@ public class TankScript : MonoBehaviour
         if(movement != Vector3.zero)
         {
             Quaternion newRot = Quaternion.AngleAxis(Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg + 90, Vector3.forward);
-            bot.rotation = Quaternion.Slerp(bot.rotation, newRot, bottomRotationSpeed);
+            bot.rotation = Quaternion.Slerp(bot.rotation, newRot, bottomRotationSpeed * Time.deltaTime);
         }
 
         //Cannon Rotation
@@ -74,7 +74,7 @@ public class TankScript : MonoBehaviour
         if(rot != Vector3.zero)
         {
             Quaternion newAngle = Quaternion.AngleAxis(Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90, Vector3.forward);
-            top.rotation = Quaternion.Slerp(top.rotation, newAngle, topRotationSpeed);
+            top.rotation = Quaternion.Slerp(top.rotation, newAngle, topRotationSpeed * Time.deltaTime);
         }
     }
 
