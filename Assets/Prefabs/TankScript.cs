@@ -40,7 +40,6 @@ public class TankScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             gameState.SendEvent(MultiplayerEvents.SHOOT);
-            Debug.Log("Shoot");
             Shoot();
         }
 

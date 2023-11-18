@@ -61,16 +61,18 @@ public class GameState : MonoBehaviour
         hasUpdated = false;
         recievingMessages = new Thread(RecieveOtherState);
 
-        multiplayerState = FindObjectOfType<MultiplayerState>();
-
-        Debug.Log("Is Server? " + multiplayerState.isServer);
-
-        GameObject.Find("Server_UI").SetActive(multiplayerState.isServer);
         postpo = FindAnyObjectByType<PostProcessVolume>();
         postpo.gameObject.SetActive(false);
 
-        GetPlayers();
+        multiplayerState = FindObjectOfType<MultiplayerState>();
 
+        if (multiplayerState == null)
+        {
+            Debug.Log("Players not connected: game running in test mode.");
+            return;
+        }
+
+        GetPlayers();
         StartDataTransfer();
     }
 

@@ -10,8 +10,6 @@ public class fool : MonoBehaviour
     [SerializeField] Text Console1;
     [SerializeField] Text Console2;
 
-    string aux = "Soc Aux";
-
     void Update()
     {
         //transform.Rotate(Vector3.forward * 10.0f);
