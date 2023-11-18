@@ -87,16 +87,19 @@ public class TankScript : MonoBehaviour
 
     IEnumerator Trail()
     {
-        while (!gameState.isGamePaused)
+        while (true)
         {
             yield return new WaitForSecondsRealtime(trailSpawnDelay);
 
-            bot.rotation.Normalize();
+            if (!gameState.isGamePaused)
+            {
+                bot.rotation.Normalize();
 
-            Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
-            Vector3 spawnDist = dir * Vector3.up * -0.2f;
+                Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
+                Vector3 spawnDist = dir * Vector3.up * -0.2f;
 
-            Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
+                Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
+            }
         }
     }
 

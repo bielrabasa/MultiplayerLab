@@ -1213,6 +1213,10 @@ PrefabInstance:
       propertyPath: SpawnTrailDelay
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 5834657883936985520, guid: 22d6949043a476542acfcb494536081c, type: 3}
+      propertyPath: trailSpawnDelay
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6144536134148669287, guid: 22d6949043a476542acfcb494536081c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3667,6 +3671,10 @@ PrefabInstance:
     - target: {fileID: -4448663456767188185, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
       propertyPath: SpawnTrailDelay
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: -4448663456767188185, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
+      propertyPath: trailSpawnDelay
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5106831908731766157, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
       propertyPath: m_RootOrder
