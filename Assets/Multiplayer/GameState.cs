@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 
 public enum MultiplayerEvents
 {
@@ -13,8 +14,9 @@ public enum MultiplayerEvents
     DISCONNECT,
     PAUSE,
     UNPAUSE,
-    OBSTACLE,
-    BOMB,
+    RESET,
+    //OBSTACLE,
+    //BOMB,
     NUMEVENTS
 }
 public struct PlayerState
@@ -47,22 +49,22 @@ public class GameState : MonoBehaviour
     PlayerState otherState;
 
     //Recieve messages
-    bool stopConnection;
     Thread recievingMessages;
 
     //EVENTS
     [HideInInspector] public List<MultiplayerEvents> events;
 
     //State Game
-    public bool isGamePaused = false;
+    public bool isGamePaused;
     PostProcessVolume postpo;
-
-    GameObject obstacleToDestroy;
+    float startResetHoldTime;
+    float R_HOLDING_TIME = 3.0f;
 
     void Start()
     {
-        stopConnection = false;
         hasUpdated = false;
+        isGamePaused = false;
+        startResetHoldTime = 0;
         recievingMessages = new Thread(RecieveOtherState);
 
         postpo = FindAnyObjectByType<PostProcessVolume>();
@@ -92,12 +94,25 @@ public class GameState : MonoBehaviour
         {
             SendPauseGame(!isGamePaused);
         }
+
+        //Hold R
+        if (Input.GetKeyDown(KeyCode.R)) startResetHoldTime = Time.time;
+        if (Input.GetKey(KeyCode.R) && (Time.time - startResetHoldTime) >= R_HOLDING_TIME)
+        {
+            SendEvent(MultiplayerEvents.RESET);
+            ResetGame();
+        }
     }
 
     void StartDataTransfer()
     {
         recievingMessages.Start();
         StartCoroutine(SendMyState());
+    }
+    void StopDataTransfer()
+    {
+        recievingMessages.Abort();
+        StopCoroutine(SendMyState());
     }
 
     void UpdateOtherState()
@@ -131,13 +146,16 @@ public class GameState : MonoBehaviour
                     SetPause(false);
                     break;
 
-                case MultiplayerEvents.OBSTACLE:
+                case MultiplayerEvents.RESET:
+                    ResetGame();
+                    break;
+                /*case MultiplayerEvents.OBSTACLE:
                     DestroyObstacle(obstacleToDestroy);
                     break;
 
                 case MultiplayerEvents.BOMB:
                     SetBomb(obstacleToDestroy);
-                    break;
+                    break;*/
             }
         }
     }
@@ -189,17 +207,21 @@ public class GameState : MonoBehaviour
 
     IEnumerator SendMyState()
     {
-        while (!stopConnection)
+        while (true)
         {
             yield return new WaitForSecondsRealtime(MESSAGE_SEND_DELAY);
-
-            byte[] messageData = ToBytes(GetMyState());
-
-            multiplayerState.socket.SendTo(messageData, messageData.Length, SocketFlags.None, multiplayerState.remote);
-
-            //After sending, clear event list
-            events.Clear();
+            SendStateOnce();
         }
+    }
+
+    void SendStateOnce()
+    {
+        byte[] messageData = ToBytes(GetMyState());
+
+        multiplayerState.socket.SendTo(messageData, messageData.Length, SocketFlags.None, multiplayerState.remote);
+
+        //After sending, clear event list
+        events.Clear();
     }
 
     //
@@ -207,11 +229,19 @@ public class GameState : MonoBehaviour
     //
     void RecieveOtherState()
     {
-        while (!stopConnection)
+        while (true)
         {
             byte[] data = new byte[MESSAGE_PACK_SIZE];
+            int size = 0;
 
-            int size = multiplayerState.socket.ReceiveFrom(data, ref multiplayerState.remote);
+            try
+            {
+                size = multiplayerState.socket.ReceiveFrom(data, ref multiplayerState.remote);
+            }
+            catch
+            {
+                return;
+            }
 
             PlayerState message = FromBytes(data, size);
 
@@ -248,7 +278,7 @@ public class GameState : MonoBehaviour
     //
     //  INGAME FUNCTIONALITIES
     //
-    public void SendEvent(MultiplayerEvents e, Transform t = null, GameObject g = null)
+    public void SendEvent(MultiplayerEvents e, Transform t = null)
     {
         //Only check death on other tank
         if(e == MultiplayerEvents.KILL)
@@ -257,12 +287,15 @@ public class GameState : MonoBehaviour
 
             t.gameObject.SetActive(false);
         }
-        else if(e == MultiplayerEvents.OBSTACLE || e == MultiplayerEvents.BOMB)
+        /*else if(e == MultiplayerEvents.OBSTACLE || e == MultiplayerEvents.BOMB)
         {
-            obstacleToDestroy = g;
-        }
+            obstacleToDestroy = t.gameObject;
+        }*/
 
         events.Add(e);
+
+        //If reset, force sending message
+        if (e == MultiplayerEvents.RESET) SendStateOnce();
     }
 
     public void SendPauseGame(bool pause)
@@ -278,9 +311,28 @@ public class GameState : MonoBehaviour
         isGamePaused = pause;
     }
 
+    void KillGame()
+    {
+        BulletScript[] bullets = FindObjectsOfType<BulletScript>();
+        foreach(BulletScript b in bullets)
+        {
+            Destroy(b.gameObject);
+        }
+
+        TralScript[] trails = FindObjectsOfType<TralScript>();
+        foreach (TralScript t in trails)
+        {
+            Destroy(t.gameObject);
+        }
+
+
+        StopDataTransfer();
+    }
+
     public void ResetGame()
     {
-        
+        KillGame();
+        SceneManager.LoadScene("MainScene");
     }
 
     /*public void SendDestroyObstacle(GameObject GO)
@@ -290,7 +342,7 @@ public class GameState : MonoBehaviour
         DestroyObstacle(obstacleToDestroy);
 
         SendEvent(MultiplayerEvents.OBSTACLE);
-    }*/
+    }
 
     public void DestroyObstacle(GameObject GO)
     {
@@ -322,5 +374,5 @@ public class GameState : MonoBehaviour
     public void Explotion(GameObject GO)
     {
         Instantiate(GO, GO.transform);
-    }
+    }*/
 }

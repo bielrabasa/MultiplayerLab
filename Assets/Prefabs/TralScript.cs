@@ -18,13 +18,9 @@ public class TralScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameState.isGamePaused)
-        {
-            timer -= Time.deltaTime;
+        timer -= Time.deltaTime;
 
-            if (timer < 1.0f) GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, timer);
-            if (timer < 0.0f) Destroy(gameObject);
-        }
-
+        if (timer < 1.0f) GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, timer);
+        if (timer < 0.0f) Destroy(gameObject);
     }
 }

@@ -42,9 +42,9 @@ public class BulletScript : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.CompareTag("OBSTACLE"))
+        /*if (collision.gameObject.CompareTag("OBSTACLE"))
         {
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, null, collision.gameObject);
+            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
 
             if (!bounce)
             {
@@ -57,11 +57,12 @@ public class BulletScript : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
         if (collision.gameObject.CompareTag("BOMB"))
         {
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, null, collision.gameObject);
+            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, collision.transform);
             Destroy(gameObject);
-        }
+        }*/
     }
 
     public void Shoot()
