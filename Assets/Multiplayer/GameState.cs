@@ -14,6 +14,7 @@ public enum MultiplayerEvents
     PAUSE,
     UNPAUSE,
     OBSTACLE,
+    BOMB,
     NUMEVENTS
 }
 public struct PlayerState
@@ -133,6 +134,10 @@ public class GameState : MonoBehaviour
                 case MultiplayerEvents.OBSTACLE:
                     DestroyObstacle(obstacleToDestroy);
                     break;
+
+                case MultiplayerEvents.BOMB:
+                    SetBomb(obstacleToDestroy);
+                    break;
             }
         }
     }
@@ -243,7 +248,7 @@ public class GameState : MonoBehaviour
     //
     //  INGAME FUNCTIONALITIES
     //
-    public void SendEvent(MultiplayerEvents e, Transform t = null)
+    public void SendEvent(MultiplayerEvents e, Transform t = null, GameObject g = null)
     {
         //Only check death on other tank
         if(e == MultiplayerEvents.KILL)
@@ -251,6 +256,10 @@ public class GameState : MonoBehaviour
             if (t == null || t == myPlayer) return;
 
             t.gameObject.SetActive(false);
+        }
+        else if(e == MultiplayerEvents.OBSTACLE || e == MultiplayerEvents.BOMB)
+        {
+            obstacleToDestroy = g;
         }
 
         events.Add(e);
@@ -274,17 +283,44 @@ public class GameState : MonoBehaviour
         
     }
 
-    public void SendDestroyObstacle(GameObject GO)
+    /*public void SendDestroyObstacle(GameObject GO)
     {
         obstacleToDestroy = GO;
 
         DestroyObstacle(obstacleToDestroy);
 
         SendEvent(MultiplayerEvents.OBSTACLE);
-    }
+    }*/
 
     public void DestroyObstacle(GameObject GO)
     {
         GO.SetActive(false);
+    }
+
+    public void SetBomb(GameObject GO)
+    {
+        GO.SetActive(false);
+
+        //StartCoroutine(ActiveBomb(GO));
+
+        //GO.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+
+        //GO.GetComponentInChildren<SpriteRenderer>().color = new Color(1f, 0.22f, 0.22f);
+
+    }
+
+    IEnumerator ActiveBomb(GameObject GO)
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        //Damage
+        //Explotion(GO);
+
+        GO.SetActive(false);
+    }
+
+    public void Explotion(GameObject GO)
+    {
+        Instantiate(GO, GO.transform);
     }
 }

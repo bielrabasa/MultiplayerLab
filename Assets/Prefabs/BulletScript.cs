@@ -44,7 +44,7 @@ public class BulletScript : MonoBehaviour
 
         if (collision.gameObject.CompareTag("OBSTACLE"))
         {
-            FindObjectOfType<GameState>().SendDestroyObstacle(collision.gameObject);
+            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, null, collision.gameObject);
 
             if (!bounce)
             {
@@ -56,6 +56,11 @@ public class BulletScript : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+        }
+        if (collision.gameObject.CompareTag("BOMB"))
+        {
+            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, null, collision.gameObject);
+            Destroy(gameObject);
         }
     }
 

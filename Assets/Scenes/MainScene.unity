@@ -2023,7 +2023,7 @@ GameObject:
   - component: {fileID: 1100804883}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: OBSTACLE
+  m_TagString: BOMB
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
