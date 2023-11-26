@@ -15,4 +15,9 @@ public class MultiplayerState : MonoBehaviour
     {
         DontDestroyOnLoad(this);
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+    }
 }
