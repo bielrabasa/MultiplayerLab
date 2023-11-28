@@ -39,12 +39,12 @@ namespace MessageTypes
 
     public class Acknowledgements : Message
     {
-        public Acknowledgements(List<long> acks) : base(MessageType.ACKNOWLEDGEMENTS)
+        public Acknowledgements(List<uint> acks) : base(MessageType.ACKNOWLEDGEMENTS)
         {
             this.acks = acks;
         }
 
-        List<long> acks;
+        public List<uint> acks;
     }
 
     public class Position : Message

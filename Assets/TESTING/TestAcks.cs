@@ -5,19 +5,24 @@ using UnityEngine;
 
 public class TestAcks : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
-        /*MessageManager.messageDistribute[MessageType.KILL] += OnKill;
-        MessageManager.messageDistribute[MessageType.CHAT] += OnKill;
-        MessageManager.messageDistribute[MessageType.ACKNOWLEDGEMENTS] += OnKill;
-        MessageManager.messageDistribute[MessageType.CONFIRMATION] += OnKill;
+        MessageManager.messageDistribute[MessageType.KILL] += OnKill;
+        MessageManager.messageDistribute[MessageType.CHAT] += UpdateChat;
 
-        MessageManager.SendMessage(new Chat("Hola Jefe!"));*/
+        MessageManager.SendMessage(new Chat("Hola Jefe!"));
     }
 
     void OnKill(Message m)
     {
-        Debug.Log("I've been killed!! - " + m.type);
+        Debug.Log("I've been killed!! - " + m.time);
+    }
+
+    private void UpdateChat(Message m)
+    {
+        Chat c = m as Chat;
+
+        Debug.Log("Chat msg: " + c.chatMsg);
     }
 
     private void OnDestroy()
