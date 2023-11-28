@@ -32,7 +32,7 @@ namespace MessageTypes
     {
         public Message(MessageType type) => this.type = type;
 
-        public long id;
+        public uint id;
         public float time;
         public MessageType type;
     }

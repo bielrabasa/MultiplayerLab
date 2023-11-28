@@ -29,7 +29,7 @@ public struct PlayerState
     public List<MultiplayerEvents> events;
 }
 
-public class GameState : MonoBehaviour, MessageReciever
+public class GameState : MonoBehaviour
 {
     const int MESSAGE_PACK_SIZE = 1024;
     const string BLUE_TANK_NAME = "Tank (blue)";
@@ -334,12 +334,6 @@ public class GameState : MonoBehaviour, MessageReciever
     {
         KillGame();
         SceneManager.LoadScene("MainScene");
-    }
-
-    public void OnMessageRecieve(Message msg)
-    {
-        //TODO: TEST
-        Debug.Log("Game State recieved a message!!!");
     }
 
     /*public void SendDestroyObstacle(GameObject GO)
