@@ -10,7 +10,20 @@ public class TestAcks : MonoBehaviour
         MessageManager.messageDistribute[MessageType.KILL] += OnKill;
         MessageManager.messageDistribute[MessageType.CHAT] += UpdateChat;
 
-        MessageManager.SendMessage(new Chat("Hola Jefe!"));
+        
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            MessageManager.SendMessage(new Chat("Hola Jefe! Soc el: " + (MessageManager.isServer?"Server":"Client")));
+        }
+
+        if(Input.GetKeyDown(KeyCode.K)) 
+        {
+            MessageManager.SendMessage(new Message(MessageType.KILL));
+        }
     }
 
     void OnKill(Message m)

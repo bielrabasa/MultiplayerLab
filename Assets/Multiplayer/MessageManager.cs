@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
-using UnityEditor.PackageManager;
 
 public class MessageManager : MonoBehaviour
 {
@@ -35,9 +34,12 @@ public class MessageManager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        for(int i = 0; i < (int)MessageType._MESSAGE_TYPE_COUNT; i++)
+        if(messageDistribute.Count == 0) 
         {
-            messageDistribute.Add((MessageType)i, null);
+            for (int i = 0; i < (int)MessageType._MESSAGE_TYPE_COUNT; i++)
+            {
+                messageDistribute.Add((MessageType)i, null);
+            }
         }
     }
 
@@ -45,11 +47,6 @@ public class MessageManager : MonoBehaviour
     {
         //Subscribe to acknowledgement messages
         messageDistribute[MessageType.ACKNOWLEDGEMENTS] += OnAcknowledgementsRecieved;
-
-        //Start thread
-        messageReciever.Start();
-
-        //TODO: Start sending acknowledgements
     }
 
     private void Update()
@@ -100,6 +97,14 @@ public class MessageManager : MonoBehaviour
         //TODO: stop sending akcs
     }
 
+    public static void StartComunication()
+    {
+        messageReciever.Start();
+
+        //TODO: Start sending acknowledgements
+
+    }
+
     static void MessageReciever()
     {
         while (true)
@@ -119,6 +124,7 @@ public class MessageManager : MonoBehaviour
 
             //Add to process later
             recievedMessages.Add(FromBytes(data, size));
+            Debug.Log("Manager Recieved a message!");
         }
     }
 

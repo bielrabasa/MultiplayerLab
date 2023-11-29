@@ -165,10 +165,9 @@ public class Client : MonoBehaviour
 
     void TransferInformation()
     {
-        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
-        ms.socket = socket;
-        ms.remote = remote;
-        ms.isServer = false;
+        MessageManager.socket = socket;
+        MessageManager.remote = remote;
+        MessageManager.isServer = false;
     }
 
     void WaitForStart() //TODO: function to abort
@@ -205,6 +204,7 @@ public class Client : MonoBehaviour
     void ChangeScene()
     {
         SceneManager.LoadScene("MainScene");
+        MessageManager.StartComunication();
     }
 
     string GetMyIp()

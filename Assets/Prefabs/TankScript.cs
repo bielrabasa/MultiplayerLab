@@ -17,7 +17,7 @@ public class TankScript : MonoBehaviour
     //Multiplayer
     bool movementBlocked = false;
 
-    GameState gameState;
+    //GameState gameState;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,7 @@ public class TankScript : MonoBehaviour
         top = transform.GetChild(0);
         bot = transform.GetChild(1);
 
-        gameState = FindObjectOfType<GameState>();
+        //gameState = FindObjectOfType<GameState>();
         trailStorage = GameObject.Find("Trails").transform;
 
         StartCoroutine(Trail());
@@ -34,13 +34,14 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (movementBlocked || gameState.isGamePaused) return;
+        //if (movementBlocked || gameState.isGamePaused) return;
+        if (movementBlocked) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            gameState.SendEvent(MultiplayerEvents.SHOOT);
-            Shoot();
+            /*gameState.SendEvent(MultiplayerEvents.SHOOT);
+            Shoot();*/
         }
 
         //Tank Movement
@@ -91,15 +92,15 @@ public class TankScript : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(trailSpawnDelay);
 
-            if (!gameState.isGamePaused)
-            {
+            //if (!gameState.isGamePaused)
+            //{
                 bot.rotation.Normalize();
 
                 Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
                 Vector3 spawnDist = dir * Vector3.up * -0.2f;
 
                 Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
-            }
+            //}
         }
     }
 

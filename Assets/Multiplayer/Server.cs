@@ -126,15 +126,15 @@ public class Server : MonoBehaviour
 
     void TransferInformation()
     {
-        MultiplayerState ms = FindObjectOfType<MultiplayerState>();
-        ms.socket = socket;
-        ms.remote = remote;
-        ms.isServer = true;
+        MessageManager.socket = socket;
+        MessageManager.remote = remote;
+        MessageManager.isServer = true;
     }
 
     void ChangeScene()
     {
         SceneManager.LoadScene("MainScene");
+        MessageManager.StartComunication();
     }
 
     public void GetIP(Text text)

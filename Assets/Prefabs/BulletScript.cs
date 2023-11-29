@@ -24,7 +24,7 @@ public class BulletScript : MonoBehaviour
         if (collision.gameObject.CompareTag("TANK"))
         {
             //Destroy(collision.gameObject);
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.KILL, collision.gameObject.transform);
+            //FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.KILL, collision.gameObject.transform);
             Destroy(gameObject);
         }
 
