@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using UnityEditor.PackageManager;
 
 public class MessageManager : MonoBehaviour
 {
@@ -47,7 +48,8 @@ public class MessageManager : MonoBehaviour
 
         //Start thread
         messageReciever.Start();
-        //TODO: Start sending messages & acknowledgements
+
+        //TODO: Start sending acknowledgements
     }
 
     private void Update()
@@ -68,9 +70,11 @@ public class MessageManager : MonoBehaviour
         message.time = Time.time;
         message.id = NextID();
 
-        sentMessages.Add(message);
+        //sentMessages.Add(message);
 
-        //TODO: Send message to other player
+        //Send message
+        byte[] messageData = ToBytes(message);
+        socket.SendTo(messageData, messageData.Length, SocketFlags.None, remote);
     }
 
     static void OnRecievedMessage(Message message)
@@ -81,19 +85,19 @@ public class MessageManager : MonoBehaviour
 
     static void OnAcknowledgementsRecieved(Message m)
     {
-        Acknowledgements a = m as Acknowledgements;
+        /*Acknowledgements a = m as Acknowledgements;
 
         //Remove the Acknowledged messages
         for (int i = sentMessages.Count - 1; i >= 0; i--)
         {
             if (a.acks.Contains(sentMessages[i].id)) sentMessages.Remove(sentMessages[i]);
-        }
+        }*/
     }
 
     static void StopComunication()
     {
         messageReciever.Abort();
-        //TODO: stop sending messages
+        //TODO: stop sending akcs
     }
 
     static void MessageReciever()
