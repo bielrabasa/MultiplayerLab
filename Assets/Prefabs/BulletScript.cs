@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-    [SerializeField] float speed = 10.0f;
     float timer = 0.0f;
-
     bool bounce = false;
 
     private void Start()
@@ -32,8 +30,7 @@ public class BulletScript : MonoBehaviour
         {
             if(!bounce)
             {
-                GetComponent<Rigidbody2D>().velocity = transform.up * (speed / 2);
-                GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(GetComponent<Rigidbody2D>().velocity, Vector3.right);
+                //TODO: Bullet needs material to bounce
                 bounce = true;
             }
             else 
@@ -63,10 +60,5 @@ public class BulletScript : MonoBehaviour
             FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, collision.transform);
             Destroy(gameObject);
         }*/
-    }
-
-    public void Shoot()
-    {
-        GetComponent<Rigidbody2D>().velocity = transform.up * speed;
     }
 }

@@ -74,6 +74,19 @@ public class MessageManager : MonoBehaviour
         socket.SendTo(messageData, messageData.Length, SocketFlags.None, remote);
     }
 
+    public static void SendMessage(MessageType type)
+    {
+        Message message = new Message(type);
+        message.time = Time.time;
+        message.id = NextID();
+
+        //sentMessages.Add(message);
+
+        //Send message
+        byte[] messageData = ToBytes(message);
+        socket.SendTo(messageData, messageData.Length, SocketFlags.None, remote);
+    }
+
     static void OnRecievedMessage(Message message)
     {
         //Send message to subscribed objects

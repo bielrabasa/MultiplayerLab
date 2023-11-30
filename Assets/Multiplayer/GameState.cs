@@ -1,7 +1,5 @@
 using System.Text;
-using System.Threading;
 using UnityEngine;
-using System.Net.Sockets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.PostProcessing;
@@ -36,13 +34,19 @@ public class GameState : MonoBehaviour
 
         GetPlayers();
 
-        MessageManager.messageDistribute[MessageType.POSITION] += UpdateOtherState;
+        MessageManager.messageDistribute[MessageType.POSITION] += MessagePosition;
+        MessageManager.messageDistribute[MessageType.KILL] += MessageKill;
+
+        MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
+        MessageManager.messageDistribute[MessageType.UNPAUSE] += MessagePause;
+        MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
+
         StartCoroutine(SendMyState());
     }
 
     void Update()
     {
-        /*if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.P))
         {
             SendPauseGame(!isGamePaused);
         }
@@ -51,58 +55,72 @@ public class GameState : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R)) startResetHoldTime = Time.time;
         if (Input.GetKey(KeyCode.R) && (Time.time - startResetHoldTime) >= R_HOLDING_TIME)
         {
-            SendEvent(MultiplayerEvents.RESET);
+            MessageManager.SendMessage(MessageType.RESET);
             ResetGame();
-        }*/
+        }
     }
 
-    void UpdateOtherState(Message message)
+    void MessagePosition(Message message)
     {
-        Debug.Log("Position Message Recieved in: " + message.time);
-
         Position p = message as Position;
         otherPlayer.position = p.pos;
         otherPlayer.GetChild(0).rotation = Quaternion.Euler(0, 0, p.topRot);
         otherPlayer.GetChild(1).rotation = Quaternion.Euler(0, 0, p.botRot);
-
-        /*foreach (MultiplayerEvents e in otherState.events)
-        {
-            switch (e)
-            {
-                case MultiplayerEvents.SHOOT:
-                    //Instanciate Bullet
-                    otherPlayer.GetComponent<TankScript>().Shoot();
-                    break;
-                case MultiplayerEvents.KILL:
-                    //Die
-                    myPlayer.gameObject.SetActive(false);
-                    break;
-
-                case MultiplayerEvents.DISCONNECT:
-
-                    break;
-
-                case MultiplayerEvents.PAUSE:
-                    SetPause(true);
-                    break;
-
-                case MultiplayerEvents.UNPAUSE:
-                    SetPause(false);
-                    break;
-
-                case MultiplayerEvents.RESET:
-                    ResetGame();
-                    break;
-                case MultiplayerEvents.OBSTACLE:
-                    DestroyObstacle(obstacleToDestroy);
-                    break;
-
-                case MultiplayerEvents.BOMB:
-                    SetBomb(obstacleToDestroy);
-                    break;
-            }
-        }*/
     }
+
+    void MessageKill(Message message)
+    {
+        myPlayer.gameObject.SetActive(false);
+    }
+
+    void MessagePause(Message message)
+    {
+        //Pause or unpause
+        SetPause(message.type == MessageType.PAUSE);
+    }
+
+    void MessageReset(Message message)
+    {
+        ResetGame();
+    }
+   
+    /*foreach (MultiplayerEvents e in otherState.events)
+    {
+        switch (e)
+        {
+            case MultiplayerEvents.SHOOT:
+                //Instanciate Bullet
+                otherPlayer.GetComponent<TankScript>().Shoot();
+                break;
+            case MultiplayerEvents.KILL:
+                //Die
+                myPlayer.gameObject.SetActive(false);
+                break;
+
+            case MultiplayerEvents.DISCONNECT:
+
+                break;
+
+            case MultiplayerEvents.PAUSE:
+                SetPause(true);
+                break;
+
+            case MultiplayerEvents.UNPAUSE:
+                SetPause(false);
+                break;
+
+            case MultiplayerEvents.RESET:
+                ResetGame();
+                break;
+            case MultiplayerEvents.OBSTACLE:
+                DestroyObstacle(obstacleToDestroy);
+                break;
+
+            case MultiplayerEvents.BOMB:
+                SetBomb(obstacleToDestroy);
+                break;
+        }
+    }*/
 
     void GetPlayers()
     {
@@ -141,21 +159,17 @@ public class GameState : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(MESSAGE_SEND_DELAY);
-            SendStateOnce();
+            MessageManager.SendMessage(new Position(myPlayer.position, 
+                myPlayer.GetChild(0).rotation.eulerAngles.z, 
+                myPlayer.GetChild(1).rotation.eulerAngles.z));
         }
-    }
-
-    void SendStateOnce()
-    {
-        Debug.Log("MessageSent");
-        MessageManager.SendMessage(new Position(myPlayer.position, myPlayer.GetChild(0).rotation.eulerAngles.z, myPlayer.GetChild(1).rotation.eulerAngles.z));
     }
 
     //
     //  INGAME FUNCTIONALITIES
     //
 
-    /*public void SendPauseGame(bool pause)
+    public void SendPauseGame(bool pause)
     {
         SetPause(pause);
         MessageManager.SendMessage(new Message(pause ? MessageType.PAUSE : MessageType.UNPAUSE));
@@ -165,7 +179,7 @@ public class GameState : MonoBehaviour
     {
         postpo.gameObject.SetActive(pause);
         isGamePaused = pause;
-    }*/
+    }
 
     void KillGame()
     {
@@ -184,11 +198,11 @@ public class GameState : MonoBehaviour
         StopCoroutine(SendMyState());
     }
 
-    /*public void ResetGame()
+    public void ResetGame()
     {
         KillGame();
         SceneManager.LoadScene("MainScene");
-    }*/
+    }
 
     /*public void SendDestroyObstacle(GameObject GO)
     {

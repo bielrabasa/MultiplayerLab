@@ -1,3 +1,4 @@
+using MessageTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,15 +10,15 @@ public class TankScript : MonoBehaviour
     Transform top;
     Transform bot;
 
-    [SerializeField] GameObject bullet;
+    //TODO: get bullet manager & shoot
+
     [SerializeField] GameObject trail;
     Transform trailStorage;
     [SerializeField] float trailSpawnDelay = 1.0f;
 
     //Multiplayer
     bool movementBlocked = false;
-
-    //GameState gameState;
+    GameState gameState;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,7 @@ public class TankScript : MonoBehaviour
         top = transform.GetChild(0);
         bot = transform.GetChild(1);
 
-        //gameState = FindObjectOfType<GameState>();
+        gameState = FindObjectOfType<GameState>();
         trailStorage = GameObject.Find("Trails").transform;
 
         StartCoroutine(Trail());
@@ -34,14 +35,14 @@ public class TankScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (movementBlocked || gameState.isGamePaused) return;
+        if (movementBlocked || gameState.isGamePaused) return;
         if (movementBlocked) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            /*gameState.SendEvent(MultiplayerEvents.SHOOT);
-            Shoot();*/
+            MessageManager.SendMessage(new Shoot(transform.position, top.rotation.eulerAngles.z));
+            //TODO: BulletManagerShoot
         }
 
         //Tank Movement
@@ -78,29 +79,21 @@ public class TankScript : MonoBehaviour
         }
     }
 
-    public void Shoot()
-    {
-        Quaternion dir = Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward);
-        Vector3 spawnDist = dir * Vector3.up * 0.7f;
-        GameObject b = Instantiate(bullet, transform.position + spawnDist, dir);
-        b.GetComponent<BulletScript>().Shoot();
-    }
-
     IEnumerator Trail()
     {
         while (true)
         {
             yield return new WaitForSecondsRealtime(trailSpawnDelay);
 
-            //if (!gameState.isGamePaused)
-            //{
+            if (!gameState.isGamePaused)
+            {
                 bot.rotation.Normalize();
 
                 Quaternion dir = Quaternion.AngleAxis(bot.rotation.eulerAngles.z + 180, Vector3.forward);
                 Vector3 spawnDist = dir * Vector3.up * -0.2f;
 
                 Instantiate(trail, transform.position + spawnDist, dir, trailStorage);
-            //}
+            }
         }
     }
 
