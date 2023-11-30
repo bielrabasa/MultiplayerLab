@@ -15,6 +15,7 @@ public class TankScript : MonoBehaviour
     [SerializeField] GameObject trail;
     Transform trailStorage;
     [SerializeField] float trailSpawnDelay = 1.0f;
+    BulletManager bulletManager;
 
     //Multiplayer
     bool movementBlocked = false;
@@ -27,6 +28,7 @@ public class TankScript : MonoBehaviour
         bot = transform.GetChild(1);
 
         gameState = FindObjectOfType<GameState>();
+        bulletManager = FindObjectOfType<BulletManager>();
         trailStorage = GameObject.Find("Trails").transform;
 
         StartCoroutine(Trail());
@@ -42,7 +44,7 @@ public class TankScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             MessageManager.SendMessage(new Shoot(transform.position, top.rotation.eulerAngles.z));
-            //TODO: BulletManagerShoot
+            bulletManager.Shoot(transform.position, top.rotation.eulerAngles.z);
         }
 
         //Tank Movement

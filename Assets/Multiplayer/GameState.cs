@@ -19,7 +19,7 @@ public class GameState : MonoBehaviour
     //Client -> Red
 
     //State Game
-    public bool isGamePaused;
+    [HideInInspector] public bool isGamePaused;
     PostProcessVolume postpo;
     float startResetHoldTime;
     float R_HOLDING_TIME = 3.0f;
@@ -42,6 +42,16 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
 
         StartCoroutine(SendMyState());
+    }
+
+    private void OnDestroy()
+    {
+        MessageManager.messageDistribute[MessageType.POSITION] -= MessagePosition;
+        MessageManager.messageDistribute[MessageType.KILL] -= MessageKill;
+
+        MessageManager.messageDistribute[MessageType.PAUSE] -= MessagePause;
+        MessageManager.messageDistribute[MessageType.UNPAUSE] -= MessagePause;
+        MessageManager.messageDistribute[MessageType.RESET] -= MessageReset;
     }
 
     void Update()

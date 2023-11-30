@@ -30,6 +30,7 @@ public class MessageManager : MonoBehaviour
     static Thread messageReciever = new(MessageReciever);
 
 
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
