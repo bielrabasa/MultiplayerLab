@@ -52,9 +52,14 @@ public class MessageManager : MonoBehaviour
 
     private void Update()
     {
+        if (recievedMessages.Count == 0) return;
+
         //Process recieved messages
-        foreach(Message m in recievedMessages) OnRecievedMessage(m);
-        recievedMessages.Clear();
+        lock (recievedMessages)
+        {
+            foreach(Message m in recievedMessages) OnRecievedMessage(m);
+            recievedMessages.Clear();
+        }
     }
 
     static uint NextID()
@@ -137,7 +142,10 @@ public class MessageManager : MonoBehaviour
             }
 
             //Add to process later
-            recievedMessages.Add(FromBytes(data, size));
+            lock (recievedMessages)
+            {
+                recievedMessages.Add(FromBytes(data, size));
+            }
             Debug.Log("Manager Recieved a message!");
         }
     }
