@@ -16,6 +16,9 @@ public class MessageManager : MonoBehaviour
 
     //Other PCs recieved messages
     static List<uint> acks = new();
+    static uint frameWait = 0;
+    static bool sendAcks = false;
+    const uint ACKS_FRAME_WAIT = 3;
 
     //All objects that need to be sent messages
     [HideInInspector] public static Dictionary<MessageType, Action<Message>> messageDistribute = new();
@@ -52,6 +55,9 @@ public class MessageManager : MonoBehaviour
 
     private void Update()
     {
+        //Send Acknowledgements
+        if(sendAcks) AcknowledgementSend();
+
         if (recievedMessages.Count == 0) return;
 
         //Process recieved messages
@@ -60,6 +66,11 @@ public class MessageManager : MonoBehaviour
             foreach(Message m in recievedMessages) OnRecievedMessage(m);
             recievedMessages.Clear();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopComunication();
     }
 
     static uint NextID()
@@ -73,7 +84,7 @@ public class MessageManager : MonoBehaviour
         message.time = Time.time;
         message.id = NextID();
 
-        //sentMessages.Add(message);
+        sentMessages.Add(message);
 
         //Send message
         byte[] messageData = ToBytes(message);
@@ -82,15 +93,7 @@ public class MessageManager : MonoBehaviour
 
     public static void SendMessage(MessageType type)
     {
-        Message message = new Message(type);
-        message.time = Time.time;
-        message.id = NextID();
-
-        //sentMessages.Add(message);
-
-        //Send message
-        byte[] messageData = ToBytes(message);
-        socket.SendTo(messageData, messageData.Length, SocketFlags.None, remote);
+        SendMessage(new Message(type));
     }
 
     static void OnRecievedMessage(Message message)
@@ -101,27 +104,53 @@ public class MessageManager : MonoBehaviour
 
     static void OnAcknowledgementsRecieved(Message m)
     {
-        /*Acknowledgements a = m as Acknowledgements;
+        Acknowledgements a = m as Acknowledgements;
 
         //Remove the Acknowledged messages
-        for (int i = sentMessages.Count - 1; i >= 0; i--)
+        lock (acks)
         {
-            if (a.acks.Contains(sentMessages[i].id)) sentMessages.Remove(sentMessages[i]);
+            for (int i = sentMessages.Count - 1; i >= 0; i--)
+            {
+                if (a.acks.Contains(sentMessages[i].id))
+                {
+                    sentMessages.RemoveAt(i);
+                }
+            }
+        }
+
+        //Re-Sent non Acknowledged messages
+        /*foreach(Message message in sentMessages)
+        {
+            SendMessage(message);
         }*/
     }
 
-    static void StopComunication()
+    void StopComunication()
     {
         messageReciever.Abort();
-        //TODO: stop sending akcs
+        sendAcks = false;
+        //TODO: Kill Sockets
     }
 
     public static void StartComunication()
     {
         messageReciever.Start();
+        sendAcks = true;
+    }
 
-        //TODO: Start sending acknowledgements
+    static void AcknowledgementSend()
+    {
+        frameWait++;
 
+        if (frameWait > ACKS_FRAME_WAIT)
+        {
+            frameWait = 0;
+
+            lock (acks) {
+                SendMessage(new Acknowledgements(acks));
+                acks.Clear();
+            }
+        }
     }
 
     static void MessageReciever()
@@ -141,12 +170,18 @@ public class MessageManager : MonoBehaviour
                 return;
             }
 
+            Message m = FromBytes(data, size);
+
             //Add to process later
             lock (recievedMessages)
             {
-                recievedMessages.Add(FromBytes(data, size));
+                recievedMessages.Add(m);
             }
-            Debug.Log("Manager Recieved a message!");
+
+            lock (acks)
+            {
+                acks.Add(m.id);
+            }
         }
     }
 

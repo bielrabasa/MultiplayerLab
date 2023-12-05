@@ -17,7 +17,7 @@ public class P2_ClientMSG : MonoBehaviour
     void Start()
     {
         //Create IP info struct
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(ip), 9050);
 
         //Open Socket
         CreateSocket();

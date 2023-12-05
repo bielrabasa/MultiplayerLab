@@ -36,7 +36,7 @@ public class P2_Client : MonoBehaviour
         consoleUI = GameObject.FindAnyObjectByType<fool>();
 
         //Create IP info struct
-        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050); //TODO: Preguntar port
+        ipep = new IPEndPoint(IPAddress.Parse(ip), 9050);
 
         //Open Socket
         CreateSocket();

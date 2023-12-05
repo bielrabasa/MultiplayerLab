@@ -11,6 +11,8 @@ public class BulletManager : MonoBehaviour
     private void Start()
     {
         MessageManager.messageDistribute[MessageType.SHOOT] += MessageShoot;
+        MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
+        MessageManager.messageDistribute[MessageType.UNPAUSE] += MessageUnpause;
     }
 
     void MessageShoot(Message message)
@@ -28,12 +30,22 @@ public class BulletManager : MonoBehaviour
 
         //Spawn further for the delayed time
         //b.transform.position += b.transform.up * speed * delayedTime;
+        //TODO: Test Spawnpos
 
         //Set speed
         b.GetComponent<Rigidbody2D>().velocity = b.transform.up * speed;
     }
 
-    //TODO: Stop & Play with pause
+
+    void MessagePause(Message message)
+    {
+        StopBullets();
+    }
+
+    void MessageUnpause(Message message)
+    {
+        ReplayBullets();
+    }
 
     void StopBullets()
     {
