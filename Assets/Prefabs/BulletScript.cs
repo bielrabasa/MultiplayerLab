@@ -23,6 +23,7 @@ public class BulletScript : MonoBehaviour
         {
             //Destroy(collision.gameObject);
             //FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.KILL, collision.gameObject.transform);
+            MessageManager.SendMessage(MessageTypes.MessageType.KILL);
             Destroy(gameObject);
         }
 
@@ -30,8 +31,7 @@ public class BulletScript : MonoBehaviour
         {
             if(!bounce)
             {
-                //TODO: Bullet needs material to bounce
-                bounce = true;
+                //bounce = true;
             }
             else 
             {

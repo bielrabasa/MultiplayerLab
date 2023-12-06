@@ -7,10 +7,9 @@ public class TestAcks : MonoBehaviour
 {
     private void Start()
     {
+        if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.KILL] += OnKill;
         MessageManager.messageDistribute[MessageType.CHAT] += UpdateChat;
-
-        
     }
 
     private void Update()
@@ -40,6 +39,7 @@ public class TestAcks : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.KILL] -= OnKill;
     }
 }

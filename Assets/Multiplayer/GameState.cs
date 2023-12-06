@@ -34,6 +34,7 @@ public class GameState : MonoBehaviour
 
         GetPlayers();
 
+        if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.POSITION] += MessagePosition;
         MessageManager.messageDistribute[MessageType.KILL] += MessageKill;
 
@@ -46,6 +47,7 @@ public class GameState : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.POSITION] -= MessagePosition;
         MessageManager.messageDistribute[MessageType.KILL] -= MessageKill;
 

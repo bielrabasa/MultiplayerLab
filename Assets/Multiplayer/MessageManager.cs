@@ -81,6 +81,8 @@ public class MessageManager : MonoBehaviour
     //Message type & other data has to be set before
     public static void SendMessage(Message message)
     {
+        if (messageDistribute.Count == 0) return;
+
         message.time = Time.time;
         message.id = NextID();
 

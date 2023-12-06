@@ -10,6 +10,7 @@ public class BulletManager : MonoBehaviour
 
     private void Start()
     {
+        if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.SHOOT] += MessageShoot;
         MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.UNPAUSE] += MessageUnpause;
@@ -33,7 +34,7 @@ public class BulletManager : MonoBehaviour
         //TODO: Test Spawnpos
 
         //Set speed
-        b.GetComponent<Rigidbody2D>().velocity = b.transform.up * speed;
+        b.GetComponent<Rigidbody2D>().AddForce(b.transform.up * speed);
     }
 
 
@@ -49,6 +50,8 @@ public class BulletManager : MonoBehaviour
 
     void StopBullets()
     {
+        //TODO: add constraints
+
         foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) { 
             rb.velocity = Vector3.zero;
         }
@@ -56,6 +59,8 @@ public class BulletManager : MonoBehaviour
 
     void ReplayBullets()
     {
+        //TODO: deactivate constraints
+
         foreach (Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>())
         {
             rb.velocity = rb.transform.up * speed;
