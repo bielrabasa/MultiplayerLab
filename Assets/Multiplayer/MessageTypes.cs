@@ -9,21 +9,21 @@ namespace MessageTypes
     {
         _NONE,              //Test
 
-        ACKNOWLEDGEMENTS,
-        CONFIRMATION,       //No msg
-        START,              //No msg
+        ACKNOWLEDGEMENTS,   //Extra
+        CONFIRMATION,       
+        START,              
 
-        POSITION,
-        SHOOT,
-        KILL,               //No msg
+        POSITION,           //Extra
+        SHOOT,              //Extra
+        KILL,               
 
-        PAUSE,              //No msg
-        UNPAUSE,            //No msg
-        RESET,              //No msg
+        PAUSE,              
+        UNPAUSE,            
+        RESET,              
 
-        DISCONNECT,         //No msg
+        DISCONNECT,         
 
-        CHAT,
+        CHAT,               //Extra
 
         _MESSAGE_TYPE_COUNT //Test
     }

@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
-    path: Assets/PRACTIQUES/P2/Server_UDP.unity
-    guid: a8a18ae366a458d45a4f7f128a65cf6a
-  - enabled: 0
-    path: Assets/PRACTIQUES/P2/Clients_UDP.unity
-    guid: 170ae1c1152c85544836da604d900804
+    path: Assets/TESTING/TEST.unity
+    guid: 5d9faa493c3edac499d327556be88c10
   m_configObjects: {}

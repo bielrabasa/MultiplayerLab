@@ -25,7 +25,7 @@ public class P2_Server : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         //Create IP info struct
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050); //TODO: Preguntar port
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
 
         //Open Socket
         CreateSocket();
@@ -43,7 +43,7 @@ public class P2_Server : MonoBehaviour
         yield return new WaitForSeconds(60);
 
         if (serverThread.IsAlive) { 
-            serverThread.Interrupt(); //TODO: This causes errors
+            serverThread.Interrupt();
             KillSocket();
 
             Debug.Log("___SERVER___\nConnection time EXPIRED!\n");

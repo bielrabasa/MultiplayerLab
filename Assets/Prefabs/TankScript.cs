@@ -1,3 +1,4 @@
+using MessageTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,15 @@ public class TankScript : MonoBehaviour
     Transform top;
     Transform bot;
 
-    [SerializeField] GameObject bullet;
+    //TODO: get bullet manager & shoot
+
     [SerializeField] GameObject trail;
     Transform trailStorage;
     [SerializeField] float trailSpawnDelay = 1.0f;
+    BulletManager bulletManager;
 
     //Multiplayer
     bool movementBlocked = false;
-
     GameState gameState;
 
     // Start is called before the first frame update
@@ -26,6 +28,7 @@ public class TankScript : MonoBehaviour
         bot = transform.GetChild(1);
 
         gameState = FindObjectOfType<GameState>();
+        bulletManager = FindObjectOfType<BulletManager>();
         trailStorage = GameObject.Find("Trails").transform;
 
         StartCoroutine(Trail());
@@ -35,12 +38,13 @@ public class TankScript : MonoBehaviour
     void Update()
     {
         if (movementBlocked || gameState.isGamePaused) return;
+        if (movementBlocked) return;
 
         //Shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            gameState.SendEvent(MultiplayerEvents.SHOOT);
-            Shoot();
+            MessageManager.SendMessage(new Shoot(transform.position, top.rotation.eulerAngles.z));
+            bulletManager.Shoot(transform.position, top.rotation.eulerAngles.z);
         }
 
         //Tank Movement
@@ -75,14 +79,6 @@ public class TankScript : MonoBehaviour
             Quaternion newAngle = Quaternion.AngleAxis(Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg + 90, Vector3.forward);
             top.rotation = Quaternion.Slerp(top.rotation, newAngle, topRotationSpeed * Time.deltaTime);
         }
-    }
-
-    public void Shoot()
-    {
-        Quaternion dir = Quaternion.AngleAxis(top.rotation.eulerAngles.z + 180, Vector3.forward);
-        Vector3 spawnDist = dir * Vector3.up * 0.7f;
-        GameObject b = Instantiate(bullet, transform.position + spawnDist, dir);
-        b.GetComponent<BulletScript>().Shoot();
     }
 
     IEnumerator Trail()
