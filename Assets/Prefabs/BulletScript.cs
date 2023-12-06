@@ -17,13 +17,17 @@ public class BulletScript : MonoBehaviour
         timer += Time.deltaTime;
         if (timer > 5.0f) Destroy(gameObject);
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("TANK"))
         {
-            //Destroy(collision.gameObject);
-            //FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.KILL, collision.gameObject.transform);
-            MessageManager.SendMessage(MessageTypes.MessageType.KILL);
+            if (FindObjectOfType<GameState>().IsOtherTank(collision.gameObject.transform))
+            {
+                MessageManager.SendMessage(MessageTypes.MessageType.KILL);
+                collision.gameObject.SetActive(false);
+            }
+
             Destroy(gameObject);
         }
 

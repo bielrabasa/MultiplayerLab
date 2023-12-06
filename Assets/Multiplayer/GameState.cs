@@ -166,6 +166,11 @@ public class GameState : MonoBehaviour
         }
     }
 
+    public bool IsOtherTank(Transform t)
+    {
+        return t == otherPlayer;
+    }
+
     IEnumerator SendMyState()
     {
         while (true)
