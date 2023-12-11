@@ -23,6 +23,23 @@ public class TestAcks : MonoBehaviour
         {
             MessageManager.SendMessage(new Message(MessageType.KILL));
         }
+
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            GameObject testingID = GameObject.Find("GameObjectID");
+            int id = testingID.GetInstanceID();
+            Object[] allObjects = GameObject.FindGameObjectsWithTag("OBSTACLE");
+
+            foreach(GameObject go in allObjects)
+            {
+                Debug.Log(go.GetInstanceID());
+
+                if (id == go.GetInstanceID())
+                {
+                    Debug.Log(go.name);
+                }
+            }
+        }
     }
 
     void OnKill(Message m)
