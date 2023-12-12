@@ -18,8 +18,8 @@ public class MessageManager : MonoBehaviour
     static List<uint> acks = new();
     static uint frameCounter = 0;
     static bool sendAcks = false;
-    const uint ACKS_FRAME_WAIT = 60;
-    const uint RESEND_FRAME_WAIT = 60;
+    const uint ACKS_FRAME_WAIT = 10;
+    const uint RESEND_FRAME_WAIT = 15;
 
     //All objects that need to be sent messages
     [HideInInspector] public static Dictionary<MessageType, Action<Message>> messageDistribute = new();
