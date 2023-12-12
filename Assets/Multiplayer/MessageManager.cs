@@ -16,9 +16,10 @@ public class MessageManager : MonoBehaviour
 
     //Other PCs recieved messages
     static List<uint> acks = new();
-    static uint frameWait = 0;
+    static uint frameCounter = 0;
     static bool sendAcks = false;
     const uint ACKS_FRAME_WAIT = 3;
+    const uint RESEND_FRAME_WAIT = 3;
 
     //All objects that need to be sent messages
     [HideInInspector] public static Dictionary<MessageType, Action<Message>> messageDistribute = new();
@@ -56,7 +57,18 @@ public class MessageManager : MonoBehaviour
     private void Update()
     {
         //Send Acknowledgements
-        if(sendAcks) AcknowledgementSend();
+        bool resetCounter = false;
+        frameCounter++;
+        if (frameCounter % ACKS_FRAME_WAIT == 0) 
+        {
+            if (sendAcks) AcknowledgementSend();
+            resetCounter = true;
+        }
+        if (frameCounter % RESEND_FRAME_WAIT == 0)
+        {
+            MessageReSend();
+            if (resetCounter) frameCounter = 0;
+        }
 
         if (recievedMessages.Count == 0) return;
 
@@ -119,12 +131,6 @@ public class MessageManager : MonoBehaviour
                 }
             }
         }
-
-        //Re-Send non Acknowledged messages
-        for (int i = 0; i < sentMessages.Count; i++)
-        {
-            SendMessage(sentMessages[i]);
-        }
     }
 
     void StopComunication()
@@ -142,16 +148,18 @@ public class MessageManager : MonoBehaviour
 
     static void AcknowledgementSend()
     {
-        frameWait++;
+        lock (acks) {
+            SendMessage(new Acknowledgements(acks));
+            acks.Clear();
+        }
+    }
 
-        if (frameWait > ACKS_FRAME_WAIT)
+    static void MessageReSend()
+    {
+        //Re-Send non Acknowledged messages
+        for (int i = 0; i < sentMessages.Count; i++)
         {
-            frameWait = 0;
-
-            lock (acks) {
-                SendMessage(new Acknowledgements(acks));
-                acks.Clear();
-            }
+            SendMessage(sentMessages[i]);
         }
     }
 
