@@ -121,9 +121,9 @@ public class MessageManager : MonoBehaviour
         }
 
         //Re-Send non Acknowledged messages
-        foreach(Message message in sentMessages)
+        for (int i = 0; i < sentMessages.Count; i++)
         {
-            SendMessage(message);
+            SendMessage(sentMessages[i]);
         }
     }
 
