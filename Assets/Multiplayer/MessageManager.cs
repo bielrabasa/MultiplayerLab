@@ -120,11 +120,11 @@ public class MessageManager : MonoBehaviour
             }
         }
 
-        //Re-Sent non Acknowledged messages
-        /*foreach(Message message in sentMessages)
+        //Re-Send non Acknowledged messages
+        foreach(Message message in sentMessages)
         {
             SendMessage(message);
-        }*/
+        }
     }
 
     void StopComunication()
