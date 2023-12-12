@@ -50,22 +50,20 @@ public class BulletManager : MonoBehaviour
         ReplayBullets();
     }
 
-    void StopBullets()
+    public void StopBullets()
     {
-        //TODO: add constraints
-
+        //TODO: stop bullet counting time (set isStopped to true)
+        
         foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) { 
             rb.velocity = Vector3.zero;
         }
     }
 
-    void ReplayBullets()
+    public void ReplayBullets()
     {
-        //TODO: deactivate constraints
-
         foreach (Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>())
         {
-            rb.velocity = rb.transform.up * speed;
+            rb.velocity = rb.transform.up * speed; //TODO: not workin well
         }
     }
 }

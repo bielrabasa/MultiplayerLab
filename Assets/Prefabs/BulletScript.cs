@@ -6,6 +6,7 @@ public class BulletScript : MonoBehaviour
 {
     float timer = 0.0f;
     bool bounce = false;
+    bool isStopped = false;
 
     private void Start()
     {
@@ -14,8 +15,11 @@ public class BulletScript : MonoBehaviour
 
     private void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > 5.0f) Destroy(gameObject);
+        if(!isStopped)
+        {
+            timer += Time.deltaTime;
+            if (timer > 5.0f) Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
