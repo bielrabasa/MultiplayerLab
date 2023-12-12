@@ -10,6 +10,8 @@ public class BulletManager : MonoBehaviour
 
     private void Start()
     {
+        DontDestroyOnLoad(gameObject); //TODO: destroy on real change scene
+
         if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.SHOOT] += MessageShoot;
         MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
