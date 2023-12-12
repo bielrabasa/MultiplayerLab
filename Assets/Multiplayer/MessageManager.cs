@@ -19,7 +19,7 @@ public class MessageManager : MonoBehaviour
     static uint frameCounter = 0;
     static bool sendAcks = false;
     const uint ACKS_FRAME_WAIT = 3;
-    const uint RESEND_FRAME_WAIT = 3;
+    const uint RESEND_FRAME_WAIT = 60;
 
     //All objects that need to be sent messages
     [HideInInspector] public static Dictionary<MessageType, Action<Message>> messageDistribute = new();
@@ -148,19 +148,21 @@ public class MessageManager : MonoBehaviour
 
     static void AcknowledgementSend()
     {
-        lock (acks) {
+        /*lock (acks) {
             SendMessage(new Acknowledgements(acks));
+        }*/
             acks.Clear();
-        }
     }
 
     static void MessageReSend()
     {
+        Debug.Log("Messages to send: " + sentMessages.Count);
+
         //Re-Send non Acknowledged messages
-        for (int i = 0; i < sentMessages.Count; i++)
+        /*for (int i = 0; i < sentMessages.Count; i++)
         {
             SendMessage(sentMessages[i]);
-        }
+        }*/
     }
 
     static void MessageReciever()
