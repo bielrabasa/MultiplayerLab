@@ -148,10 +148,11 @@ public class MessageManager : MonoBehaviour
 
     static void AcknowledgementSend()
     {
-        /*lock (acks) {
-            SendMessage(new Acknowledgements(acks));
-        }*/
-            acks.Clear();
+        lock (acks) {
+            if(acks.Count > 0) SendMessage(new Acknowledgements(acks));
+        }
+
+        acks.Clear();
     }
 
     static void MessageReSend()
