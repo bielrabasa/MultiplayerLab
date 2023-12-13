@@ -32,11 +32,11 @@ public class BulletManager : MonoBehaviour
         GameObject b = Instantiate(bullet, pos + spawnDist, dir, transform);
 
         //Spawn further for the delayed time
-        //b.transform.position += b.transform.up * speed * delayedTime;
+        b.transform.position += b.transform.up * speed * delayedTime;
         //TODO: Test Spawnpos
 
         //Set speed
-        b.GetComponent<Rigidbody2D>().AddForce(b.transform.up * speed);
+        b.GetComponent<Rigidbody2D>().velocity = b.transform.up * speed;
     }
 
 
@@ -55,7 +55,6 @@ public class BulletManager : MonoBehaviour
         //TODO: stop bullet counting time (set isStopped to true)
         
         foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) {
-            rb.gameObject.GetComponent<BulletScript>(); //TODO: save rb.velocity as bulletVelocity from BulletScript 
             rb.velocity = Vector3.zero;
         }
     }
@@ -64,8 +63,7 @@ public class BulletManager : MonoBehaviour
     {
         foreach (Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>())
         {
-            rb.gameObject.GetComponent<BulletScript>(); //TODO: read bulletVelocity from BulletScript to set the rb velocity
-            rb.velocity = rb.transform.up; //TODO: not workin well
+            rb.velocity = rb.transform.up * speed;
         }
     }
 }
