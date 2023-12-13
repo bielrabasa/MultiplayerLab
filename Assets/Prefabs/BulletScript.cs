@@ -6,16 +6,20 @@ public class BulletScript : MonoBehaviour
 {
     float timer = 0.0f;
     bool bounce = false;
-    bool isStopped = false;
+
+    public Vector2 bulletVelocity;
+
+    GameState gameState;
 
     private void Start()
     {
         timer = 0.0f;
+        gameState = FindObjectOfType<GameState>();
     }
 
     private void Update()
     {
-        if(!isStopped)
+        if(!gameState.isGamePaused)
         {
             timer += Time.deltaTime;
             if (timer > 5.0f) Destroy(gameObject);
