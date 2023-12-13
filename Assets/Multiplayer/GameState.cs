@@ -95,44 +95,6 @@ public class GameState : MonoBehaviour
     {
         ResetGame();
     }
-   
-    /*foreach (MultiplayerEvents e in otherState.events)
-    {
-        switch (e)
-        {
-            case MultiplayerEvents.SHOOT:
-                //Instanciate Bullet
-                otherPlayer.GetComponent<TankScript>().Shoot();
-                break;
-            case MultiplayerEvents.KILL:
-                //Die
-                myPlayer.gameObject.SetActive(false);
-                break;
-
-            case MultiplayerEvents.DISCONNECT:
-
-                break;
-
-            case MultiplayerEvents.PAUSE:
-                SetPause(true);
-                break;
-
-            case MultiplayerEvents.UNPAUSE:
-                SetPause(false);
-                break;
-
-            case MultiplayerEvents.RESET:
-                ResetGame();
-                break;
-            case MultiplayerEvents.OBSTACLE:
-                DestroyObstacle(obstacleToDestroy);
-                break;
-
-            case MultiplayerEvents.BOMB:
-                SetBomb(obstacleToDestroy);
-                break;
-        }
-    }*/
 
     void GetPlayers()
     {
@@ -190,6 +152,15 @@ public class GameState : MonoBehaviour
     {
         SetPause(pause);
         MessageManager.SendMessage(new Message(pause ? MessageType.PAUSE : MessageType.UNPAUSE));
+
+        if (pause)
+        {
+            FindObjectOfType<BulletManager>().StopBullets();
+        }
+        else
+        {
+            FindObjectOfType<BulletManager>().ReplayBullets();
+        }
     }
 
     void SetPause(bool pause)

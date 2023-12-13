@@ -799,7 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b7ef11d12dec9246a9c1a117e855cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 150
+  speed: 3
   bullet: {fileID: 8239439814468822852, guid: 3f03c61e4a7f997409b49648c22c2a1f, type: 3}
 --- !u!4 &533214471
 Transform:

@@ -7,15 +7,23 @@ public class BulletScript : MonoBehaviour
     float timer = 0.0f;
     bool bounce = false;
 
+    public Vector2 bulletVelocity;
+
+    GameState gameState;
+
     private void Start()
     {
         timer = 0.0f;
+        gameState = FindObjectOfType<GameState>();
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > 5.0f) Destroy(gameObject);
+        if(!gameState.isGamePaused)
+        {
+            timer += Time.deltaTime;
+            if (timer > 5.0f) Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

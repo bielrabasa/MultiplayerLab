@@ -10,6 +10,8 @@ public class BulletManager : MonoBehaviour
 
     private void Start()
     {
+        DontDestroyOnLoad(gameObject); //TODO: destroy on real change scene
+
         if (MessageManager.messageDistribute.Count == 0) return;
         MessageManager.messageDistribute[MessageType.SHOOT] += MessageShoot;
         MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
@@ -30,11 +32,11 @@ public class BulletManager : MonoBehaviour
         GameObject b = Instantiate(bullet, pos + spawnDist, dir, transform);
 
         //Spawn further for the delayed time
-        //b.transform.position += b.transform.up * speed * delayedTime;
+        b.transform.position += b.transform.up * speed * delayedTime;
         //TODO: Test Spawnpos
 
         //Set speed
-        b.GetComponent<Rigidbody2D>().AddForce(b.transform.up * speed);
+        b.GetComponent<Rigidbody2D>().velocity = b.transform.up * speed;
     }
 
 
@@ -48,19 +50,17 @@ public class BulletManager : MonoBehaviour
         ReplayBullets();
     }
 
-    void StopBullets()
+    public void StopBullets()
     {
-        //TODO: add constraints
-
-        foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) { 
+        //TODO: stop bullet counting time (set isStopped to true)
+        
+        foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) {
             rb.velocity = Vector3.zero;
         }
     }
 
-    void ReplayBullets()
+    public void ReplayBullets()
     {
-        //TODO: deactivate constraints
-
         foreach (Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>())
         {
             rb.velocity = rb.transform.up * speed;
