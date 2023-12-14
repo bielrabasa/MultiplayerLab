@@ -17,7 +17,7 @@ namespace MessageTypes
         SHOOT,              //Extra
         KILL,               
 
-        OBSTACLE,
+        OBSTACLE,           //Extra
 
         PAUSE,              
         UNPAUSE,            
