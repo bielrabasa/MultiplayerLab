@@ -1,3 +1,4 @@
+using MessageTypes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,13 @@ public class BulletScript : MonoBehaviour
     public Vector2 bulletVelocity;
 
     GameState gameState;
+    ObjectsManager oManager;
 
     private void Start()
     {
         timer = 0.0f;
         gameState = FindObjectOfType<GameState>();
+        oManager = FindObjectOfType<ObjectsManager>();
     }
 
     private void Update()
@@ -51,9 +54,21 @@ public class BulletScript : MonoBehaviour
             }
         }
 
-        /*if (collision.gameObject.CompareTag("OBSTACLE"))
+        if (collision.gameObject.CompareTag("OBSTACLE"))
         {
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
+            for (int i = 0; i <= oManager.obstacle.Length; i++)
+            {
+                if (oManager.obstacle[i] == collision.gameObject)
+                {
+                    MessageManager.SendMessage(new Obstacle(i));
+                    gameState.DestroyObstacle(i);
+                }
+            }
+            //TODO: Send Correct ID
+
+
+
+            /*FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
 
             if (!bounce)
             {
@@ -64,10 +79,10 @@ public class BulletScript : MonoBehaviour
             else
             {
                 Destroy(gameObject);
-            }
+            }*/
         }
 
-        if (collision.gameObject.CompareTag("BOMB"))
+        /*if (collision.gameObject.CompareTag("BOMB"))
         {
             FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, collision.transform);
             Destroy(gameObject);

@@ -24,6 +24,8 @@ public class GameState : MonoBehaviour
     float startResetHoldTime;
     float R_HOLDING_TIME = 3.0f;
 
+    ObjectsManager objManager;
+
     void Start()
     {
         isGamePaused = false;
@@ -31,6 +33,8 @@ public class GameState : MonoBehaviour
 
         postpo = FindAnyObjectByType<PostProcessVolume>();
         postpo.gameObject.SetActive(false);
+
+        objManager = FindAnyObjectByType<ObjectsManager>();
 
         GetPlayers();
 
@@ -41,6 +45,8 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.UNPAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
+
+        MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
 
         StartCoroutine(SendMyState());
     }
@@ -94,6 +100,12 @@ public class GameState : MonoBehaviour
     void MessageReset(Message message)
     {
         ResetGame();
+    }
+
+    public void MessageDestroyObstacle(Message message)
+    {
+        Obstacle o = message as Obstacle;
+        DestroyObstacle(o.idObject);
     }
 
     void GetPlayers()
@@ -190,6 +202,11 @@ public class GameState : MonoBehaviour
     {
         KillGame();
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void DestroyObstacle(int id)
+    {
+        Destroy(objManager.FindObjectbyID(id, objManager.obstacle));
     }
 
     /*public void SendDestroyObstacle(GameObject GO)

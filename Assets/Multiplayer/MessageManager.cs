@@ -244,6 +244,11 @@ public class MessageManager : MonoBehaviour
                     m = JsonUtility.FromJson<Chat>(json);
                     break;
                 }
+            case MessageType.OBSTACLE:
+                {
+                    m = JsonUtility.FromJson<Obstacle>(json);
+                    break;
+                }
         }
 
         return m;

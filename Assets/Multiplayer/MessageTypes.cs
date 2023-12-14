@@ -17,6 +17,8 @@ namespace MessageTypes
         SHOOT,              //Extra
         KILL,               
 
+        OBSTACLE,
+
         PAUSE,              
         UNPAUSE,            
         RESET,              
@@ -81,5 +83,16 @@ namespace MessageTypes
         }
 
         public string chatMsg;
+    }
+
+    public class Obstacle : Message
+    {
+        public Obstacle(int idObject) : base(MessageType.OBSTACLE)
+        {
+            this.idObject = idObject;
+        }
+
+        public int idObject;
+
     }
 }
