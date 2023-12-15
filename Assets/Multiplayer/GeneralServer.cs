@@ -6,12 +6,11 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.tvOS;
 
-public class Server : MonoBehaviour
+public class GeneralServer : MonoBehaviour
 {
     Thread waitingClientThread;
-    bool connected;
 
     Socket socket;
     EndPoint remote;
@@ -20,14 +19,12 @@ public class Server : MonoBehaviour
     void Start()
     {
         waitingClientThread = new Thread(WaitClient);
-        connected = false;
-        
 
         ServerSetup();
         waitingClientThread.Start();
 
         //Set port in screen
-        GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
+        //GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
     }
 
     void ServerSetup()
@@ -90,7 +87,7 @@ public class Server : MonoBehaviour
         string message = Encoding.ASCII.GetString(recieveData, 0, recv);
 
         //Incorrect message
-        if(message != "ClientConnected")
+        if (message != "ClientConnected")
         {
             Debug.Log("Incorrect confirmation message: " + message);
             StopConnection();
@@ -100,8 +97,6 @@ public class Server : MonoBehaviour
         //Send Confirmation Message
         byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
         socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
-
-        connected = true;
     }
 
     public void StopSearching()
@@ -110,7 +105,7 @@ public class Server : MonoBehaviour
     }
 
     //GAME
-    public void StartPlaying()
+    /*public void StartPlaying()
     {
         if (!connected) return;
 
@@ -161,5 +156,5 @@ public class Server : MonoBehaviour
         }
 
         return "";
-    }
+    }*/
 }
