@@ -7,11 +7,15 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.tvOS;
+using UnityEngine.UI;
 
 public class GeneralServer : MonoBehaviour
 {
-    Thread waitingClientThread;
+    uint connectedPlayers = 0;
 
+    Thread waitingClientThread;
+    bool finishedConnection = false;
+    
     Socket socket;
     EndPoint remote;
     int port;
@@ -25,6 +29,24 @@ public class GeneralServer : MonoBehaviour
 
         //Set port in screen
         //GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
+        Debug.Log("IP: " + GetMyIp() + "\tPORT: " + port.ToString());
+    }
+
+    private void Update()
+    {
+        //Search for a new client
+        if (finishedConnection)
+        {
+            Debug.Log(connectedPlayers);
+            finishedConnection = false;
+            waitingClientThread = new Thread(WaitClient);
+            waitingClientThread.Start();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)) 
+        {
+            StartPlaying();
+        }
     }
 
     void ServerSetup()
@@ -97,6 +119,10 @@ public class GeneralServer : MonoBehaviour
         //Send Confirmation Message
         byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
         socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
+
+        //Setup
+        finishedConnection = true;
+        connectedPlayers++;
     }
 
     public void StopSearching()
@@ -105,9 +131,12 @@ public class GeneralServer : MonoBehaviour
     }
 
     //GAME
-    /*public void StartPlaying()
+    public void StartPlaying()
     {
-        if (!connected) return;
+        if (connectedPlayers == 0) return;
+
+        //Stop searching clients
+        waitingClientThread.Abort();
 
         TransferInformation();
 
@@ -133,7 +162,7 @@ public class GeneralServer : MonoBehaviour
     }
 
     //Screen
-
+    
     public void GetIP(Text text)
     {
         text.text = GetMyIp();
@@ -156,5 +185,5 @@ public class GeneralServer : MonoBehaviour
         }
 
         return "";
-    }*/
+    }
 }
