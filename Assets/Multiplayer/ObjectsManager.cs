@@ -5,11 +5,13 @@ using UnityEngine;
 public class ObjectsManager : MonoBehaviour
 {
     public GameObject[] obstacle;
+    public GameObject[] bomb;
 
     // Start is called before the first frame update
     void Start()
     {
-        obstacle = AddObjects("OBSTACLE");
+        obstacle = AddObjects("FENCE");
+        bomb = AddObjects("BOMB");
     }
     
     //return an array of all the same GameObjects with the given tag

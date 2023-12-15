@@ -105,7 +105,20 @@ public class GameState : MonoBehaviour
     public void MessageDestroyObstacle(Message message)
     {
         Obstacle o = message as Obstacle;
-        DestroyObstacle(o.idObject);
+
+        switch(o.objectType)
+        {
+            case MessageType.FENCE: 
+                {
+                    DestroyFence(o.idObject);
+                    break;
+                }
+            case MessageType.BOMB:
+                {
+                    DestroyBomb(o.idObject);
+                    break;
+                }
+        }
     }
 
     void GetPlayers()
@@ -204,9 +217,14 @@ public class GameState : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void DestroyObstacle(int id)
+    public void DestroyFence(int id)
     {
         Destroy(objManager.FindObjectbyID(id, objManager.obstacle));
+    }
+
+    public void DestroyBomb(int id)
+    {
+        Destroy(objManager.FindObjectbyID(id, objManager.bomb));
     }
 
     /*public void SendDestroyObstacle(GameObject GO)

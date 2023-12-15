@@ -18,6 +18,8 @@ namespace MessageTypes
         KILL,               
 
         OBSTACLE,           //Extra
+        FENCE,           
+        BOMB,               
 
         PAUSE,              
         UNPAUSE,            
@@ -87,12 +89,13 @@ namespace MessageTypes
 
     public class Obstacle : Message
     {
-        public Obstacle(int idObject) : base(MessageType.OBSTACLE)
+        public Obstacle(int idObject, MessageType objectType) : base(MessageType.OBSTACLE)
         {
             this.idObject = idObject;
+            this.objectType = objectType;
         }
 
         public int idObject;
-
+        public MessageType objectType;
     }
 }

@@ -54,19 +54,16 @@ public class BulletScript : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.CompareTag("OBSTACLE"))
+        if (collision.gameObject.CompareTag("FENCE"))
         {
-            for (int i = 0; i <= oManager.obstacle.Length; i++)
+            for (int i = 0; i < oManager.obstacle.Length; i++)
             {
                 if (oManager.obstacle[i] == collision.gameObject)
                 {
-                    MessageManager.SendMessage(new Obstacle(i));
-                    gameState.DestroyObstacle(i);
+                    MessageManager.SendMessage(new Obstacle(i, MessageType.FENCE));
+                    gameState.DestroyFence(i);
                 }
             }
-            //TODO: Send Correct ID
-
-
 
             /*FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
 
@@ -82,10 +79,16 @@ public class BulletScript : MonoBehaviour
             }*/
         }
 
-        /*if (collision.gameObject.CompareTag("BOMB"))
+        if (collision.gameObject.CompareTag("BOMB"))
         {
-            FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.BOMB, collision.transform);
-            Destroy(gameObject);
-        }*/
+            for (int i = 0; i < oManager.bomb.Length; i++)
+            {
+                if (oManager.bomb[i] == collision.gameObject)
+                {
+                    MessageManager.SendMessage(new Obstacle(i, MessageType.BOMB));
+                    gameState.DestroyBomb(i);
+                }
+            }
+        }
     }
 }
