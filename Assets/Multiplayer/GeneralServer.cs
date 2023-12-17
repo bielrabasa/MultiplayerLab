@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.tvOS;
@@ -11,25 +13,33 @@ using UnityEngine.UI;
 
 public class GeneralServer : MonoBehaviour
 {
-    uint connectedPlayers = 0;
+    const int MAX_PLAYERS = 2;
+    int connectedPlayers = 0;
 
     Thread waitingClientThread;
     bool finishedConnection = false;
     
     Socket socket;
-    EndPoint remote;
+    EndPoint[] remote;
     int port;
 
     void Start()
     {
+        remote = new EndPoint[MAX_PLAYERS];
+
         waitingClientThread = new Thread(WaitClient);
 
+        //Create Socket
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+        //Setup port
         ServerSetup();
+        Debug.Log("IP: " + GetMyIp() + "\tPORT: " + port.ToString());
+        RemoteSetup();
         waitingClientThread.Start();
 
         //Set port in screen
         //GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
-        Debug.Log("IP: " + GetMyIp() + "\tPORT: " + port.ToString());
     }
 
     private void Update()
@@ -39,8 +49,14 @@ public class GeneralServer : MonoBehaviour
         {
             Debug.Log(connectedPlayers);
             finishedConnection = false;
-            waitingClientThread = new Thread(WaitClient);
-            waitingClientThread.Start();
+
+            if(connectedPlayers < MAX_PLAYERS)
+            {
+                Debug.Log("Waiting for another player!");
+                RemoteSetup();
+                waitingClientThread = new Thread(WaitClient);
+                waitingClientThread.Start();
+            }
         }
 
         if(Input.GetKeyDown(KeyCode.Space)) 
@@ -51,9 +67,6 @@ public class GeneralServer : MonoBehaviour
 
     void ServerSetup()
     {
-        //Create Socket
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
         //Try different ports until one is free
         port = 9000;
         bool correctPort = false;
@@ -75,10 +88,13 @@ public class GeneralServer : MonoBehaviour
                 port++;
             }
         }
+    }
 
-        //Set port 0 to send the messages
-        IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        remote = (EndPoint)(sender);
+    void RemoteSetup()
+    {
+        //Set port to send the messages
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, connectedPlayers);
+        remote[connectedPlayers] = (EndPoint)(sender);
     }
 
     public void StopConnection()
@@ -86,7 +102,7 @@ public class GeneralServer : MonoBehaviour
         socket.Close();
         Debug.Log("SERVER DISCONNECTED");
     }
-
+    
     //THREAD
     private void WaitClient()
     {
@@ -96,7 +112,7 @@ public class GeneralServer : MonoBehaviour
         //Recieve message
         try
         {
-            recv = socket.ReceiveFrom(recieveData, ref remote);
+            recv = socket.ReceiveFrom(recieveData, ref remote[connectedPlayers]);
         }
         catch
         {
@@ -118,7 +134,7 @@ public class GeneralServer : MonoBehaviour
 
         //Send Confirmation Message
         byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
-        socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
+        socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote[connectedPlayers]);
 
         //Setup
         finishedConnection = true;
@@ -138,20 +154,23 @@ public class GeneralServer : MonoBehaviour
         //Stop searching clients
         waitingClientThread.Abort();
 
-        TransferInformation();
+        //TransferInformation();
 
         //SendStart message
-        byte[] sendData = Encoding.ASCII.GetBytes("StartGame");
-        socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote);
+        foreach (var rem in remote)
+        {
+            byte[] sendData = Encoding.ASCII.GetBytes("StartGame");
+            socket.SendTo(sendData, sendData.Length, SocketFlags.None, rem);
+        }
 
         //ChangeScene
-        ChangeScene();
+        //ChangeScene();
     }
 
     void TransferInformation()
     {
         MessageManager.socket = socket;
-        MessageManager.remote = remote;
+        //MessageManager.remote = remote;
         MessageManager.isServer = true;
     }
 
@@ -168,10 +187,10 @@ public class GeneralServer : MonoBehaviour
         text.text = GetMyIp();
     }
 
-    public void GetPort(Text text)
+    /*public void GetPort(Text text)
     {
         text.text = port.ToString();
-    }
+    }*/
 
     string GetMyIp()
     {
