@@ -15,6 +15,7 @@ public class GameState : MonoBehaviour
     //Real ingame objects
     Transform otherPlayer;
     Transform myPlayer;
+    [SerializeField] GameObject explosion;
     //Server -> Blue
     //Client -> Red
 
@@ -224,6 +225,9 @@ public class GameState : MonoBehaviour
 
     public void DestroyBomb(int id)
     {
+        Transform auxiliarTransform = objManager.FindObjectbyID(id, objManager.bomb).transform;
+        Instantiate(explosion, auxiliarTransform.position, auxiliarTransform.rotation);
+
         Destroy(objManager.FindObjectbyID(id, objManager.bomb));
     }
 
