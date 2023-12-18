@@ -101,7 +101,7 @@ public class MessageManager : MonoBehaviour
         sentMessages.Add(message);
 
         //Send message
-        byte[] messageData = ToBytes(message);
+        byte[] messageData = Serializer.ToBytes(message);
         socket.SendTo(messageData, messageData.Length, SocketFlags.None, remote);
     }
 
@@ -183,7 +183,7 @@ public class MessageManager : MonoBehaviour
                 return;
             }
 
-            Message m = FromBytes(data, size);
+            Message m = Serializer.FromBytes(data, size);
 
             //Add to process later
             lock (recievedMessages)
@@ -196,61 +196,5 @@ public class MessageManager : MonoBehaviour
                 acks.Add(m.id);
             }
         }
-    }
-
-    //From message to Json string
-    static string ToJson(Message m)
-    {
-        return JsonUtility.ToJson(m);
-    }
-
-    //From message to Bytes
-    static byte[] ToBytes(Message m)
-    {
-        return Encoding.ASCII.GetBytes(ToJson(m));
-    }
-
-    //From bytes to message
-    static Message FromBytes(byte[] data, int size)
-    {
-        return FromJson(Encoding.ASCII.GetString(data, 0, size));
-    }
-
-    //From Json string to message
-    static Message FromJson(string json)
-    {
-        Message m = JsonUtility.FromJson<Message>(json);
-
-        //Check to reDeserialize in case of inherited class
-        switch (m.type)
-        {
-            case MessageType.ACKNOWLEDGEMENTS:
-                {
-                    m = JsonUtility.FromJson<Acknowledgements>(json);
-                    break;
-                }
-            case MessageType.POSITION:
-                {
-                    m = JsonUtility.FromJson<Position>(json);
-                    break;
-                }
-            case MessageType.SHOOT:
-                {
-                    m = JsonUtility.FromJson<Shoot>(json);
-                    break;
-                }
-            case MessageType.CHAT:
-                {
-                    m = JsonUtility.FromJson<Chat>(json);
-                    break;
-                }
-            case MessageType.OBSTACLE:
-                {
-                    m = JsonUtility.FromJson<Obstacle>(json);
-                    break;
-                }
-        }
-
-        return m;
     }
 }

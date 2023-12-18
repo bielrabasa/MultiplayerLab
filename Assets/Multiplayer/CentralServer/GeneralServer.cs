@@ -52,7 +52,7 @@ public class GeneralServer : MonoBehaviour
 
             if(connectedPlayers < MAX_PLAYERS)
             {
-                Debug.Log("Waiting for another player!");
+                Debug.Log("Should start waiting for connection again!");
                 RemoteSetup();
                 waitingClientThread = new Thread(WaitClient);
                 waitingClientThread.Start();
@@ -152,7 +152,7 @@ public class GeneralServer : MonoBehaviour
         if (connectedPlayers == 0) return;
 
         //Stop searching clients
-        waitingClientThread.Abort();
+        StopSearching();
 
         //TransferInformation();
 
@@ -164,20 +164,19 @@ public class GeneralServer : MonoBehaviour
         }
 
         //ChangeScene
-        //ChangeScene();
-    }
-
-    void TransferInformation()
-    {
-        MessageManager.socket = socket;
-        //MessageManager.remote = remote;
-        MessageManager.isServer = true;
+        ChangeScene();
     }
 
     void ChangeScene()
     {
-        SceneManager.LoadScene("MainScene");
-        MessageManager.StartComunication();
+        //SceneManager.LoadScene("MainScene");
+        //MessageManager.StartComunication();
+        ServerReceiver sr = gameObject.AddComponent<ServerReceiver>();
+        sr.socket = socket;
+
+        //Create new remote to receive game messages
+        IPEndPoint sender = new IPEndPoint(IPAddress.Any, connectedPlayers);
+        sr.remote = (EndPoint)(sender);
     }
 
     //Screen
