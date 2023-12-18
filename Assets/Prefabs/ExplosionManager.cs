@@ -49,8 +49,6 @@ public class ExplosionManager : MonoBehaviour
                 MessageManager.SendMessage(MessageTypes.MessageType.KILL);
                 collision.gameObject.SetActive(false);
             }
-
-            Destroy(gameObject);
         }
     }
 }

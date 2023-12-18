@@ -65,6 +65,8 @@ public class BulletScript : MonoBehaviour
                 }
             }
 
+            Destroy(gameObject);
+
             /*FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
 
             if (!bounce)
@@ -89,6 +91,8 @@ public class BulletScript : MonoBehaviour
                     gameState.DestroyBomb(i);
                 }
             }
+
+            Destroy(gameObject);
         }
     }
 }
