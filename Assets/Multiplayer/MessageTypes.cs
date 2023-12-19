@@ -36,7 +36,8 @@ namespace MessageTypes
         public Message(MessageType type) => this.type = type;
 
         public uint id;
-        public float time; 
+        public float time;
+        public int playerID;
         public MessageType type;
     }
 

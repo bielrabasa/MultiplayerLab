@@ -1,14 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.tvOS;
 using UnityEngine.UI;
 
 public class GeneralServer : MonoBehaviour
@@ -28,9 +24,6 @@ public class GeneralServer : MonoBehaviour
         remote = new EndPoint[MAX_PLAYERS];
 
         waitingClientThread = new Thread(WaitClient);
-
-        //Create Socket
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
         //Setup port
         ServerSetup();
@@ -67,6 +60,9 @@ public class GeneralServer : MonoBehaviour
 
     void ServerSetup()
     {
+        //Create Socket
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
         //Try different ports until one is free
         port = 9000;
         bool correctPort = false;
@@ -164,23 +160,36 @@ public class GeneralServer : MonoBehaviour
         }
 
         //ChangeScene
-        ChangeScene();
+        StartComunication();
     }
 
-    void ChangeScene()
+    void StartComunication()
     {
-        //SceneManager.LoadScene("MainScene");
-        //MessageManager.StartComunication();
-        ServerReceiver sr = gameObject.AddComponent<ServerReceiver>();
-        sr.socket = socket;
+        //Create instance
+        gameObject.AddComponent<ServerReceiver>();
+
+        //Setup variables
+        ServerReceiver.socket = socket;
 
         //Create new remote to receive game messages
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, connectedPlayers);
-        sr.remote = (EndPoint)(sender);
+        ServerReceiver.remote = (EndPoint)(sender);
+
+        ServerReceiver.messagers = new ServerMessager[connectedPlayers];
+        for (int i = 0; i < connectedPlayers; i++)
+        {
+            //Setup Messager
+            ServerMessager sm = gameObject.AddComponent<ServerMessager>();
+            sm.playerID = i;
+            sm.socket = socket;
+            sm.remote = remote[i];
+
+            //Set ServerMessager array in the ServerReceiver
+            ServerReceiver.messagers[i] = sm;
+        }
     }
 
     //Screen
-    
     public void GetIP(Text text)
     {
         text.text = GetMyIp();

@@ -7,14 +7,21 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.tvOS;
+
+/// <summary>
+/// 
+/// IN CHARGE OF RECEIVING MESSAGES & MANAGING SERVER MESSAGERS
+/// 
+/// </summary>
 
 public class ServerReceiver : MonoBehaviour
 {
-    [HideInInspector] public Socket socket;
-    [HideInInspector] public EndPoint remote;
+    [HideInInspector] public static Socket socket;
+    [HideInInspector] public static EndPoint remote;
 
-    Thread receiver;
+    [HideInInspector] public static ServerMessager[] messagers;
+
+    static Thread receiver;
 
     // Start is called before the first frame update
     void Start()
@@ -23,13 +30,7 @@ public class ServerReceiver : MonoBehaviour
         receiver.Start();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void MessageReceiver()
+    static void MessageReceiver()
     {
         while (true)
         {
@@ -48,18 +49,21 @@ public class ServerReceiver : MonoBehaviour
 
             Message m = Serializer.FromBytes(data, size);
 
-            Debug.Log(m.type);
-
-            //Add to process later
-            /*lock (recievedMessages)
-            {
-                recievedMessages.Add(m);
-            }
-
-            lock (acks)
-            {
-                acks.Add(m.id);
-            }*/
+            //Send message to messager
+            messagers[m.playerID].OnMessageReceived(m);
         }
+    }
+
+    public static void SendMessageToEveryone(int playerID, Message m)
+    {
+        for (int i = 0; i < messagers.Length; i++)
+        {
+            if (i == playerID) continue;
+
+            //Send Message to all other players
+            messagers[i].SendMessage(m);
+        }
+
+        Debug.Log("Distributing message ( " + m.playerID + " ): " + m.type);
     }
 }
