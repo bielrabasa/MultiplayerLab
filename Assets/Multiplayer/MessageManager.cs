@@ -30,7 +30,8 @@ public class MessageManager : MonoBehaviour
     //Network
     [HideInInspector] public static Socket socket;
     [HideInInspector] public static EndPoint remote;
-    public static bool isServer = true;
+    [HideInInspector] public static int playerID;
+
     static Thread messageReciever = new(MessageReciever);
 
 
@@ -97,6 +98,7 @@ public class MessageManager : MonoBehaviour
 
         message.time = Time.time;
         message.id = NextID();
+        message.playerID = playerID;
 
         sentMessages.Add(message);
 

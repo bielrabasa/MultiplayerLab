@@ -13,22 +13,20 @@ public class GeneralServer : MonoBehaviour
     int connectedPlayers = 0;
 
     Thread waitingClientThread;
-    bool finishedConnection = false;
     
     Socket socket;
     EndPoint[] remote;
+    
     int port;
 
     void Start()
     {
         remote = new EndPoint[MAX_PLAYERS];
-
         waitingClientThread = new Thread(WaitClient);
 
         //Setup port
         ServerSetup();
         Debug.Log("IP: " + GetMyIp() + "\tPORT: " + port.ToString());
-        RemoteSetup();
         waitingClientThread.Start();
 
         //Set port in screen
@@ -37,21 +35,6 @@ public class GeneralServer : MonoBehaviour
 
     private void Update()
     {
-        //Search for a new client
-        if (finishedConnection)
-        {
-            Debug.Log(connectedPlayers);
-            finishedConnection = false;
-
-            if(connectedPlayers < MAX_PLAYERS)
-            {
-                Debug.Log("Should start waiting for connection again!");
-                RemoteSetup();
-                waitingClientThread = new Thread(WaitClient);
-                waitingClientThread.Start();
-            }
-        }
-
         if(Input.GetKeyDown(KeyCode.Space)) 
         {
             StartPlaying();
@@ -102,39 +85,43 @@ public class GeneralServer : MonoBehaviour
     //THREAD
     private void WaitClient()
     {
-        byte[] recieveData = new byte[1024];
-        int recv;
-
-        //Recieve message
-        try
+        while (connectedPlayers < MAX_PLAYERS)
         {
-            recv = socket.ReceiveFrom(recieveData, ref remote[connectedPlayers]);
+            //Setup new remote
+            RemoteSetup();
+
+            byte[] recieveData = new byte[1024];
+            int recv;
+
+            //Recieve message
+            try
+            {
+                recv = socket.ReceiveFrom(recieveData, ref remote[connectedPlayers]);
+            }
+            catch
+            {
+                Debug.Log("Server stopped listening! ");
+                return;
+            }
+
+            //Recieved message
+            string message = Encoding.ASCII.GetString(recieveData, 0, recv);
+
+            //Incorrect message
+            if (message != "ClientConnected")
+            {
+                Debug.Log("Incorrect confirmation message: " + message);
+                return;
+            }
+
+            //Send Confirmation Message
+            byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
+            socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote[connectedPlayers]);
+
+            //End
+            connectedPlayers++;
+            Debug.Log("Connected Player " +  connectedPlayers);
         }
-        catch
-        {
-            Debug.Log("Server stopped listening! ");
-            StopConnection();
-            return;
-        }
-
-        //Recieved message
-        string message = Encoding.ASCII.GetString(recieveData, 0, recv);
-
-        //Incorrect message
-        if (message != "ClientConnected")
-        {
-            Debug.Log("Incorrect confirmation message: " + message);
-            StopConnection();
-            return;
-        }
-
-        //Send Confirmation Message
-        byte[] sendData = Encoding.ASCII.GetBytes("ServerConnected");
-        socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote[connectedPlayers]);
-
-        //Setup
-        finishedConnection = true;
-        connectedPlayers++;
     }
 
     public void StopSearching()
@@ -150,13 +137,11 @@ public class GeneralServer : MonoBehaviour
         //Stop searching clients
         StopSearching();
 
-        //TransferInformation();
-
         //SendStart message
-        foreach (var rem in remote)
+        for (int i = 0; i < connectedPlayers; i++)
         {
-            byte[] sendData = Encoding.ASCII.GetBytes("StartGame");
-            socket.SendTo(sendData, sendData.Length, SocketFlags.None, rem);
+            byte[] sendData = Encoding.ASCII.GetBytes(i + "StartGame");
+            socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote[i]);
         }
 
         //ChangeScene

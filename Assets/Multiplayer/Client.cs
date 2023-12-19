@@ -22,6 +22,7 @@ public class Client : MonoBehaviour
     bool startGame;
     bool startConnection;
 
+    int playerID;
 
     private void Start()
     {
@@ -137,9 +138,9 @@ public class Client : MonoBehaviour
         {
             recv = socket.ReceiveFrom(data, ref remote);
         }
-        catch
+        catch(System.Exception e)
         {
-            Debug.Log("Client stopped listening!");
+            Debug.Log("Client stopped listening! " + e.ToString());
             StopConnection();
             return;
         }
@@ -167,7 +168,6 @@ public class Client : MonoBehaviour
     {
         MessageManager.socket = socket;
         MessageManager.remote = remote;
-        MessageManager.isServer = false;
     }
 
     void WaitForStart() //TODO: function to abort
@@ -191,9 +191,12 @@ public class Client : MonoBehaviour
         string message = Encoding.ASCII.GetString(data, 0, recv);
 
         //ChangeScene
-        if (message == "StartGame")
+        if (message.Contains("StartGame"))
         {
             startGame = true;
+
+            //Set player id (message = "0StartGame")
+            playerID = (int)message[0] - 48;
         }
         else
         {
@@ -204,6 +207,7 @@ public class Client : MonoBehaviour
     void ChangeScene()
     {
         SceneManager.LoadScene("MainScene");
+        MessageManager.playerID = playerID;
         MessageManager.StartComunication();
     }
 

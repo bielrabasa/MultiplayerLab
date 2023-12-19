@@ -41,9 +41,9 @@ public class ServerReceiver : MonoBehaviour
             {
                 size = socket.ReceiveFrom(data, ref remote);
             }
-            catch
+            catch(System.Exception e)
             {
-                Debug.Log("Stopped recieving messages.");
+                Debug.Log("Stopped recieving messages: " + e.ToString());
                 return;
             }
 
@@ -51,6 +51,8 @@ public class ServerReceiver : MonoBehaviour
 
             //Send message to messager
             messagers[m.playerID].OnMessageReceived(m);
+
+            Debug.Log("Message received from Player " + m.playerID + "\n" + m.ToString());
         }
     }
 
@@ -62,8 +64,7 @@ public class ServerReceiver : MonoBehaviour
 
             //Send Message to all other players
             messagers[i].SendMessage(m);
+            Debug.Log("Distributing message from ( " + playerID + " ) to ( " + i + " )");
         }
-
-        Debug.Log("Distributing message ( " + m.playerID + " ): " + m.type);
     }
 }

@@ -115,7 +115,7 @@ public class GameState : MonoBehaviour
         {
             if (t.gameObject.name == BLUE_TANK_NAME)
             {
-                if (MessageManager.isServer)
+                if (MessageManager.playerID == 0)
                 {
                     myPlayer = t.gameObject.transform;
                 }
@@ -127,7 +127,7 @@ public class GameState : MonoBehaviour
             }
             else if(t.gameObject.name == RED_TANK_NAME)
             {
-                if (!MessageManager.isServer)
+                if (MessageManager.playerID == 1)
                 {
                     myPlayer = t.gameObject.transform;
                 }
