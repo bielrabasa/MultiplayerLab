@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class Server : MonoBehaviour
 {
-    Thread waitingClientThread;
+    /*Thread waitingClientThread;
     bool connected;
 
     Socket socket;
@@ -128,7 +128,7 @@ public class Server : MonoBehaviour
     {
         MessageManager.socket = socket;
         MessageManager.remote = remote;
-        MessageManager.isServer = true;
+        //MessageManager.isServer = true;
     }
 
     void ChangeScene()
@@ -136,6 +136,8 @@ public class Server : MonoBehaviour
         SceneManager.LoadScene("MainScene");
         MessageManager.StartComunication();
     }
+
+    //Screen
 
     public void GetIP(Text text)
     {
@@ -159,5 +161,5 @@ public class Server : MonoBehaviour
         }
 
         return "";
-    }
+    }*/
 }

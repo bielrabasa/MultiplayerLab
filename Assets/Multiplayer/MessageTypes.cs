@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace MessageTypes
@@ -38,6 +39,7 @@ namespace MessageTypes
 
         public uint id;
         public float time;
+        public int playerID;
         public MessageType type;
     }
 
@@ -97,5 +99,66 @@ namespace MessageTypes
 
         public int idObject;
         public MessageType objectType;
+    }
+
+    //SERIALIZER
+
+    public class Serializer
+    {
+        //From message to Json string
+        public static string ToJson(Message m)
+        {
+            return JsonUtility.ToJson(m);
+        }
+
+        //From message to Bytes
+        public static byte[] ToBytes(Message m)
+        {
+            return Encoding.ASCII.GetBytes(ToJson(m));
+        }
+
+        //From bytes to message
+        public static Message FromBytes(byte[] data, int size)
+        {
+            return FromJson(Encoding.ASCII.GetString(data, 0, size));
+        }
+
+        //From Json string to message
+        public static Message FromJson(string json)
+        {
+            Message m = JsonUtility.FromJson<Message>(json);
+
+            //Check to reDeserialize in case of inherited class
+            switch (m.type)
+            {
+                case MessageType.ACKNOWLEDGEMENTS:
+                    {
+                        m = JsonUtility.FromJson<Acknowledgements>(json);
+                        break;
+                    }
+                case MessageType.POSITION:
+                    {
+                        m = JsonUtility.FromJson<Position>(json);
+                        break;
+                    }
+                case MessageType.SHOOT:
+                    {
+                        m = JsonUtility.FromJson<Shoot>(json);
+                        break;
+                    }
+                case MessageType.CHAT:
+                    {
+                        m = JsonUtility.FromJson<Chat>(json);
+                        break;
+                    }
+                case MessageType.OBSTACLE:
+                    {
+                        m = JsonUtility.FromJson<Obstacle>(json);
+                        break;
+                    }
+            }
+
+            return m;
+        }
     }
 }

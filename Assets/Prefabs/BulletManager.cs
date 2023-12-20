@@ -32,7 +32,7 @@ public class BulletManager : MonoBehaviour
         GameObject b = Instantiate(bullet, pos + spawnDist, dir, transform);
 
         //Spawn further for the delayed time
-        b.transform.position += b.transform.up * speed * delayedTime;
+        //b.transform.position += b.transform.up * speed * delayedTime;
         //TODO: Test Spawnpos
 
         //Set speed
