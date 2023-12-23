@@ -658,7 +658,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 25, y: 25}
-  m_SizeDelta: {x: 360, y: 232}
+  m_SizeDelta: {x: 300, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &244593313
 MonoBehaviour:
@@ -721,7 +721,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 80c18f36c14f1f840ba2e9d179b85413, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cb0cca7c4b17a67489331ca1c2585cb9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6614,7 +6614,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -951, y: -360}
+  m_AnchoredPosition: {x: 0, y: -300}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1753620132
@@ -6656,7 +6656,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  colorChart: {fileID: 2800000, guid: 80c18f36c14f1f840ba2e9d179b85413, type: 3}
+  colorChart: {fileID: 2800000, guid: cb0cca7c4b17a67489331ca1c2585cb9, type: 3}
   chart: {fileID: 244593311}
   cursor: {fileID: 521610584}
   button: {fileID: 1753620134}
