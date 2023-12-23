@@ -18,8 +18,12 @@ public class ColorPickButton : MonoBehaviour
 
         cursor.position = pointer.position;
 
-        Color pickedColor = colorChart.GetPixel((int)(cursor.localPosition.x * (colorChart.width / transform.GetChild(0).GetComponent<RectTransform>().rect.width)), (int)(cursor.localPosition.y * (colorChart.height / transform.GetChild(0).GetComponent<RectTransform>().rect.height)));
+        Color pickedColor = colorChart.GetPixel((int)((cursor.localPosition.x + 150) * (colorChart.width / transform.GetChild(0).GetComponent<RectTransform>().rect.width)), (int)((cursor.localPosition.y + 200) * (colorChart.height / transform.GetChild(0).GetComponent<RectTransform>().rect.height)));
         
+        Debug.Log(pickedColor);
+        Debug.Log(cursor.localPosition.x);
+        Debug.Log(cursor.localPosition.x * (colorChart.width / transform.GetChild(0).GetComponent<RectTransform>().rect.width));
+
         button.color = pickedColor;
         cursorColor.color = pickedColor;
         ColorPickerEvent.Invoke(pickedColor);
