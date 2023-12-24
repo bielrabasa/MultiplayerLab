@@ -5222,6 +5222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e26b19f7cda94543b853adb1eccdac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGameTankName: {fileID: 0}
+  bottomTank: {fileID: 1467576699}
 --- !u!1 &1467576699
 GameObject:
   m_ObjectHideFlags: 0
@@ -5311,6 +5313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e26b19f7cda94543b853adb1eccdac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGameTankName: {fileID: 0}
+  bottomTank: {fileID: 0}
 --- !u!1 &1483326471
 GameObject:
   m_ObjectHideFlags: 0
