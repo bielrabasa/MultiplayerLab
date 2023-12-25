@@ -15,8 +15,10 @@ public class ColorTank : MonoBehaviour
         bottomTank.GetComponent<Image>().color = newColor;
     }
 
-    public void SetCOlorInGame(Color newColor)
+    public void SetColorInGame(Color newColor)
     {
+        if (newColor == null) newColor = Color.white;
+
         GetComponent<SpriteRenderer>().color = newColor;
         bottomTank.GetComponent<SpriteRenderer>().color = newColor;
     }
@@ -26,6 +28,8 @@ public class ColorTank : MonoBehaviour
         inGameTankName.text = name;
     }
 
+
+    //TODO: Biel, extract the info amb les 2 funcions daqui sota
     Color GetColor()
     {
         Color newColor = GetComponent<Image>().color;

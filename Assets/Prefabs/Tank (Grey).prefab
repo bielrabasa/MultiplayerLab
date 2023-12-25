@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 1300238049349329295}
   - component: {fileID: 360545193953142948}
   m_Layer: 5
-  m_Name: Name
+  m_Name: TankName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,6 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3138030770125925440}
   - component: {fileID: 8822404418494352734}
+  - component: {fileID: 4133629445250128001}
   m_Layer: 0
   m_Name: tankTop(G)
   m_TagString: Untagged
@@ -324,6 +325,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4133629445250128001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3302470232043072241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e26b19f7cda94543b853adb1eccdac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inGameTankName: {fileID: 360545193953142948}
+  bottomTank: {fileID: 5807432128421658373}
 --- !u!1 &4477429768132477483
 GameObject:
   m_ObjectHideFlags: 0
