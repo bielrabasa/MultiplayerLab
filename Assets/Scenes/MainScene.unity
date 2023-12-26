@@ -627,7 +627,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_Name
-      value: Tank (Grey) (1)
+      value: Tank (red)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_RootOrder
@@ -3823,7 +3827,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_Name
-      value: Tank (Grey)
+      value: Tank (blue)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_RootOrder

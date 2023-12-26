@@ -26,8 +26,11 @@ public class ObjectsManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K)) SetSettingsTanks();
-        if(Input.GetKeyDown(KeyCode.L)) MessageManager.SendMessage(new Settings("Roger", Color.cyan));
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            MessageManager.SendMessage(new Settings("Roger", Color.cyan));
+
+        } 
     }
 
     //return an array of all the same GameObjects with the given tag
@@ -53,9 +56,11 @@ public class ObjectsManager : MonoBehaviour
 
     public void MessageSettings(Message m)
     {
+        //ERROR, aixo esta mal
         Settings s = m as Settings;
-        names[0] = s.tankName;
-        colors[0] = s.color;
+        names[s.playerID] = s.tankName;
+        colors[s.playerID] = s.color;
+        SetSettingsTanks();
     }
 
     //TODO: Biel recive info (Color and String)
