@@ -53,10 +53,7 @@ public class ObjectsManager : MonoBehaviour
 
     public void MessageSettings(Message m)
     {
-        Debug.Log("entradas");
-
         Settings s = m as Settings;
-        //TODO: look call order
         names[0] = s.tankName;
         colors[0] = s.color;
     }
