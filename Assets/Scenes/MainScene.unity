@@ -463,7 +463,7 @@ Transform:
   - {fileID: 2046020681}
   - {fileID: 587212422}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &368209958
 GameObject:
@@ -531,7 +531,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &407149658
 GameObject:
@@ -617,6 +617,67 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &493673079
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_Name
+      value: Tank (Grey) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +875,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &542393096
 GameObject:
@@ -1175,6 +1236,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank (blue)
       objectReference: {fileID: 0}
+    - target: {fileID: 4477429768132477483, guid: 22d6949043a476542acfcb494536081c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5834657883936985520, guid: 22d6949043a476542acfcb494536081c, type: 3}
       propertyPath: SpawnTrailDelay
       value: 25
@@ -1429,7 +1494,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &836870824
 GameObject:
@@ -1659,7 +1724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3258627820691708295, guid: c527a49d2fd69e34080394c703a1e690, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3258627820691708295, guid: c527a49d2fd69e34080394c703a1e690, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1950,7 +2015,7 @@ Transform:
   m_Children:
   - {fileID: 1614022165}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &1241665562
 GameObject:
@@ -2326,7 +2391,7 @@ Transform:
   m_Children:
   - {fileID: 1245669754}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &1444391248
 GameObject:
@@ -2593,7 +2658,7 @@ RectTransform:
   - {fileID: 639726693}
   - {fileID: 1676826830}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3088,7 +3153,7 @@ Transform:
   m_Children:
   - {fileID: 752461951}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &1911848845
 GameObject:
@@ -3127,7 +3192,7 @@ Transform:
   - {fileID: 1241665563}
   - {fileID: 2125300343}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1919387794
 GameObject:
@@ -3159,7 +3224,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1919387796
 MonoBehaviour:
@@ -3205,7 +3270,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1936909901
 GameObject:
@@ -3535,7 +3600,7 @@ Transform:
   m_Children:
   - {fileID: 1088538479}
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &2038329260
 GameObject:
@@ -3568,6 +3633,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacle: []
   bomb: []
+  tanks: []
+  names: []
+  colors: []
 --- !u!4 &2038329262
 Transform:
   m_ObjectHideFlags: 0
@@ -3581,7 +3649,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2046020680
 GameObject:
@@ -3743,8 +3811,69 @@ Transform:
   m_Children:
   - {fileID: 1975662744}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!1001 &2054693295
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_Name
+      value: Tank (Grey)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
 --- !u!1 &2109499488
 GameObject:
   m_ObjectHideFlags: 0
@@ -3973,7 +4102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3258627820691708295, guid: c527a49d2fd69e34080394c703a1e690, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3258627820691708295, guid: c527a49d2fd69e34080394c703a1e690, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4083,6 +4212,10 @@ PrefabInstance:
     - target: {fileID: 8688666382527849343, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
       propertyPath: m_Name
       value: Tank (red)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688666382527849343, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

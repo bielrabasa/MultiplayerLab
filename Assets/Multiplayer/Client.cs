@@ -209,6 +209,9 @@ public class Client : MonoBehaviour
         SceneManager.LoadScene("MainScene");
         MessageManager.playerID = playerID;
         MessageManager.StartComunication();
+
+        //TODO: Biel take name and color
+        //MessageManager.SendMessage(new MessageTypes.Settings("Roger", coloret));
     }
 
     string GetMyIp()

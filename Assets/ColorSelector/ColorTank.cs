@@ -23,9 +23,9 @@ public class ColorTank : MonoBehaviour
         bottomTank.GetComponent<SpriteRenderer>().color = newColor;
     }
 
-    public void SetName(string name = "Player")
+    public void SetName(string nameTank = "Player")
     {
-        inGameTankName.text = name;
+        inGameTankName.text = nameTank;
     }
 
 

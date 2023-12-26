@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MessageTypes;
 
 public class ObjectsManager : MonoBehaviour
 {
@@ -8,18 +9,25 @@ public class ObjectsManager : MonoBehaviour
     public GameObject[] bomb;
     public GameObject[] tanks;
 
+    public string[] names;
+    public Color[] colors;
+
     // Start is called before the first frame update
     void Start()
     {
         obstacle = AddObjects("FENCE");
         bomb = AddObjects("BOMB");
         tanks = AddObjects("TANK");
-        
+
+        if (MessageManager.messageDistribute.Count == 0) return;
+        MessageManager.messageDistribute[MessageType.SETTINGS] += MessageSettings;
+
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.K)) SetSettingsTanks();
+        if(Input.GetKeyDown(KeyCode.L)) MessageManager.SendMessage(new Settings("Roger", Color.cyan));
     }
 
     //return an array of all the same GameObjects with the given tag
@@ -43,6 +51,16 @@ public class ObjectsManager : MonoBehaviour
         return null;
     }
 
+    public void MessageSettings(Message m)
+    {
+        Debug.Log("entradas");
+
+        Settings s = m as Settings;
+        //TODO: look call order
+        names[0] = s.tankName;
+        colors[0] = s.color;
+    }
+
     //TODO: Biel recive info (Color and String)
     public void SetSettingsTanks()
     {
@@ -50,9 +68,9 @@ public class ObjectsManager : MonoBehaviour
         {
             ColorTank tankSettings = tanks[i].GetComponentInChildren<ColorTank>();
             //TODO: send the string in the message with the function SetName
-            tankSettings.SetName();
+            tankSettings.SetName(names[i]);
             //TODO: swap Color.blue with the color in the message
-            tankSettings.SetColorInGame(Color.blue);
+            tankSettings.SetColorInGame(colors[i]);
         }
     }
 }

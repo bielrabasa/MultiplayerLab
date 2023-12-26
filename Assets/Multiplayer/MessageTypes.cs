@@ -12,7 +12,8 @@ namespace MessageTypes
 
         ACKNOWLEDGEMENTS,   //Extra
         CONFIRMATION,       
-        START,              
+        START,
+        SETTINGS,            //Extra
 
         POSITION,           //Extra
         SHOOT,              //Extra
@@ -101,6 +102,18 @@ namespace MessageTypes
         public MessageType objectType;
     }
 
+    public class Settings : Message
+    {
+        public Settings(string tankName, Color color) : base(MessageType.SETTINGS)
+        {
+            this.tankName = tankName;
+            this.color = color;
+        }
+
+        public string tankName;
+        public Color color;
+    }
+
     //SERIALIZER
 
     public class Serializer
@@ -154,6 +167,11 @@ namespace MessageTypes
                 case MessageType.OBSTACLE:
                     {
                         m = JsonUtility.FromJson<Obstacle>(json);
+                        break;
+                    }
+                case MessageType.SETTINGS:
+                    {
+                        m = JsonUtility.FromJson<Settings>(json);
                         break;
                     }
             }
