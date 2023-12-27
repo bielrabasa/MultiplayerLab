@@ -9,8 +9,8 @@ public class ObjectsManager : MonoBehaviour
     public GameObject[] bomb;
     public GameObject[] tanks;
 
-    public string[] names;
-    public Color[] colors;
+    public string names;
+    public Color colors;
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +58,8 @@ public class ObjectsManager : MonoBehaviour
     {
         //ERROR, aixo esta mal
         Settings s = m as Settings;
-        names[s.playerID] = s.tankName;
-        colors[s.playerID] = s.color;
+        names = s.tankName;
+        colors = s.color;
         SetSettingsTanks();
     }
 
@@ -70,9 +70,9 @@ public class ObjectsManager : MonoBehaviour
         {
             ColorTank tankSettings = tanks[i].GetComponentInChildren<ColorTank>();
             //TODO: send the string in the message with the function SetName
-            tankSettings.SetName(names[i]);
+            tankSettings.SetName(names);
             //TODO: swap Color.blue with the color in the message
-            tankSettings.SetColorInGame(colors[i]);
+            tankSettings.SetColorInGame(colors);
         }
     }
 }

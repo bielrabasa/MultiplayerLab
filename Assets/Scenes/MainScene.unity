@@ -3638,8 +3638,8 @@ MonoBehaviour:
   obstacle: []
   bomb: []
   tanks: []
-  names: []
-  colors: []
+  names: Roger
+  colors: {r: 0.9433962, g: 0.11273279, b: 0.11273279, a: 0}
 --- !u!4 &2038329262
 Transform:
   m_ObjectHideFlags: 0
