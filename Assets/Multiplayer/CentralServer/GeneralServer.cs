@@ -30,15 +30,7 @@ public class GeneralServer : MonoBehaviour
         waitingClientThread.Start();
 
         //Set port in screen
-        //GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space)) 
-        {
-            StartPlaying();
-        }
+        GameObject.Find("Port").GetComponent<Text>().text = "Port: " + port.ToString();
     }
 
     void ServerSetup()
@@ -132,7 +124,7 @@ public class GeneralServer : MonoBehaviour
     //GAME
     public void StartPlaying()
     {
-        if (connectedPlayers == 0) return;
+        if (connectedPlayers < 2) return;
 
         //Stop searching clients
         StopSearching();

@@ -159,7 +159,7 @@ public class MessageManager : MonoBehaviour
 
     static void MessageReSend()
     {
-        Debug.Log("Messages to send: " + sentMessages.Count);
+        //Debug.Log("Messages to send: " + sentMessages.Count);
 
         //Re-Send non Acknowledged messages
         for (int i = 0; i < sentMessages.Count; i++)
