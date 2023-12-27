@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GeneralServer : MonoBehaviour
 {
@@ -136,6 +137,9 @@ public class GeneralServer : MonoBehaviour
             socket.SendTo(sendData, sendData.Length, SocketFlags.None, remote[i]);
         }
 
+        //Server only show a normal screen
+        ScreenServer();
+
         //ChangeScene
         StartComunication();
     }
@@ -164,6 +168,18 @@ public class GeneralServer : MonoBehaviour
             //Set ServerMessager array in the ServerReceiver
             ServerReceiver.messagers[i] = sm;
         }
+    }
+
+    void ScreenServer()
+    {
+        GameObject.Find("Create").SetActive(false);
+        GameObject.Find("TankB (2)").SetActive(false);
+        GameObject.Find("TB").SetActive(false);
+        GameObject.Find("TankV (2)").SetActive(false);
+        GameObject.Find("Title1").SetActive(false);
+        GameObject.Find("Title2").SetActive(false);
+        
+        GameObject.Find("GameStarted").GetComponent<TMP_Text>().text = "The game has started";
     }
 
     //Screen
