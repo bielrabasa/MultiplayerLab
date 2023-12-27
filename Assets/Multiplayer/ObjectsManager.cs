@@ -26,11 +26,11 @@ public class ObjectsManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            MessageManager.SendMessage(new Settings("Roger", Color.cyan));
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    MessageManager.SendMessage(new Settings("Roger", Color.cyan));
 
-        } 
+        //} 
     }
 
     //return an array of all the same GameObjects with the given tag
@@ -56,7 +56,6 @@ public class ObjectsManager : MonoBehaviour
 
     public void MessageSettings(Message m)
     {
-        //ERROR, aixo esta mal
         Settings s = m as Settings;
         names = s.tankName;
         colors = s.color;

@@ -631,7 +631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_RootOrder
@@ -1242,7 +1242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4477429768132477483, guid: 22d6949043a476542acfcb494536081c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5834657883936985520, guid: 22d6949043a476542acfcb494536081c, type: 3}
       propertyPath: SpawnTrailDelay
@@ -3831,7 +3831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4477429768132477483, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6144536134148669287, guid: 2f2cb9ef6df10aa47970f84ffa6a8bcd, type: 3}
       propertyPath: m_RootOrder
@@ -4223,7 +4223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8688666382527849343, guid: 6446c69d345e6bb41a8c6107cb659fbe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
