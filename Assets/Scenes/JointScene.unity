@@ -1099,7 +1099,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 482193855}
-  - component: {fileID: 482193854}
+  - component: {fileID: 482193856}
   m_Layer: 0
   m_Name: SERVER
   m_TagString: Untagged
@@ -1107,18 +1107,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &482193854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 482193853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9631e7cb9290a6d45963f2c491b85def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &482193855
 Transform:
   m_ObjectHideFlags: 0
@@ -1134,6 +1122,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &482193856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482193853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 699b507c4cd920545b4eb1f81a65763c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &521290872
 GameObject:
   m_ObjectHideFlags: 0
@@ -3757,8 +3757,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 482193854}
-        m_TargetAssemblyTypeName: Server, Assembly-CSharp
+      - m_Target: {fileID: 482193856}
+        m_TargetAssemblyTypeName: GeneralServer, Assembly-CSharp
         m_MethodName: StartPlaying
         m_Mode: 1
         m_Arguments:
@@ -4619,8 +4619,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 482193854}
-        m_TargetAssemblyTypeName: Server, Assembly-CSharp
+      - m_Target: {fileID: 482193856}
+        m_TargetAssemblyTypeName: GeneralServer, Assembly-CSharp
         m_MethodName: GetIP
         m_Mode: 2
         m_Arguments:
