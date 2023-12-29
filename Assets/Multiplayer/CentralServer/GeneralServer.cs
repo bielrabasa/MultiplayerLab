@@ -10,7 +10,7 @@ using TMPro;
 
 public class GeneralServer : MonoBehaviour
 {
-    const int MAX_PLAYERS = 2;
+    public const int MAX_PLAYERS = 2;
     int connectedPlayers = 0;
 
     Thread waitingClientThread;

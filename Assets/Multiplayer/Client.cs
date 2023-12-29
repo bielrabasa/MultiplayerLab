@@ -210,8 +210,11 @@ public class Client : MonoBehaviour
         MessageManager.playerID = playerID;
         MessageManager.StartComunication();
 
-        //TODO: Biel take name and color
-        //MessageManager.SendMessage(new MessageTypes.Settings("Roger", coloret));
+        ColorTank colorTank = FindAnyObjectByType<ColorTank>();
+
+        //Send the info about the name and the color
+        //TOOD: Roger pensa com pasar la info del propi jugador (envies per a laltre)
+        MessageManager.SendMessage(new MessageTypes.Settings(colorTank.GetName(), colorTank.GetColor()));
     }
 
     string GetMyIp()

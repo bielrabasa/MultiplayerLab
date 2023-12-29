@@ -8,6 +8,7 @@ public class ColorTank : MonoBehaviour
 {
     [SerializeField] TMP_Text inGameTankName;
     [SerializeField] GameObject bottomTank;
+    [SerializeField] TMP_InputField textName;
 
     public void SetColor(Color newColor)
     {
@@ -28,17 +29,15 @@ public class ColorTank : MonoBehaviour
         inGameTankName.text = nameTank;
     }
 
-
-    //TODO: Biel, extract the info amb les 2 funcions daqui sota
-    Color GetColor()
+    public Color GetColor()
     {
         Color newColor = GetComponent<Image>().color;
         return newColor;
     }
 
-    string GetName()
+    public string GetName()
     {
-        string newName = transform.parent.GetComponentInChildren<TMP_InputField>().text;
+        string newName = textName.text;
         return newName;
     }
 }
