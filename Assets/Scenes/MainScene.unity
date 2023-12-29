@@ -3242,7 +3242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c15c82f117bd814086336872c8c3afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MESSAGE_SEND_DELAY: 0.05
+  MESSAGE_SEND_DELAY: 0.1
   explosion: {fileID: 2879626120304633322, guid: 2b92ced9f32690e44abbcec8828c82af, type: 3}
   isGamePaused: 0
 --- !u!1 &1936286169
