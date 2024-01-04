@@ -49,7 +49,7 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.UNPAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
 
-        MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
+        //MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
 
         StartCoroutine(SendMyState());
     }
