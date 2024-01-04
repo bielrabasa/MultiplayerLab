@@ -20,10 +20,10 @@ public class DataTank : MonoBehaviour
         MessageManager.messageDistribute[MessageType.SETTINGS] += MessageSettings;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        
+        if (MessageManager.messageDistribute.Count == 0) return;
+        MessageManager.messageDistribute[MessageType.POSITION] -= MessageSettings;
     }
 
     public void MessageSettings(Message m)
@@ -34,12 +34,12 @@ public class DataTank : MonoBehaviour
         SetSettingsTanks();
     }
 
-    public void GetData()
+    /*public void GetData()
     {
         ColorTank colorTank = FindAnyObjectByType<ColorTank>();
 
         SaveDataTank(MessageManager.playerID, colorTank.GetName(), colorTank.GetColor());
-    }
+    }*/
 
     public void SaveDataTank(int id, string name, Color color)
     {

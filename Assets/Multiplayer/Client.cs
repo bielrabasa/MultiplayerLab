@@ -212,10 +212,12 @@ public class Client : MonoBehaviour
         MessageManager.StartComunication();
 
         ColorTank colorTank = FindAnyObjectByType<ColorTank>();
+        DataTank dataTank = FindAnyObjectByType<DataTank>();
 
         //Send the info about the name and the color
-        //TOOD: Roger pensa com pasar la info del propi jugador (envies per a laltre)
+        //TODO: Roger pensa com pasar la info del propi jugador (envies per a laltre)
         MessageManager.SendMessage(new MessageTypes.Settings(colorTank.GetName(), colorTank.GetColor()));
+        dataTank.SaveDataTank(playerID, colorTank.GetName(), colorTank.GetColor());
     }
 
     string GetMyIp()
