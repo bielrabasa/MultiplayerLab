@@ -206,7 +206,8 @@ public class Client : MonoBehaviour
     }
     void ChangeScene()
     {
-        SceneManager.LoadScene("MainScene");
+        //Change the scene to loading scene     The same as this
+        LevelLoader.LoadLevel("MainScene");     //SceneManager.LoadScene("MainScene");
         MessageManager.playerID = playerID;
         MessageManager.StartComunication();
 
