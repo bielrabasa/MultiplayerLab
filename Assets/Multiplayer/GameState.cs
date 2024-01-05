@@ -26,7 +26,9 @@ public class GameState : MonoBehaviour
     float R_HOLDING_TIME = 3.0f;
 
     ObjectsManager objManager;
+    DataTank dataTank;
 
+    bool setColorRestart = false;
     void Start()
     {
         isGamePaused = false;
@@ -36,6 +38,7 @@ public class GameState : MonoBehaviour
         postpo.gameObject.SetActive(false);
 
         objManager = FindAnyObjectByType<ObjectsManager>();
+        dataTank = FindAnyObjectByType<DataTank>();
 
         GetPlayers();
 
@@ -48,6 +51,8 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
 
         StartCoroutine(SendMyState());
+
+        setColorRestart = true;
     }
 
     private void OnDestroy()
@@ -74,6 +79,11 @@ public class GameState : MonoBehaviour
         {
             MessageManager.SendMessage(MessageType.RESET);
             ResetGame();
+        }
+        if (setColorRestart)
+        {
+            dataTank.SetSettingsTanks();
+            setColorRestart = false;
         }
     }
 

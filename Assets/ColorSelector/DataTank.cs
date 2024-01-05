@@ -45,7 +45,10 @@ public class DataTank : MonoBehaviour
         for (int i = 0; i < ObjectsManager.tanks.Length; i++)
         {
             ColorTank tankSettings = ObjectsManager.tanks[i].GetComponentInChildren<ColorTank>();
-            tankSettings.SetName(names[i]);
+
+            if(names[i] == "" || names[i] == null) tankSettings.SetName("Player " + (i + 1));
+            else tankSettings.SetName(names[i]);
+
             tankSettings.SetColorInGame(colors[i]);
         }
     }
