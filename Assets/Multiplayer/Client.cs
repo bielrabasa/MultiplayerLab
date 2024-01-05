@@ -215,7 +215,6 @@ public class Client : MonoBehaviour
         DataTank dataTank = FindAnyObjectByType<DataTank>();
 
         //Send the info about the name and the color
-        //TODO: Roger pensa com pasar la info del propi jugador (envies per a laltre)
         MessageManager.SendMessage(new MessageTypes.Settings(colorTank.GetName(), colorTank.GetColor()));
         dataTank.SaveDataTank(playerID, colorTank.GetName(), colorTank.GetColor());
     }

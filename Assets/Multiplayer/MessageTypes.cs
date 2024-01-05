@@ -19,10 +19,6 @@ namespace MessageTypes
         SHOOT,              //Extra
         KILL,               
 
-        OBSTACLE,           //Extra
-        FENCE,           
-        BOMB,               
-
         PAUSE,              
         UNPAUSE,            
         RESET,              
@@ -90,18 +86,6 @@ namespace MessageTypes
         public string chatMsg;
     }
 
-    public class Obstacle : Message
-    {
-        public Obstacle(int idObject, MessageType objectType) : base(MessageType.OBSTACLE)
-        {
-            this.idObject = idObject;
-            this.objectType = objectType;
-        }
-
-        public int idObject;
-        public MessageType objectType;
-    }
-
     public class Settings : Message
     {
         public Settings(string tankName, Color color) : base(MessageType.SETTINGS)
@@ -162,11 +146,6 @@ namespace MessageTypes
                 case MessageType.CHAT:
                     {
                         m = JsonUtility.FromJson<Chat>(json);
-                        break;
-                    }
-                case MessageType.OBSTACLE:
-                    {
-                        m = JsonUtility.FromJson<Obstacle>(json);
                         break;
                     }
                 case MessageType.SETTINGS:

@@ -16,8 +16,6 @@ public class GameState : MonoBehaviour
     Transform otherPlayer;
     Transform myPlayer;
     [SerializeField] GameObject explosion;
-    //TODO Roger: Guardem tots els tanks amb ordre de ID
-    public GameObject[] allPlayers;
     //Server -> Blue
     //Client -> Red
 
@@ -48,8 +46,6 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.PAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.UNPAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
-
-        //MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
 
         StartCoroutine(SendMyState());
     }
@@ -103,25 +99,6 @@ public class GameState : MonoBehaviour
     void MessageReset(Message message)
     {
         ResetGame();
-    }
-
-    public void MessageDestroyObstacle(Message message)
-    {
-        Obstacle o = message as Obstacle;
-
-        switch(o.objectType)
-        {
-            case MessageType.FENCE: 
-                {
-                    DestroyFence(o.idObject);
-                    break;
-                }
-            case MessageType.BOMB:
-                {
-                    DestroyBomb(o.idObject);
-                    break;
-                }
-        }
     }
 
     void GetPlayers()
@@ -233,45 +210,4 @@ public class GameState : MonoBehaviour
 
         Destroy(objManager.FindObjectbyID(id, objManager.bomb));
     }
-
-    /*public void SendDestroyObstacle(GameObject GO)
-    {
-        obstacleToDestroy = GO;
-
-        DestroyObstacle(obstacleToDestroy);
-
-        SendEvent(MultiplayerEvents.OBSTACLE);
-    }
-
-    public void DestroyObstacle(GameObject GO)
-    {
-        GO.SetActive(false);
-    }
-
-    public void SetBomb(GameObject GO)
-    {
-        GO.SetActive(false);
-
-        //StartCoroutine(ActiveBomb(GO));
-
-        //GO.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-
-        //GO.GetComponentInChildren<SpriteRenderer>().color = new Color(1f, 0.22f, 0.22f);
-
-    }
-
-    IEnumerator ActiveBomb(GameObject GO)
-    {
-        yield return new WaitForSecondsRealtime(1);
-
-        //Damage
-        //Explotion(GO);
-
-        GO.SetActive(false);
-    }
-
-    public void Explotion(GameObject GO)
-    {
-        Instantiate(GO, GO.transform);
-    }*/
 }

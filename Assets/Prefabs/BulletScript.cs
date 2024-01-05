@@ -60,25 +60,11 @@ public class BulletScript : MonoBehaviour
             {
                 if (oManager.obstacle[i] == collision.gameObject)
                 {
-                    MessageManager.SendMessage(new Obstacle(i, MessageType.FENCE));
                     gameState.DestroyFence(i);
                 }
             }
 
             Destroy(gameObject);
-
-            /*FindObjectOfType<GameState>().SendEvent(MultiplayerEvents.OBSTACLE, collision.transform);
-
-            if (!bounce)
-            {
-                GetComponent<Rigidbody2D>().velocity = transform.up * (speed / 2);
-                GetComponent<Rigidbody2D>().velocity = Vector3.Reflect(GetComponent<Rigidbody2D>().velocity, Vector3.right);
-                bounce = true;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }*/
         }
 
         if (collision.gameObject.CompareTag("BOMB"))
@@ -87,7 +73,6 @@ public class BulletScript : MonoBehaviour
             {
                 if (oManager.bomb[i] == collision.gameObject)
                 {
-                    MessageManager.SendMessage(new Obstacle(i, MessageType.BOMB));
                     gameState.DestroyBomb(i);
                 }
             }

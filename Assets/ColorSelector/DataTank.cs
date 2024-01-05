@@ -34,13 +34,6 @@ public class DataTank : MonoBehaviour
         SetSettingsTanks();
     }
 
-    /*public void GetData()
-    {
-        ColorTank colorTank = FindAnyObjectByType<ColorTank>();
-
-        SaveDataTank(MessageManager.playerID, colorTank.GetName(), colorTank.GetColor());
-    }*/
-
     public void SaveDataTank(int id, string name, Color color)
     {
         names[id] = name;
@@ -49,7 +42,6 @@ public class DataTank : MonoBehaviour
 
     public void SetSettingsTanks()
     {
-        //TODO: revisar com ferho
         for (int i = 0; i < ObjectsManager.tanks.Length; i++)
         {
             ColorTank tankSettings = ObjectsManager.tanks[i].GetComponentInChildren<ColorTank>();
