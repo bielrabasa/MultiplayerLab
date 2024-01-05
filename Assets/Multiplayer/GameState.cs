@@ -16,6 +16,8 @@ public class GameState : MonoBehaviour
     Transform otherPlayer;
     Transform myPlayer;
     [SerializeField] GameObject explosion;
+    //TODO Roger: Guardem tots els tanks amb ordre de ID
+    public GameObject[] allPlayers;
     //Server -> Blue
     //Client -> Red
 
@@ -47,7 +49,7 @@ public class GameState : MonoBehaviour
         MessageManager.messageDistribute[MessageType.UNPAUSE] += MessagePause;
         MessageManager.messageDistribute[MessageType.RESET] += MessageReset;
 
-        MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
+        //MessageManager.messageDistribute[MessageType.OBSTACLE] += MessageDestroyObstacle;
 
         StartCoroutine(SendMyState());
     }
@@ -215,7 +217,8 @@ public class GameState : MonoBehaviour
     public void ResetGame()
     {
         KillGame();
-        SceneManager.LoadScene("MainScene");
+        //Change the scene to loading scene     The same as this
+        LevelLoader.LoadLevel("MainScene");     //SceneManager.LoadScene("MainScene");
     }
 
     public void DestroyFence(int id)

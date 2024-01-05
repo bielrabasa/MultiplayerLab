@@ -206,12 +206,18 @@ public class Client : MonoBehaviour
     }
     void ChangeScene()
     {
-        SceneManager.LoadScene("MainScene");
+        //Change the scene to loading scene     The same as this
+        LevelLoader.LoadLevel("MainScene");     //SceneManager.LoadScene("MainScene");
         MessageManager.playerID = playerID;
         MessageManager.StartComunication();
 
-        //TODO: Biel take name and color
-        //MessageManager.SendMessage(new MessageTypes.Settings("Roger", coloret));
+        ColorTank colorTank = FindAnyObjectByType<ColorTank>();
+        DataTank dataTank = FindAnyObjectByType<DataTank>();
+
+        //Send the info about the name and the color
+        //TODO: Roger pensa com pasar la info del propi jugador (envies per a laltre)
+        MessageManager.SendMessage(new MessageTypes.Settings(colorTank.GetName(), colorTank.GetColor()));
+        dataTank.SaveDataTank(playerID, colorTank.GetName(), colorTank.GetColor());
     }
 
     string GetMyIp()
