@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Loading : MonoBehaviour
@@ -15,13 +16,15 @@ public class Loading : MonoBehaviour
 
     IEnumerator MakeTheLoad(string level)
     {
-        //aixi es mostra, xk la carga es molt rapida
-        yield return new WaitForSeconds(1f);
+        Slider chargeBar = FindAnyObjectByType<Slider>();
+
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(level);
 
         while (operation.isDone == false)
         {
+            float progres = Mathf.Clamp01(operation.progress / .09f);
+            chargeBar.value = progres;
             yield return null;
         }
     }
