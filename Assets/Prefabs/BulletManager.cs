@@ -8,6 +8,11 @@ public class BulletManager : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] GameObject bullet;
 
+    private void Awake()
+    {
+        if (FindObjectsOfType<BulletManager>().Length > 1) Destroy(gameObject);
+    }
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject); //TODO: destroy on real change scene

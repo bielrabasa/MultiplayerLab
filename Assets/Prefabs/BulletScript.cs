@@ -8,6 +8,7 @@ public class BulletScript : MonoBehaviour
     public float timer = 0.0f;
 
     public Vector2 bulletVelocity;
+    [SerializeField] GameObject explosion;
 
     GameState gameState;
     ObjectsManager oManager;
@@ -47,7 +48,7 @@ public class BulletScript : MonoBehaviour
         if (collision.gameObject.CompareTag("BOMB"))
         {
             Transform auxiliarTransform = collision.transform;
-            Instantiate(GameState.explosion, auxiliarTransform.position, auxiliarTransform.rotation);
+            Instantiate(explosion, auxiliarTransform.position, auxiliarTransform.rotation);
 
             Destroy(collision.gameObject);
         }

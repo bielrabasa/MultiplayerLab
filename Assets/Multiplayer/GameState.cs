@@ -15,7 +15,6 @@ public class GameState : MonoBehaviour
     //Real ingame objects
     Transform otherPlayer;
     Transform myPlayer;
-    public static GameObject explosion;
     //Server -> Blue
     //Client -> Red
 
