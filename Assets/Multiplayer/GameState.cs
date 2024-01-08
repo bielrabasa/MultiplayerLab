@@ -3,8 +3,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.PostProcessing;
-using UnityEngine.SceneManagement;
 using MessageTypes;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameState : MonoBehaviour
 {
@@ -24,8 +25,10 @@ public class GameState : MonoBehaviour
     float startResetHoldTime;
     float R_HOLDING_TIME = 3.0f;
 
-    ObjectsManager objManager;
     DataTank dataTank;
+
+    [SerializeField] GameObject panelEndGame;
+    [SerializeField] TextMeshProUGUI textEndGame;
 
     bool setColorRestart = false;
     void Start()
@@ -36,7 +39,6 @@ public class GameState : MonoBehaviour
         postpo = FindAnyObjectByType<PostProcessVolume>();
         postpo.gameObject.SetActive(false);
 
-        objManager = FindAnyObjectByType<ObjectsManager>();
         dataTank = FindAnyObjectByType<DataTank>();
 
         GetPlayers();
@@ -97,6 +99,7 @@ public class GameState : MonoBehaviour
     void MessageKill(Message message)
     {
         myPlayer.gameObject.SetActive(false);
+        EndGame("You Lose");
     }
 
     void MessagePause(Message message)
@@ -205,5 +208,14 @@ public class GameState : MonoBehaviour
         KillGame();
         //Change the scene to loading scene     The same as this
         LevelLoader.LoadLevel("MainScene");     //SceneManager.LoadScene("MainScene");
+    }
+
+    public void EndGame(string text)
+    {
+        SendPauseGame(!isGamePaused);
+
+        panelEndGame.SetActive(true);
+
+        textEndGame.text = text;
     }
 }

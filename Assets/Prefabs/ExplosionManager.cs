@@ -48,6 +48,7 @@ public class ExplosionManager : MonoBehaviour
             {
                 MessageManager.SendMessage(MessageTypes.MessageType.KILL);
                 collision.gameObject.SetActive(false);
+                gameState.EndGame("You Win");
             }
         }
     }
