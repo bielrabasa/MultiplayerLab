@@ -30,10 +30,9 @@ public class BulletManager : MonoBehaviour
         Quaternion dir = Quaternion.AngleAxis(angle + 180, Vector3.forward);
         Vector3 spawnDist = dir * Vector3.up * 0.7f;
         GameObject b = Instantiate(bullet, pos + spawnDist, dir, transform);
-
-        //Spawn further for the delayed time
+        
+        //TODO: Spawn further for the delayed time
         //b.transform.position += b.transform.up * speed * delayedTime;
-        //TODO: Test Spawnpos
 
         //Set speed
         b.GetComponent<Rigidbody2D>().velocity = b.transform.up * speed;
@@ -52,7 +51,7 @@ public class BulletManager : MonoBehaviour
 
     public void StopBullets()
     {
-        //TODO: stop bullet counting time (set isStopped to true)
+        //Stop bullet on Pause
         
         foreach(Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>()) {
             rb.velocity = Vector3.zero;
@@ -61,6 +60,8 @@ public class BulletManager : MonoBehaviour
 
     public void ReplayBullets()
     {
+        //Replay bullets on Unpause
+
         foreach (Rigidbody2D rb in GetComponentsInChildren<Rigidbody2D>())
         {
             rb.velocity = rb.transform.up * speed;

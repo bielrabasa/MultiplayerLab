@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
-    float timer = 0.0f;
-    bool bounce = false;
+    public float timer = 0.0f;
 
     public Vector2 bulletVelocity;
 
@@ -25,7 +24,7 @@ public class BulletScript : MonoBehaviour
         if(!gameState.isGamePaused)
         {
             timer += Time.deltaTime;
-            if (timer > 5.0f) Destroy(gameObject);
+            if (timer > 10.0f) Destroy(gameObject);
         }
     }
 
@@ -38,46 +37,21 @@ public class BulletScript : MonoBehaviour
                 MessageManager.SendMessage(MessageTypes.MessageType.KILL);
                 collision.gameObject.SetActive(false);
             }
-
-            Destroy(gameObject);
-        }
-
-        if (collision.gameObject.CompareTag("WALL"))
-        {
-            if(!bounce)
-            {
-                //bounce = true;
-            }
-            else 
-            {
-                Destroy(gameObject);
-            }
         }
 
         if (collision.gameObject.CompareTag("FENCE"))
         {
-            for (int i = 0; i < oManager.obstacle.Length; i++)
-            {
-                if (oManager.obstacle[i] == collision.gameObject)
-                {
-                    gameState.DestroyFence(i);
-                }
-            }
-
-            Destroy(gameObject);
+            Destroy(collision.gameObject);
         }
 
         if (collision.gameObject.CompareTag("BOMB"))
         {
-            for (int i = 0; i < oManager.bomb.Length; i++)
-            {
-                if (oManager.bomb[i] == collision.gameObject)
-                {
-                    gameState.DestroyBomb(i);
-                }
-            }
+            Transform auxiliarTransform = collision.transform;
+            Instantiate(GameState.explosion, auxiliarTransform.position, auxiliarTransform.rotation);
 
-            Destroy(gameObject);
+            Destroy(collision.gameObject);
         }
+
+        Destroy(gameObject);
     }
 }

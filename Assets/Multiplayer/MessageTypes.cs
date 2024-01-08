@@ -11,8 +11,6 @@ namespace MessageTypes
         _NONE,              //Test
 
         ACKNOWLEDGEMENTS,   //Extra
-        CONFIRMATION,       
-        START,
         SETTINGS,            //Extra
 
         POSITION,           //Extra
@@ -22,10 +20,6 @@ namespace MessageTypes
         PAUSE,              
         UNPAUSE,            
         RESET,              
-
-        DISCONNECT,         
-
-        CHAT,               //Extra
 
         _MESSAGE_TYPE_COUNT //Test
     }
@@ -74,16 +68,6 @@ namespace MessageTypes
 
         public Vector3 pos;
         public float rot;
-    }
-
-    public class Chat : Message 
-    {
-        public Chat(string chatMsg) : base(MessageType.CHAT)
-        { 
-            this.chatMsg = chatMsg;
-        }
-
-        public string chatMsg;
     }
 
     public class Settings : Message
@@ -141,11 +125,6 @@ namespace MessageTypes
                 case MessageType.SHOOT:
                     {
                         m = JsonUtility.FromJson<Shoot>(json);
-                        break;
-                    }
-                case MessageType.CHAT:
-                    {
-                        m = JsonUtility.FromJson<Chat>(json);
                         break;
                     }
                 case MessageType.SETTINGS:
