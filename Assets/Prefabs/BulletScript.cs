@@ -27,6 +27,10 @@ public class BulletScript : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > 10.0f) Destroy(gameObject);
         }
+
+        //Yes, this is ugly, but nothing else works
+        if (transform.position.z != 0.0f)
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
