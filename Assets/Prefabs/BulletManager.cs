@@ -34,8 +34,8 @@ public class BulletManager : MonoBehaviour
         //Instanciate bullet
         Quaternion dir = Quaternion.AngleAxis(angle + 180, Vector3.forward);
         Vector3 spawnDist = dir * Vector3.up * 0.7f;
-        GameObject b = Instantiate(bullet, pos + spawnDist, dir, transform);
-        
+        GameObject b = Instantiate(bullet, spawnDist + pos, dir, transform);
+
         //TODO: Spawn further for the delayed time
         b.transform.position += b.transform.forward * speed * delayedTime;
 
